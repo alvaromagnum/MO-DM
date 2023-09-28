@@ -35,7 +35,7 @@ $('#signUpButton').click(function () {
                 window.location.href = '/';
             }
 
-        })
+        });
 
     });
 

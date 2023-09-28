@@ -2,15 +2,16 @@ const express = require('express');
 const SHA256 = require("crypto-js/sha256");
 const messages = require('../messages');
 const databaseConfig = require('../database-config');
+const path = require("path");
 
 const registrationRoute = express.Router();
 
 function registerUser(req, res) {
-    res.sendFile(__dirname.replace('\\routes', '') + '/html/sign-up.html');
+    res.sendFile(path.resolve(__dirname, '..') + '/html/sign-up.html');
 }
 
 function registerProject(req, res) {
-    res.sendFile(__dirname.replace('\\routes', '') + '/html/register-project.html');
+    res.sendFile(path.resolve(__dirname, '..') + '/html/register-project.html');
 }
 
 function saveUser(req, res) {

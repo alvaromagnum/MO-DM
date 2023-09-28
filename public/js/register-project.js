@@ -31,7 +31,7 @@ $('#createProjectButton').click(function () {
                 window.location.href = '/';
             }
 
-        })
+        });
 
     });
 
