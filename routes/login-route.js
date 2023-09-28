@@ -34,6 +34,8 @@ function doLogin(req, res) {
                 return;
             }
 
+            project.addUser(user);
+
             global.user = user;
             global.project = project;
 
