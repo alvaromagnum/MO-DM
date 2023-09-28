@@ -1,19 +1,15 @@
-$('#signUpButton').click(function () {
+$('#createProjectButton').click(function () {
 
-    var loginInput = $('#inputTextLogin').val();
+    var projectName = $('#inputProjectName').val();
+    var key = crypto.randomUUID();
 
-    var passwordInput1 = $('#inputTextPassword1').val();
-    var passwordInput2 = $('#inputTextPassword2').val();
-
-    $('#inputTextLogin').val('');
-    $('#inputTextPassword1').val('');
-    $('#inputTextPassword2').val('');
+    $('#inputProjectName').val('');
 
     $.ajax({
 
         method: "POST",
-        url: "/register/user",
-        data: { login: loginInput, password1: passwordInput1, password2: passwordInput2 }
+        url: "/register/project",
+        data: { projectName: projectName, key: key }
 
     }).fail(function(jqXHR, textStatus, errorThrown) {
 
@@ -24,7 +20,7 @@ $('#signUpButton').click(function () {
         Swal.fire({
 
             title: 'Sucesso!',
-            text: msg,
+            html: msg,
             icon: 'success',
             showCancelButton: false,
             confirmButtonText: 'OK! Fazer Login!'
@@ -41,10 +37,10 @@ $('#signUpButton').click(function () {
 
 });
 
-$("#formSignup").keypress(function(e){
+$("#formProject").keypress(function(e){
     if(e.keyCode == 13) {
         e.preventDefault();
-        $('#signUpButton').click();
+        $('#createProjectButton').click();
         return false;
     }
 });

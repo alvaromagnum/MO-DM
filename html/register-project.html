@@ -58,33 +58,25 @@
             <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
               <div class="card card-plain">
                 <div class="card-header">
-                  <h4 class="font-weight-bolder">Criar Usuário</h4><br/>
-                  <p class="mb-0"><b>Insira um nome de usuário e uma senha para efetuar o registro!</b></p><br/>
-                  <p class="mb-0"><i>Não utilize caracteres especiais, nem espaços, para o login!</i></p>
+                  <h4 class="font-weight-bolder">Criar Projeto</h4><br/>
+                  <p class="mb-0"><b>Insira um nome de projeto para efetuar o registro!</b></p><br/>
+                  <p class="mb-0"><i>Não utilize caracteres especiais para o nome do projeto!</i></p>
                 </div>
                 <div class="card-body">
-                  <form role="form" id="formSignup">
+                  <form role="form" id="formProject">
                     <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Login</label>
-                      <input id="inputTextLogin" type="text" class="form-control">
-                    </div>
-                    <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Senha</label>
-                      <input id="inputTextPassword1" type="password" class="form-control">
-                    </div>
-                    <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Repetir Senha</label>
-                      <input id="inputTextPassword2" type="password" class="form-control">
+                      <label class="form-label">Nome do Projeto</label>
+                      <input id="inputProjectName" type="text" class="form-control">
                     </div>
                     <div class="text-center">
-                      <button type="button" id="signUpButton" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Criar</button>
+                      <button type="button" id="createProjectButton" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Criar</button>
                     </div>
                   </form>
                 </div>
                 <div class="card-footer text-center pt-0 px-lg-2 px-1">
                   <p class="mb-2 text-sm mx-auto">
-                    Já possui uma conta?
-                    <a href="/" class="text-primary text-gradient font-weight-bold">Entrar</a>
+                    Deseja voltar para o login?
+                    <a href="/" class="text-primary text-gradient font-weight-bold">Voltar</a>
                   </p>
                 </div>
               </div>
@@ -114,7 +106,7 @@
   <script src="/js/material-dashboard.min.js?v=3.1.0"></script>
   <script src="/js/jquery.min.js"></script>
   <script src="/js/sweet-alert.js"></script>
-  <script src="/js/sign-up.js"></script>
+  <script src="/js/register-project.js"></script>
 </body>
 
 </html>

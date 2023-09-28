@@ -9,6 +9,10 @@ function registerUser(req, res) {
     res.sendFile(__dirname.replace('\\routes', '') + '/html/sign-up.html');
 }
 
+function registerProject(req, res) {
+    res.sendFile(__dirname.replace('\\routes', '') + '/html/register-project.html');
+}
+
 function saveUser(req, res) {
 
     var login = req.body.login;
@@ -50,8 +54,40 @@ function saveUser(req, res) {
 
 }
 
-registrationRoute.get('/user', registerUser);
+function saveProject(req, res) {
 
+    var projectName = req.body.projectName;
+    var key = req.body.key;
+
+    var regex = /[^\w\s]/gi;
+
+    if(regex.test(projectName) === true) {
+        res.status(500).send(messages.invalidProjectName);
+        return;
+    }
+
+    databaseConfig.Project.findOne({ where: { key: key } }).then((project)=>{
+
+        if(project !== null) {
+            res.status(500).send(messages.createProjectError);
+            return;
+        }
+
+        databaseConfig.Project.create({
+            name: projectName,
+            key: key,
+        }).then(() => {
+            res.send(`${messages.projectCreatedSuccess} <b>${key}</b>`);
+        });
+
+    });
+
+}
+
+registrationRoute.get('/user', registerUser);
 registrationRoute.post('/user', saveUser);
+
+registrationRoute.get('/project', registerProject);
+registrationRoute.post('/project', saveProject);
 
 module.exports = registrationRoute;

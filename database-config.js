@@ -43,6 +43,7 @@ const Project = sequelize.define('Project', {
 
     key: {
         type: DataTypes.STRING,
+        unique: true,
         allowNull: false
     }
 
@@ -59,4 +60,7 @@ function databaseConnected() {
 
 sequelize.authenticate().then(databaseConnected).catch(err => console.log('Erro: ', err))
 
-module.exports = {User: User};
+module.exports = {
+    User: User,
+    Project: Project
+};
