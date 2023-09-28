@@ -9,6 +9,7 @@ module.exports = {
     differentPasswords: 'As senhas estão diferentes!',
     usersTableCreated: 'Tabela USUÁRIOS criada!',
     projectsTableCreated: 'Tabela PROJETOS criada!',
+    projectUsersTableCreated: 'Tabela de USUÁRIOS DE PROJETOS criada!',
     loginError: 'Erro ao efetuar o login! Tente novamente!',
     databaseConnected: 'Conectado ao banco de dados!',
     cantLogin: 'Não foi possível efetuar o login! Tente novamente!',

@@ -18,7 +18,6 @@ app.use('/register', registrationRoute);
 app.use('/login', loginRoute);
 app.use('/dashboard', dashboardRoute);
 
-// Land Page
 function getRoot(req, res) {
 
     global.user = null;
@@ -29,7 +28,6 @@ function getRoot(req, res) {
 }
 
 app.get('/', getRoot);
-// Land Page - End
 
 function serverInitializedCallback() {
     console.log(messages.serverInitializedMessage);
