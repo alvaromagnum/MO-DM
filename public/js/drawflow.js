@@ -632,10 +632,10 @@ export default class Drawflow {
       event.preventDefault()
       if(event.deltaY > 0) {
         // Zoom Out
-        this.zoom_out_by_value(0.005);
+        this.zoom_out_by_value(0.009);
       } else {
         // Zoom In
-        this.zoom_in_by_value(0.005);
+        this.zoom_in_by_value(0.009);
       }
     }
   }
