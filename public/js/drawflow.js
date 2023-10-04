@@ -42,7 +42,7 @@ export default class Drawflow {
     this.zoom = 1;
     this.zoom_max = 1.6;
     this.zoom_min = 0.5;
-    this.zoom_value = 0.1;
+    this.zoom_value = 0.01;
     this.zoom_last_value = 1;
 
     // Mobile
@@ -628,14 +628,14 @@ export default class Drawflow {
   }
 
   zoom_enter(event, delta) {
-    if (event.ctrlKey) {
+    if (event.shiftKey) {
       event.preventDefault()
       if(event.deltaY > 0) {
         // Zoom Out
-        this.zoom_out();
+        this.zoom_out_by_value(0.005);
       } else {
         // Zoom In
-        this.zoom_in();
+        this.zoom_in_by_value(0.005);
       }
     }
   }
@@ -652,12 +652,28 @@ export default class Drawflow {
         this.zoom_refresh();
     }
   }
+
+  zoom_in_by_value(value) {
+    if(this.zoom < this.zoom_max) {
+      this.zoom+=value;
+      this.zoom_refresh();
+    }
+  }
+
   zoom_out() {
     if(this.zoom > this.zoom_min) {
       this.zoom-=this.zoom_value;
-        this.zoom_refresh();
+      this.zoom_refresh();
     }
   }
+
+  zoom_out_by_value(value) {
+    if(this.zoom > this.zoom_min) {
+      this.zoom-=value;
+      this.zoom_refresh();
+    }
+  }
+
   zoom_reset(){
     if(this.zoom != 1) {
       this.zoom = 1;
