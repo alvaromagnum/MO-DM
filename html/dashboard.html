@@ -37,6 +37,8 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- CSS Files -->
   <link id="pagestyle" href="/css/material-dashboard.css?v=3.1.0" rel="stylesheet" />
+  <link href="/css/drawflow.css" rel="stylesheet" />
+  <link href="/css/custom.css" rel="stylesheet" />
 </head>
 
 <body class="g-sidenav-show  bg-gray-200">
@@ -259,6 +261,44 @@
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-xl-12 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-header p-3 pt-2">
+              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+                <i class="material-icons opacity-10">share_location</i>
+              </div>
+              <div class="text-end pt-1">
+                <p class="text-sm mb-0 text-capitalize">Configuração do Projeto</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <hr class="dark horizontal my-0">
+              <br/>
+              <div class="align-right">
+                Modo:
+                <select id="selectNode" class="select-node">
+                  <option value="1">Etapa</option>
+                  <option value="2">Decisão</option>
+                  <option value="3">Stakeholder</option>
+                </select>
+                <button id="btReset" class="btn btn-outline-primary" data-toggle="Limpar Configurações"><i class="material-icons icon-button">autorenew</i></button>
+                <button id="btImport" class="btn btn-outline-primary"><i class="material-icons icon-button">downloading</i></button>
+                <button id="btZoomOut" class="btn btn-outline-primary"><i class="material-icons icon-button">zoom_out</i></button>
+                <button id="btZoomReset" class="btn btn-outline-primary"><i class="material-icons icon-button">zoom_out_map</i></button>
+                <button id="btZoomIn" class="btn btn-outline-primary"><i class="material-icons icon-button">zoom_in</i></button>
+                <button id="btSave" class="btn btn-outline-primary"><i class="material-icons icon-button">save</i></button>
+                <button id="btExport" class="btn btn-outline-primary"><i class="material-icons icon-button">file_open</i></button>
+                <button id="btGetDados" class="btn btn-outline-primary"><i class="material-icons icon-button">upload_file</i></button>
+              </div>
+              <br/>
+              <div id="projectConfigCanvas" class="project-config-canvas"></div>
+              <br/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-5"></div>
       <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
@@ -1112,7 +1152,11 @@
   <script src="/js/material-dashboard.min.js?v=3.1.0"></script>
   <script src="/js/jquery.min.js"></script>
   <script src="/js/sweet-alert.js"></script>
-  <script src="/js/dashboard.js"></script>
+  <script src="/js/jsonata.min.js"></script>
+  <script src="/js/underscore.js"></script>
+  <script src="/js/core/bootstrap.bundle.min.js"></script>
+  <script src="/js/drawflow.js" type="module"></script>
+  <script src="/js/dashboard.js" type="module"></script>
 </body>
 
 </html>
