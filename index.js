@@ -20,6 +20,8 @@ app.use('/login', loginRoute);
 app.use('/dashboard', dashboardRoute);
 app.use('/project', projectRoute);
 
+global.resetDatabase = false;
+
 function getRoot(req, res) {
 
     global.user = null;

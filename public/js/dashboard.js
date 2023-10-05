@@ -1,6 +1,6 @@
 import Drawflow from '../js/drawflow.js';
 
-var root = am5.Root.new("sankeyChartDiv");
+var sankeyChartRoot = am5.Root.new("sankeyChartDiv");
 
 darkMode(true);
 
@@ -162,17 +162,18 @@ $('#btZoomReset').click(function(){
 
 $('#btReset').click(function(){
     configEditor.clear();
+    sankeyChartRoot.container.children.clear();
 });
 
 function generateProjectSankeyChart(nodes, links) {
 
-    root.container.children.clear();
+    sankeyChartRoot.container.children.clear();
 
-    root.setThemes([
-        am5themes_Animated.new(root)
+    sankeyChartRoot.setThemes([
+        am5themes_Animated.new(sankeyChartRoot)
     ]);
 
-    var series = root.container.children.push(am5flow.Sankey.new(root, {
+    var series = sankeyChartRoot.container.children.push(am5flow.Sankey.new(sankeyChartRoot, {
         sourceIdField: "from",
         targetIdField: "to",
         valueField: "value",

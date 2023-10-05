@@ -23,7 +23,28 @@ const User = sequelize.define('User', {
     password: {
         type: DataTypes.STRING,
         allowNull: false
-    }
+    },
+
+    gender: {
+        type: DataTypes.CHAR,
+        allowNull: true
+    },
+
+});
+
+const Course = sequelize.define('Course', {
+
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
 
 });
 
@@ -50,42 +71,28 @@ const Project = sequelize.define('Project', {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false
-    }
-
-});
-
-const ProjectUser = sequelize.define('ProjectUser', {
-
-    idProject: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: Project,
-            key: 'id'
-        }
     },
 
-    idUser: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: User, // 'Actors' would also work
-            key: 'id'
-        }
-    }
-
 });
 
+const ProjectUser = sequelize.define('ProjectUser', {});
+
 Project.belongsToMany(User, { through: ProjectUser });
+
 User.belongsToMany(Project, { through: ProjectUser });
+
+Course.hasOne(User);
 
 function databaseConnected() {
 
     console.log(messages.databaseConnected);
 
-    if(true) return; // Setar para falso para recriar as tabelas. TODO Remover e colocar algo mais elegante
+    if(!global.resetDatabase) return;
 
+    ProjectUser.sync({ force: true }).then(() => {console.log(messages.projectUsersTableCreated)});
     User.sync({ force: true }).then(() => {console.log(messages.usersTableCreated)});
     Project.sync({ force: true }).then(() => {console.log(messages.projectsTableCreated)});
-    ProjectUser.sync({ force: true }).then(() => {console.log(messages.projectUsersTableCreated)});
+    Course.sync({ force: true }).then(() => {console.log(messages.coursesTableCreated)});
 
 }
 
@@ -95,4 +102,5 @@ module.exports = {
     User: User,
     Project: Project,
     ProjectUser: ProjectUser,
+    Course: Course,
 };
