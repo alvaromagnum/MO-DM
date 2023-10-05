@@ -4,6 +4,7 @@ const databaseConfig = require('./database-config');
 const registrationRoute = require('./routes/registration-route');
 const loginRoute = require('./routes/login-route');
 const dashboardRoute = require('./routes/dashboard-route');
+const projectRoute = require('./routes/project-route');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/register', registrationRoute);
 app.use('/login', loginRoute);
 app.use('/dashboard', dashboardRoute);
+app.use('/project', projectRoute);
 
 function getRoot(req, res) {
 

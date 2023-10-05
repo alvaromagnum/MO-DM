@@ -2018,7 +2018,6 @@ export default class Drawflow {
     this.drawflow = { "drawflow": { "Home": { "data": {} }}};
   }
   export () {
-    console.log(JSON.stringify(this.drawflow));
     const dataExport = JSON.parse(JSON.stringify(this.drawflow));
     this.dispatch('export', dataExport);
     return dataExport;

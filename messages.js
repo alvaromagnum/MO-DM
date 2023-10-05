@@ -1,6 +1,7 @@
 module.exports = {
     serverInitializedMessage: 'Servidor Node Express inicializado!',
     userCreatedSuccess: 'Agora você possui uma conta e pode utilizar o sistema!',
+    projectConfigSaveSuccess: 'Configuração do projeto salva com sucesso!',
     loginAlreadyExists: 'Esse login já está cadastrado!',
     invalidLogin: 'Login inválido!',
     invalidProjectName: 'Nome de projeto inválido!',
