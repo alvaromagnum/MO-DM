@@ -49,11 +49,16 @@ $('#btImport').click(function(){
     importDefaultData();
 });
 
-function processProjectConfig() {
-    getConfigData(configEditor.getJson()).then(processSankeyChart);
+async function processProjectConfig() {
+
+    var configData = await getConfigData(configEditor.getJson());
+    var linksNodes = await getSankeyChartDataFromConfig(configData);
+
+    generateProjectSankeyChart(linksNodes.nodes, linksNodes.links);
+
 }
 
-function processSankeyChart(steps) {
+async function getSankeyChartDataFromConfig(steps) {
 
     var nodes = [];
     var links = [];
@@ -85,28 +90,18 @@ function processSankeyChart(steps) {
     nodes = _.uniq(nodes, true, (o)=> {return o.id});
 
     var stakeholdersQuery = `[*[type='STAKEHOLDER']]`;
+    var uniqueStakeholders = await jsonata(stakeholdersQuery).evaluate(nodes);
 
-    jsonata(stakeholdersQuery).evaluate(nodes).then((stakeholders)=> {
+    for(const stakeholder of uniqueStakeholders) {
 
-        for(const stakeholder of stakeholders) {
+        var stakeholderDecisionsCountQuery = `$count(*[to=${stakeholder.id}])`;
+        var count = await jsonata(stakeholderDecisionsCountQuery).evaluate(links);
 
-            var stakeholderDecisionsCountQuery = `$count(*[to=${stakeholder.id}])`;
+        stakeholder.info = `Decisões: ${count}`;
 
-            jsonata(stakeholderDecisionsCountQuery).evaluate(links).then((count)=> {
+    }
 
-                stakeholder.info = `Decisões: ${count}`;
-                generateProjectSankeyChart(nodes, links);
-
-                // console.log(JSON.stringify(editor.export(),null,'\t'));
-                // console.log(JSON.stringify(steps,null,'\t'));
-                // console.log(JSON.stringify(nodes,null,'\t'));
-                // console.log(JSON.stringify(links,null,'\t'));
-
-            });
-
-        }
-
-    });
+    return({nodes: nodes, links: links});
 
 }
 
