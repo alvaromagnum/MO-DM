@@ -548,7 +548,6 @@ export default class Drawflow {
                         this.connection_ele.classList.add(output_class);
                         this.connection_ele.classList.add(input_class);
 
-
                         this.drawflow.drawflow[this.module].data[id_output].outputs[output_class].connections.push({
                             "node": id_input,
                             "output": input_class

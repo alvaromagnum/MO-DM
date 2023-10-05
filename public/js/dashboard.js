@@ -50,45 +50,61 @@ $('#btImport').click(function(){
 });
 
 function processProjectConfig() {
+    processData(editor.getJson()).then(processSankeyChart);
+}
 
-    processData(editor.getJson()).then((steps)=>{
+function processSankeyChart(steps) {
 
-        var nodes = [];
-        var links = [];
-        var repeatedStakeholders = [];
+    var nodes = [];
+    var links = [];
+    var repeatedStakeholders = [];
 
-        for(const step of steps) {
+    for(const step of steps) {
 
-            nodes.push({ id: step.id, name: step.stepName, fill: am5.color(0x1a2035) });
+        nodes.push({ id: step.id, type: "ETAPA", name: step.stepName, info : `Decisões: ${step.decisions.length}`, fill: am5.color(0x1a2035) });
 
-            for(const decision of step.decisions) {
+        for(const decision of step.decisions) {
+            for(const stakeholder of decision.stakeholders) {
+                repeatedStakeholders.push(stakeholder);
+            }
 
-                nodes.push({ id: decision.id, name: decision.question, fill: am5.color(0x1a2035) });
-                links.push({ from: step.id, to: decision.id, value: decision.stakeholders.length });
+            var stakeholders = _.uniq(repeatedStakeholders, true, (o)=>{return o.idUser});
 
-                for(const stakeholder of decision.stakeholders) {
-                    repeatedStakeholders.push(stakeholder);
-                }
+            nodes.push({ id: decision.id, type: "DECISAO", name: decision.question, info : `Stakeholders: ${stakeholders.length}`, fill: am5.color(0x1a2035) });
+            links.push({ from: step.id, to: decision.id, value: decision.stakeholders.length });
 
-                var stakeholders = _.uniq(repeatedStakeholders, true, (o)=>{return o.idUser});
-
-                for(const stakeholder of stakeholders) {
-                    nodes.push({ id: stakeholder.id, name: stakeholder.stakeholderName, fill: am5.color(0x1a2035) });
-                    links.push({ from: decision.id, to: stakeholder.id, value: decision.stakeholders.length });
-                }
-
+            for(const stakeholder of stakeholders) {
+                nodes.push({ id: stakeholder.id, type: "STAKEHOLDER", name: stakeholder.stakeholderName, info : "", fill: am5.color(0x1a2035) });
+                links.push({ from: decision.id, to: stakeholder.id, value: decision.stakeholders.length });
             }
 
         }
 
-        nodes = _.uniq(nodes, true, (o)=> {return o.id});
+    }
 
-        generateProjectSankeyChart(nodes, links);
+    nodes = _.uniq(nodes, true, (o)=> {return o.id});
 
-        // console.log(JSON.stringify(editor.export(),null,'\t'));
-        // console.log(JSON.stringify(steps,null,'\t'));
-        // console.log(JSON.stringify(nodes,null,'\t'));
-        // console.log(JSON.stringify(links,null,'\t'));
+    var stakeholdersQuery = `[*[type='STAKEHOLDER']]`;
+
+    jsonata(stakeholdersQuery).evaluate(nodes).then((stakeholders)=> {
+
+        for(const stakeholder of stakeholders) {
+
+            var stakeholderDecisionsCountQuery = `$count(*[to=${stakeholder.id}])`;
+
+            jsonata(stakeholderDecisionsCountQuery).evaluate(links).then((count)=> {
+
+                stakeholder.info = `Decisões: ${count}`;
+                generateProjectSankeyChart(nodes, links);
+
+                // console.log(JSON.stringify(editor.export(),null,'\t'));
+                // console.log(JSON.stringify(steps,null,'\t'));
+                // console.log(JSON.stringify(nodes,null,'\t'));
+                // console.log(JSON.stringify(links,null,'\t'));
+
+            });
+
+        }
 
     });
 
@@ -115,7 +131,7 @@ async function processData(json) {
     var querySteps = '[drawflow.Home.data.*[name=\'step\'].[${\'id\': id, \'stepName\': data.step_name, \'previousStepId\' : inputs.input_1.connections.node & \'\', \'nextStepId\': outputs.output_1.connections.node & \'\', \'decisions\': []}].*]';
     var steps = await jsonata(querySteps).evaluate(JSON.parse(json));
 
-    for(const step of Array.from(steps)) {
+    for(const step of steps) {
 
         var queryDecisions = `[drawflow.Home.data.*[name='decision'][inputs.input_1.connections.node='${step.id}'].[\${'id':id, 'question':data.question, 'stakeholders': []}].*]`;
         step.decisions = await jsonata(queryDecisions).evaluate(JSON.parse(json));
@@ -195,7 +211,8 @@ function generateProjectSankeyChart(nodes, links) {
         cornerRadiusTL: 4,
         cornerRadiusTR: 4,
         cornerRadiusBL: 4,
-        cornerRadiusBR: 4
+        cornerRadiusBR: 4,
+        tooltipText: "[bold]{name}[/]\n{info}",
     });
 
     series.nodes.data.setAll(nodes)
