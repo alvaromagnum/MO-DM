@@ -9,9 +9,9 @@ $(function () {
 })
 
 var configCanvas = document.getElementById("projectConfigCanvas");
-const editor = new Drawflow(configCanvas);
+const configEditor = new Drawflow(configCanvas);
 
-editor.start();
+configEditor.start();
 
 $('#btSave').click(function(){
 
@@ -21,7 +21,7 @@ $('#btSave').click(function(){
 
         method: "POST",
         url: "/project/saveConfig",
-        data: { jsonConfig: JSON.stringify(editor.export()) }
+        data: { jsonConfig: JSON.stringify(configEditor.export()) }
 
     }).fail(function(jqXHR, textStatus, errorThrown) {
 
@@ -50,7 +50,7 @@ $('#btImport').click(function(){
 });
 
 function processProjectConfig() {
-    processData(editor.getJson()).then(processSankeyChart);
+    getConfigData(configEditor.getJson()).then(processSankeyChart);
 }
 
 function processSankeyChart(steps) {
@@ -119,14 +119,14 @@ function importDefaultData() {
         Swal.fire('Erro!', jqXHR.responseText, 'error');
     }).done(function (dataToImport) {
         if(dataToImport) {
-            editor.import(JSON.parse(dataToImport));
+            configEditor.import(JSON.parse(dataToImport));
             processProjectConfig();
         }
     });
 
 }
 
-async function processData(json) {
+async function getConfigData(json) {
 
     var querySteps = '[drawflow.Home.data.*[name=\'step\'].[${\'id\': id, \'stepName\': data.step_name, \'previousStepId\' : inputs.input_1.connections.node & \'\', \'nextStepId\': outputs.output_1.connections.node & \'\', \'decisions\': []}].*]';
     var steps = await jsonata(querySteps).evaluate(JSON.parse(json));
@@ -154,22 +154,22 @@ async function processData(json) {
 }
 
 $('#btZoomIn').click(function(){
-    editor.zoom_in_by_value(0.05);
+    configEditor.zoom_in_by_value(0.05);
 });
 
 $('#btZoomOut').click(function(){
-    editor.zoom_out_by_value(0.05);
+    configEditor.zoom_out_by_value(0.05);
 });
 
 $('#btZoomReset').click(function(){
-    editor.zoom_reset();
+    configEditor.zoom_reset();
 });
 
 $('#btReset').click(function(){
-    editor.clear();
+    configEditor.clear();
 });
 
-editor.zoom_out_by_value(0.3);
+configEditor.zoom_out_by_value(0.3);
 
 importDefaultData();
 
