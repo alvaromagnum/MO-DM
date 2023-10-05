@@ -48,7 +48,7 @@ function saveUser(req, res) {
             login: login,
             password: SHA256(password1).toString(),
         }).then(() => {
-            res.send(messages.userCreatedSuccess)
+            res.send(messages.userCreatedSuccess);
         });
 
     });

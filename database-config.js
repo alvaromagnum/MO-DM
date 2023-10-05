@@ -81,7 +81,7 @@ function databaseConnected() {
 
     console.log(messages.databaseConnected);
 
-    if(false) return; // Setar para falso para recriar as tabelas. TODO Remover e colocar algo mais elegante
+    if(true) return; // Setar para falso para recriar as tabelas. TODO Remover e colocar algo mais elegante
 
     User.sync({ force: true }).then(() => {console.log(messages.usersTableCreated)});
     Project.sync({ force: true }).then(() => {console.log(messages.projectsTableCreated)});

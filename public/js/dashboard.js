@@ -2,6 +2,11 @@ import Drawflow from '../js/drawflow.js';
 
 darkMode(true);
 
+$(function () {
+    console.log( "entrou");
+    $('[data-toggle="tooltip"]').tooltip();
+})
+
 var configCanvas = document.getElementById("projectConfigCanvas");
 const editor = new Drawflow(configCanvas);
 
