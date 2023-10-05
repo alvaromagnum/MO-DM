@@ -169,14 +169,6 @@ $('#btReset').click(function(){
     configEditor.clear();
 });
 
-configEditor.zoom_out_by_value(0.3);
-
-importDefaultData();
-
-/************************************************** Sankey Diagram */
-
-
-
 function generateProjectSankeyChart(nodes, links) {
 
     root.container.children.clear();
@@ -222,3 +214,7 @@ function generateProjectSankeyChart(nodes, links) {
     series.appear(1000, 500);
 
 }
+
+configEditor.zoom_out_by_value(0.3);
+
+importDefaultData();
