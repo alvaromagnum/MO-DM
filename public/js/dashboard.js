@@ -6,41 +6,43 @@ darkMode(true);
 
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
-})
+    $('.toast').toast();
+});
 
 var configCanvas = document.getElementById("projectConfigCanvas");
 const configEditor = new Drawflow(configCanvas);
 
 configEditor.start();
 
+configEditor.on("nodeCreated", processProjectConfig);
+configEditor.on("connectionCreated", processProjectConfig);
+configEditor.on("nodeRemoved", processProjectConfig);
+configEditor.on("connectionRemoved", processProjectConfig);
+configEditor.on("nodeDataChanged", processProjectConfig);
+
+$('#btTest').click(function(){
+
+    processProjectConfig().then((data)=>{
+
+        console.log(JSON.stringify(data.configData,null,'\t'));
+        console.log(JSON.stringify(data.nodes,null,'\t'));
+        console.log(JSON.stringify(data.links,null,'\t'));
+
+        $.notify('Teste realizado!', "success");
+    });
+});
+
 $('#btSave').click(function(){
 
-    //console.log(JSON.stringify(editor.export(), null, '\t'));
-
     $.ajax({
-
         method: "POST",
         url: "/project/saveConfig",
         data: { jsonConfig: JSON.stringify(configEditor.export()) }
-
     }).fail(function(jqXHR, textStatus, errorThrown) {
-
         Swal.fire('Erro!', jqXHR.responseText, 'error');
-
     }).done(function (msg) {
-
-        Swal.fire({
-
-            title: 'Sucesso!',
-            html: msg,
-            icon: 'success',
-            showCancelButton: false,
-            confirmButtonText: 'OK'
-
-        });
-
+        $.notify(msg, "success");
         processProjectConfig();
-
     });
 
 });
@@ -55,6 +57,8 @@ async function processProjectConfig() {
     var linksNodes = await getSankeyChartDataFromConfig(configData);
 
     generateProjectSankeyChart(linksNodes.nodes, linksNodes.links);
+
+    return({configData: configData, nodes: linksNodes.nodes, links: linksNodes.links});
 
 }
 
@@ -141,8 +145,6 @@ async function getConfigData(json) {
         }
 
     }
-
-    //console.log(JSON.stringify(steps,null,'\t'));
 
     return steps;
 
