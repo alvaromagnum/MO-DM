@@ -14,24 +14,14 @@ const configEditor = new Drawflow(configCanvas);
 
 configEditor.start();
 
-configEditor.on("nodeCreated", processProjectConfig);
-configEditor.on("connectionCreated", processProjectConfig);
-configEditor.on("nodeRemoved", processProjectConfig);
-configEditor.on("connectionRemoved", processProjectConfig);
-configEditor.on("nodeDataChanged", processProjectConfig);
+configEditor.on("nodeCreated", processProjectConfigDelayed);
+configEditor.on("connectionCreated", processProjectConfigDelayed);
+configEditor.on("nodeRemoved", processProjectConfigDelayed);
+configEditor.on("connectionRemoved", processProjectConfigDelayed);
+configEditor.on("nodeDataChanged", processProjectConfigDelayed);
 
 $('#btTest').click(function(){
-
-    processProjectConfig().then((data)=>{
-
-        console.log(JSON.stringify(JSON.parse(configEditor.getJson()),null,'\t'));
-        console.log(JSON.stringify(data.configData,null,'\t'));
-        console.log(JSON.stringify(data.nodes,null,'\t'));
-        console.log(JSON.stringify(data.links,null,'\t'));
-
-        $.notify('Teste realizado!', "success");
-
-    });
+    processProjectConfig().then((data)=>{$.notify('Teste realizado!', "success");});
 });
 
 $('#btSave').click(function(){
@@ -53,10 +43,26 @@ $('#btImport').click(function(){
     importDefaultData();
 });
 
+// Give time to remove all the connections. Avoid exhibition of old data.
+function processProjectConfigDelayed() {
+
+    var delayInMilliseconds = 500; //1 second
+
+    setTimeout(function() {
+        processProjectConfig();
+    }, delayInMilliseconds);
+
+}
+
 async function processProjectConfig() {
 
     var configData = await getConfigData(configEditor.getJson());
     var linksNodes = await getSankeyChartDataFromConfig(configData);
+
+    // console.log(JSON.stringify(JSON.parse(configEditor.getJson()),null,'\t'));
+    // console.log(JSON.stringify(configData,null,'\t'));
+    // console.log(JSON.stringify(linksNodes.nodes,null,'\t'));
+    // console.log(JSON.stringify(linksNodes.links,null,'\t'));
 
     generateProjectSankeyChart(linksNodes.nodes, linksNodes.links);
 
@@ -68,10 +74,10 @@ async function getSankeyChartDataFromConfig(steps) {
 
     var nodes = [];
     var links = [];
-    var repeatedStakeholders = [];
+    var allStakeholders = [];
 
-    nodes.push({ id: -1, type: "DECISAO", name: "SEM DECISÕES", info : "SEM DECISÕES", fill: am5.color(0x000000) });
-    nodes.push({ id: 0, type: "STAKEHOLDER", name: "SEM STAKEHOLDERS", info : "SEM STAKEHOLDERS", fill: am5.color(0x000000) });
+    nodes.push({ id: -1, type: "DECISAO", name: "SEM DECISÕES", info : "---", fill: am5.color(0x000000) });
+    nodes.push({ id: 0, type: "STAKEHOLDER", name: "SEM STAKEHOLDERS", info : "---", fill: am5.color(0x000000) });
 
     for(const step of steps) {
 
@@ -84,22 +90,24 @@ async function getSankeyChartDataFromConfig(steps) {
 
         for(const decision of step.decisions) {
 
+            decision.stakeholders = _.uniq(decision.stakeholders, true, (o)=>{return o.idUser});
+
             for(const stakeholder of decision.stakeholders) {
-                repeatedStakeholders.push(stakeholder);
+                allStakeholders.push(stakeholder);
             }
 
-            var stakeholders = _.uniq(repeatedStakeholders, true, (o)=>{return o.idUser});
-
-            nodes.push({ id: decision.id, type: "DECISAO", name: decision.question, info : `Stakeholders: ${stakeholders.length}`, fill: am5.color(0x1a2035) });
+            nodes.push({ id: decision.id, type: "DECISAO", name: decision.question, info : `Stakeholders: ${decision.stakeholders.length}`, fill: am5.color(0x1a2035) });
             links.push({ from: step.id, to: decision.id, value: Math.max(decision.stakeholders.length, 1) });
 
-            if(stakeholders.length === 0) {
+            if(decision.stakeholders.length === 0) {
                 links.push({ from: decision.id, to: 0, value: 1 });
             }
 
-            for(const stakeholder of stakeholders) {
+            allStakeholders = _.uniq(allStakeholders, true, (o)=>{return o.idUser});
+
+            for(const stakeholder of allStakeholders) {
                 nodes.push({ id: stakeholder.id, type: "STAKEHOLDER", name: stakeholder.stakeholderName, info : "", fill: am5.color(0x1a2035) });
-                links.push({ from: decision.id, to: stakeholder.id, value: decision.stakeholders.length });
+                if(decision.stakeholders.length > 0) links.push({ from: decision.id, to: stakeholder.id, value: decision.stakeholders.length });
             }
 
         }
@@ -113,11 +121,27 @@ async function getSankeyChartDataFromConfig(steps) {
 
     for(const stakeholder of uniqueStakeholders) {
 
+        if(stakeholder.id === 0) continue;
+
         var stakeholderDecisionsCountQuery = `$count(*[to=${stakeholder.id}])`;
         var count = await jsonata(stakeholderDecisionsCountQuery).evaluate(links);
 
         stakeholder.info = `Decisões: ${count}`;
 
+    }
+
+    var noDecisionsCount = `$count(*[to=-1])`;
+    var count = await jsonata(noDecisionsCount).evaluate(links);
+
+    if(count === 0) {
+        nodes = _.without(nodes, _.findWhere(nodes, {id: -1}));
+    }
+
+    var noStakeholdersCount = `$count(*[to=0])`;
+    var count = await jsonata(noStakeholdersCount).evaluate(links);
+
+    if(count === 0) {
+        nodes = _.without(nodes, _.findWhere(nodes, {id: 0}));
     }
 
     return({nodes: nodes, links: links});
