@@ -1171,10 +1171,10 @@ export default class Drawflow {
 
         switch ($('#selectNode').val().toString()) {
             case "1":
-                this.addNode('step', 1, 2, pos_x, pos_y, 'step-node', {"step_name": ''}, this.stepNode);
+                this.addNode('step', 1, 2, pos_x, pos_y, 'step-node', {"step_name": 'ETAPA ' + this.nodeId}, this.stepNode);
                 break;
             case "2":
-                this.addNode('decision', 1, 1, pos_x, pos_y, 'decision-node', {"question": ''}, this.decisionNode);
+                this.addNode('decision', 1, 1, pos_x, pos_y, 'decision-node', {"question": 'DECISÃO ' + this.nodeId}, this.decisionNode);
                 break;
             case "3":
                 this.addNode('stakeholder', 1, 0, pos_x, pos_y, 'stakeholder-node', {"user_id": '2'}, this.stakeholderNode);

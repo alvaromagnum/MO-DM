@@ -24,11 +24,13 @@ $('#btTest').click(function(){
 
     processProjectConfig().then((data)=>{
 
+        console.log(JSON.stringify(JSON.parse(configEditor.getJson()),null,'\t'));
         console.log(JSON.stringify(data.configData,null,'\t'));
         console.log(JSON.stringify(data.nodes,null,'\t'));
         console.log(JSON.stringify(data.links,null,'\t'));
 
         $.notify('Teste realizado!', "success");
+
     });
 });
 
@@ -68,11 +70,20 @@ async function getSankeyChartDataFromConfig(steps) {
     var links = [];
     var repeatedStakeholders = [];
 
+    nodes.push({ id: -1, type: "DECISAO", name: "SEM DECISÕES", info : "SEM DECISÕES", fill: am5.color(0x000000) });
+    nodes.push({ id: 0, type: "STAKEHOLDER", name: "SEM STAKEHOLDERS", info : "SEM STAKEHOLDERS", fill: am5.color(0x000000) });
+
     for(const step of steps) {
 
         nodes.push({ id: step.id, type: "ETAPA", name: step.stepName, info : `Decisões: ${step.decisions.length}`, fill: am5.color(0x1a2035) });
 
+        if(step.decisions.length === 0) {
+            links.push({ from: step.id, to: -1, value: 1 });
+            links.push({ from: -1, to: 0, value: 1 });
+        }
+
         for(const decision of step.decisions) {
+
             for(const stakeholder of decision.stakeholders) {
                 repeatedStakeholders.push(stakeholder);
             }
@@ -80,7 +91,11 @@ async function getSankeyChartDataFromConfig(steps) {
             var stakeholders = _.uniq(repeatedStakeholders, true, (o)=>{return o.idUser});
 
             nodes.push({ id: decision.id, type: "DECISAO", name: decision.question, info : `Stakeholders: ${stakeholders.length}`, fill: am5.color(0x1a2035) });
-            links.push({ from: step.id, to: decision.id, value: decision.stakeholders.length });
+            links.push({ from: step.id, to: decision.id, value: Math.max(decision.stakeholders.length, 1) });
+
+            if(stakeholders.length === 0) {
+                links.push({ from: decision.id, to: 0, value: 1 });
+            }
 
             for(const stakeholder of stakeholders) {
                 nodes.push({ id: stakeholder.id, type: "STAKEHOLDER", name: stakeholder.stakeholderName, info : "", fill: am5.color(0x1a2035) });
@@ -132,7 +147,7 @@ async function getConfigData(json) {
 
     for(const step of steps) {
 
-        var queryDecisions = `[drawflow.Home.data.*[name='decision'][inputs.input_1.connections.node='${step.id}'].[\${'id':id, 'question':data.question, 'stakeholders': []}].*]`;
+        var queryDecisions = `[drawflow.Home.data.*[name='decision']['${step.id}' in inputs.input_1.connections.node].[\${'id':id, 'question':data.question, 'stakeholders': []}].*]`;
         step.decisions = await jsonata(queryDecisions).evaluate(JSON.parse(json));
 
         for(const decision of step.decisions) {
