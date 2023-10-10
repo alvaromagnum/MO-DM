@@ -59,10 +59,10 @@ async function processProjectConfig() {
     var configData = await getConfigData(configEditor.getJson());
     var linksNodes = await getSankeyChartDataFromConfig(configData);
 
-    //console.log(JSON.stringify(JSON.parse(configEditor.getJson()),null,'\t'));
-    //console.log(JSON.stringify(configData,null,'\t'));
-    console.log(JSON.stringify(linksNodes.nodes,null,'\t'));
-    console.log(JSON.stringify(linksNodes.links,null,'\t'));
+    // console.log(JSON.stringify(JSON.parse(configEditor.getJson()),null,'\t'));
+    // console.log(JSON.stringify(configData,null,'\t'));
+    // console.log(JSON.stringify(linksNodes.nodes,null,'\t'));
+    // console.log(JSON.stringify(linksNodes.links,null,'\t'));
 
     generateProjectSankeyChart(linksNodes.nodes, linksNodes.links);
 
@@ -116,34 +116,6 @@ async function getSankeyChartDataFromConfig(steps) {
 
     nodes = _.uniq(nodes, true, (o)=> {return o.id});
     links = _.uniq(links, true, (o)=> {return o.from + "_" + o.to});
-
-    var linksIdsTo = links.map((o)=>{return o.to});
-    var linksIdsFrom = links.map((o)=>{return o.from});
-
-    var linkCountsTo = _.countBy(linksIdsTo, function(item) {
-        return item;
-    });
-
-    var linkCountsFrom = _.countBy(linksIdsFrom, function(item) {
-        return item;
-    });
-
-    var decisionNodes = _.filter(nodes, function(node){ return node.type === "DECISAO" && node.id > 0; }).map((o)=>{return o.id});
-
-    var differentLinks = _.filter(decisionNodes, function(decision){ return linkCountsTo[decision] !== linkCountsFrom[decision]; });
-
-    for(var link of links) {
-
-        var id = link.from;
-
-        if(!_.contains(differentLinks, id)) continue;
-
-        if(!linkCountsTo[id]) linkCountsTo[id] = 0;
-        if(!linkCountsFrom[id]) linkCountsFrom[id] = 0;
-
-        //link.value = Math.max(linkCountsTo[id], linkCountsFrom[id]);
-
-    }
 
     var stakeholdersQuery = `[*[type='STAKEHOLDER']]`;
     var uniqueStakeholders = await jsonata(stakeholdersQuery).evaluate(nodes);
