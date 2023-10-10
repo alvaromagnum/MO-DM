@@ -5,6 +5,7 @@ const registrationRoute = require('./routes/registration-route');
 const loginRoute = require('./routes/login-route');
 const dashboardRoute = require('./routes/dashboard-route');
 const projectRoute = require('./routes/project-route');
+const usersRoute = require('./routes/users-route');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use('/register', registrationRoute);
 app.use('/login', loginRoute);
 app.use('/dashboard', dashboardRoute);
 app.use('/project', projectRoute);
+app.use('/users', usersRoute);
 
 global.resetDatabase = false;
 

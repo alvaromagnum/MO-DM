@@ -35,6 +35,15 @@
     padding: 5px;
 }
 
+.node-user-name {
+    color:black!important;
+}
+
+.select-divider {
+    background: #202940;
+    color: white;
+}
+
 :root {
     --dfBackgroundColor: #ffffff;
     --dfBackgroundSize: 0px;

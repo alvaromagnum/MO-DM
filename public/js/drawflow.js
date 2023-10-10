@@ -49,43 +49,6 @@ export default class Drawflow {
         this.evCache = new Array();
         this.prevDiff = -1;
 
-        // TODO MAGNUM
-        this.stepNode = `
-    <div class="container">
-        <div class="col rounded step-node-header">
-            <i class="bi-arrow-right-square"></i> Etapa
-        </div>
-        <div><br/></div>
-        <div>
-            <input class="rounded" type="text" df-step_name/>
-        </div>
-    </div>
-`;
-
-        this.decisionNode = `
-    <div class="container">
-        <div class="col rounded decision-node-header">
-            <i class="bi-patch-question"></i> Decisão
-        </div>
-        <div><br/></div>
-        <div>
-            <input class="rounded" type="text" df-question/>
-        </div>
-    </div>
-`;
-
-        this.stakeholderNode = `
-    <div class="container">
-        <div class="col rounded stakeholder-node-header">
-            <i class="bi-person"></i> Stakeholder
-        </div>
-        <div><br/></div>
-        <div class="text-center">
-            <input type="hidden" df-user_id>
-            <img src="/img/kal-visuals-square.jpg" alt="kal" class="border-radius-lg shadow avatar-xl shadow-dark"/>
-        </div>
-    </div>
-`;
     }
 
     start() {
@@ -1169,16 +1132,73 @@ export default class Drawflow {
         var pos_x = this.pos_x * (this.precanvas.clientWidth / (this.precanvas.clientWidth * this.zoom)) - (this.precanvas.getBoundingClientRect().x * (this.precanvas.clientWidth / (this.precanvas.clientWidth * this.zoom)));
         var pos_y = this.pos_y * (this.precanvas.clientHeight / (this.precanvas.clientHeight * this.zoom)) - (this.precanvas.getBoundingClientRect().y * (this.precanvas.clientHeight / (this.precanvas.clientHeight * this.zoom)));
 
-        switch ($('#selectNode').val().toString()) {
-            case "1":
-                this.addNode('step', 1, 2, pos_x, pos_y, 'step-node', {"step_name": 'ETAPA ' + this.nodeId}, this.stepNode);
+        var nodeValue = $('#selectNodeType').val();
+
+        switch (nodeValue) {
+
+            case "-3":
                 break;
-            case "2":
-                this.addNode('decision', 1, 1, pos_x, pos_y, 'decision-node', {"question": 'DECISÃO ' + this.nodeId}, this.decisionNode);
+
+            case "-2":
                 break;
-            case "3":
-                this.addNode('stakeholder', 1, 0, pos_x, pos_y, 'stakeholder-node', {"user_id": '2'}, this.stakeholderNode);
+
+            case "-1":
+
+                var stepNode = `
+                    <div class="container">
+                        <div class="col rounded step-node-header">
+                            <i class="bi-arrow-right-square"></i> Etapa
+                        </div>
+                        <div><br/></div>
+                        <div>
+                            <input class="rounded" type="text" df-step_name/>
+                        </div>
+                    </div>
+                `;
+
+                this.addNode('step', 1, 2, pos_x, pos_y, 'step-node', {"step_name": 'ETAPA ' + this.nodeId}, stepNode);
                 break;
+
+            case "0":
+
+                var decisionNode = `
+                    <div class="container">
+                        <div class="col rounded decision-node-header">
+                            <i class="bi-patch-question"></i> Decisão
+                        </div>
+                        <div><br/></div>
+                        <div>
+                            <input class="rounded" type="text" df-question/>
+                        </div>
+                    </div>
+                `;
+
+                this.addNode('decision', 1, 1, pos_x, pos_y, 'decision-node', {"question": 'DECISÃO ' + this.nodeId}, decisionNode);
+                break;
+
+            default:
+
+                var userName = $('#selectNodeType option:selected').text();
+
+                var stakeholderNode = `
+                    <div class="container">
+                        <div class="col rounded stakeholder-node-header">
+                            <i class="bi-person"></i> Stakeholder
+                        </div>
+                        <div><br/></div>
+                        <div class="text-center">
+                            <input type="hidden" df-user_id>
+                            <input type="hidden" df-user_name>
+                            <img src="/img/kal-visuals-square.jpg" alt="kal" class="border-radius-lg avatar-xl"/>
+                            <br/><br/>
+                            <div class="node-user-name">${userName}</div>
+                        </div>
+                    </div>
+                `;
+
+                this.addNode('stakeholder', 1, 0, pos_x, pos_y, 'stakeholder-node', {"user_id": nodeValue, "user_name": userName}, stakeholderNode);
+                break;
+
         }
         // if(this.connection_selected != null && this.reroute) {
         //     this.createReroutePoint(this.connection_selected);

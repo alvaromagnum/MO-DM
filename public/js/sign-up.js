@@ -1,6 +1,7 @@
 $('#signUpButton').click(function () {
 
     var loginInput = $('#inputTextLogin').val();
+    var nameInput = $('#inputTextName').val();
 
     var passwordInput1 = $('#inputTextPassword1').val();
     var passwordInput2 = $('#inputTextPassword2').val();
@@ -8,12 +9,13 @@ $('#signUpButton').click(function () {
     $('#inputTextLogin').val('');
     $('#inputTextPassword1').val('');
     $('#inputTextPassword2').val('');
+    $('#inputTextName').val('');
 
     $.ajax({
 
         method: "POST",
         url: "/register/user",
-        data: { login: loginInput, password1: passwordInput1, password2: passwordInput2 }
+        data: { name: nameInput, login: loginInput, password1: passwordInput1, password2: passwordInput2 }
 
     }).fail(function(jqXHR, textStatus, errorThrown) {
 

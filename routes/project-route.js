@@ -14,7 +14,7 @@ function saveProjectConfig(req, res) {
     global.project.jsonConfig = req.body.jsonConfig;
 
     global.project.save().then(()=> {
-        res.send(messages.projectConfigSaveSuccess)
+        res.send(messages.projectConfigSaveSuccess);
     });
 
 }

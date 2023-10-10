@@ -16,6 +16,7 @@ function registerProject(req, res) {
 
 function saveUser(req, res) {
 
+    var name = req.body.name;
     var login = req.body.login;
     var password1 = req.body.password1;
     var password2 = req.body.password2;
@@ -45,6 +46,7 @@ function saveUser(req, res) {
         }
 
         databaseConfig.User.create({
+            name: name,
             login: login,
             password: SHA256(password1).toString(),
         }).then(() => {

@@ -59,10 +59,10 @@ async function processProjectConfig() {
     var configData = await getConfigData(configEditor.getJson());
     var linksNodes = await getSankeyChartDataFromConfig(configData);
 
-    // console.log(JSON.stringify(JSON.parse(configEditor.getJson()),null,'\t'));
-    // console.log(JSON.stringify(configData,null,'\t'));
-    // console.log(JSON.stringify(linksNodes.nodes,null,'\t'));
-    // console.log(JSON.stringify(linksNodes.links,null,'\t'));
+    //console.log(JSON.stringify(JSON.parse(configEditor.getJson()),null,'\t'));
+    //console.log(JSON.stringify(configData,null,'\t'));
+    console.log(JSON.stringify(linksNodes.nodes,null,'\t'));
+    console.log(JSON.stringify(linksNodes.links,null,'\t'));
 
     generateProjectSankeyChart(linksNodes.nodes, linksNodes.links);
 
@@ -97,7 +97,7 @@ async function getSankeyChartDataFromConfig(steps) {
             }
 
             nodes.push({ id: decision.id, type: "DECISAO", name: decision.question, info : `Stakeholders: ${decision.stakeholders.length}`, fill: am5.color(0x1a2035) });
-            links.push({ from: step.id, to: decision.id, value: Math.max(decision.stakeholders.length, 1) });
+            links.push({ from: step.id, to: decision.id, value: 1 });
 
             if(decision.stakeholders.length === 0) {
                 links.push({ from: decision.id, to: 0, value: 1 });
@@ -107,7 +107,7 @@ async function getSankeyChartDataFromConfig(steps) {
 
             for(const stakeholder of allStakeholders) {
                 nodes.push({ id: stakeholder.id, type: "STAKEHOLDER", name: stakeholder.stakeholderName, info : "", fill: am5.color(0x1a2035) });
-                if(decision.stakeholders.length > 0) links.push({ from: decision.id, to: stakeholder.id, value: decision.stakeholders.length });
+                if(_.contains(decision.stakeholders.map((o)=>{return o.id}), stakeholder.id)) links.push({ from: decision.id, to: stakeholder.id, value: 1 }); //baba
             }
 
         }
@@ -115,6 +115,35 @@ async function getSankeyChartDataFromConfig(steps) {
     }
 
     nodes = _.uniq(nodes, true, (o)=> {return o.id});
+    links = _.uniq(links, true, (o)=> {return o.from + "_" + o.to});
+
+    var linksIdsTo = links.map((o)=>{return o.to});
+    var linksIdsFrom = links.map((o)=>{return o.from});
+
+    var linkCountsTo = _.countBy(linksIdsTo, function(item) {
+        return item;
+    });
+
+    var linkCountsFrom = _.countBy(linksIdsFrom, function(item) {
+        return item;
+    });
+
+    var decisionNodes = _.filter(nodes, function(node){ return node.type === "DECISAO" && node.id > 0; }).map((o)=>{return o.id});
+
+    var differentLinks = _.filter(decisionNodes, function(decision){ return linkCountsTo[decision] !== linkCountsFrom[decision]; });
+
+    for(var link of links) {
+
+        var id = link.from;
+
+        if(!_.contains(differentLinks, id)) continue;
+
+        if(!linkCountsTo[id]) linkCountsTo[id] = 0;
+        if(!linkCountsFrom[id]) linkCountsFrom[id] = 0;
+
+        //link.value = Math.max(linkCountsTo[id], linkCountsFrom[id]);
+
+    }
 
     var stakeholdersQuery = `[*[type='STAKEHOLDER']]`;
     var uniqueStakeholders = await jsonata(stakeholdersQuery).evaluate(nodes);
@@ -148,6 +177,25 @@ async function getSankeyChartDataFromConfig(steps) {
 
 }
 
+function importUsersNodes() {
+
+    $.ajax({
+        method: "GET",
+        url: "/users/get/projectUsers",
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+    }).done(function (users) {
+        for(var user of users) {
+            addUserNode(user.name, user.id)
+        }
+    });
+
+}
+
+function addUserNode(optionText, optionValue) {
+    $('#selectNodeType').append(`<option value="${optionValue}">${optionText} </option>`);
+}
+
 function importDefaultData() {
 
     $.ajax({
@@ -176,7 +224,7 @@ async function getConfigData(json) {
 
         for(const decision of step.decisions) {
 
-            var queryStakeholders = `[drawflow.Home.data.*[name='stakeholder' and '${decision.id}' in inputs.input_1.connections.node].[\${'id': id, 'idUser':$number(data.user_id), 'stakeholderName': 'STAKEHOLDER ' & data.user_id}].*]`;
+            var queryStakeholders = `[drawflow.Home.data.*[name='stakeholder' and '${decision.id}' in inputs.input_1.connections.node].[\${'id': id, 'idUser':$number(data.user_id), 'stakeholderName': $trim(data.user_name)}].*]`;
             var stakeholders = await jsonata(queryStakeholders).evaluate(JSON.parse(json));
 
             decision.stakeholders = _.uniq(stakeholders, true, (o)=>{return o.idUser});
@@ -254,4 +302,5 @@ function generateProjectSankeyChart(nodes, links) {
 
 configEditor.zoom_out_by_value(0.3);
 
+importUsersNodes();
 importDefaultData();
