@@ -158,7 +158,7 @@ function importUsersNodes() {
         Swal.fire('Erro!', jqXHR.responseText, 'error');
     }).done(function (users) {
         for(var user of users) {
-            addUserNode(user.name, user.id)
+            addUserNode(`${user.name} - ${user.courseName}`, user.id)
         }
     });
 
@@ -238,7 +238,7 @@ function generateProjectSankeyChart(nodes, links) {
         sourceIdField: "from",
         targetIdField: "to",
         valueField: "value",
-        paddingRight: 200
+        paddingRight: 400
     }));
 
     series.nodes.setAll({

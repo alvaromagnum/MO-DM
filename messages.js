@@ -3,6 +3,7 @@ module.exports = {
     userCreatedSuccess: 'Agora você possui uma conta e pode utilizar o sistema!',
     projectConfigSaveSuccess: 'Configuração do projeto salva com sucesso!',
     loginAlreadyExists: 'Esse login já está cadastrado!',
+    selectCourse: 'Selecione um curso!',
     invalidLogin: 'Login inválido!',
     invalidProjectName: 'Nome de projeto inválido!',
     createProjectError: 'Erro ao tentar criar projeto! Tente novamente!',

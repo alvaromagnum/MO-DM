@@ -35,6 +35,30 @@
     padding: 5px;
 }
 
+.select-course {
+    width: 100%!important;
+    height: 40px!important;
+    border: 1px solid lightgrey!important;
+    border-radius: 5px!important;
+    padding: 5px!important;
+}
+
+.select-course-selected {
+    border: 2px solid #e91e63!important;
+}
+
+.select-course:focus {
+    border: 2px solid #e91e63!important;
+}
+
+.select-course:focus-visible {
+    border: 2px solid #e91e63!important;
+}
+
+.select-course-label {
+    color: grey!important;
+}
+
 .node-user-name {
     color:black!important;
 }

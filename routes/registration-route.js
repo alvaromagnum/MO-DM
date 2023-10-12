@@ -20,6 +20,12 @@ function saveUser(req, res) {
     var login = req.body.login;
     var password1 = req.body.password1;
     var password2 = req.body.password2;
+    var idCourse = req.body.idCourse;
+
+    if(idCourse < 1) {
+        res.status(500).send(messages.selectCourse);
+        return;
+    }
 
     var regex = /[^\w]/gi;
 
@@ -46,6 +52,7 @@ function saveUser(req, res) {
         }
 
         databaseConfig.User.create({
+            CourseId: idCourse,
             name: name,
             login: login,
             password: SHA256(password1).toString(),
