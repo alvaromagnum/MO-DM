@@ -171,15 +171,30 @@ function addUserNode(optionText, optionValue) {
 function importDefaultData() {
 
     $.ajax({
+
         method: "GET",
         url: "/project/loadConfig",
+
     }).fail(function(jqXHR, textStatus, errorThrown) {
+
         Swal.fire('Erro!', jqXHR.responseText, 'error');
+
     }).done(function (dataToImport) {
+
         if(dataToImport) {
-            configEditor.import(JSON.parse(dataToImport));
+            var projectName = dataToImport.projectName;
+            var jsonConfig = dataToImport.jsonConfig;
+
+            $("#labelProjectName").text(projectName);
+
+            if(!jsonConfig) return;
+
+            configEditor.import(JSON.parse(jsonConfig));
+
             processProjectConfig();
+
         }
+
     });
 
 }

@@ -26,7 +26,7 @@ function loadProjectConfig(req, res) {
         return;
     }
 
-    res.send(global.project.jsonConfig);
+    res.send({jsonConfig: global.project.jsonConfig, projectName: global.project.name});
 
 }
 

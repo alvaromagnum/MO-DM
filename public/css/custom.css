@@ -24,6 +24,11 @@
     font-size: 1.3rem!important;
 }
 
+.project-name {
+    color: white!important;
+    font-size: 20pt;
+}
+
 .align-right {
     text-align: right;
 }

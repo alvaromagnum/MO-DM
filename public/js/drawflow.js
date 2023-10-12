@@ -1151,7 +1151,7 @@ export default class Drawflow {
                         </div>
                         <div><br/></div>
                         <div>
-                            <input class="rounded" type="text" df-step_name/>
+                            <input onClick="this.select();" class="rounded" type="text" df-step_name/>
                         </div>
                     </div>
                 `;
@@ -1168,7 +1168,7 @@ export default class Drawflow {
                         </div>
                         <div><br/></div>
                         <div>
-                            <input class="rounded" type="text" df-question/>
+                            <input onClick="this.select();" class="rounded" type="text" df-question/>
                         </div>
                     </div>
                 `;
