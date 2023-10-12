@@ -186,8 +186,10 @@ function importDefaultData() {
 
             var projectName = dataToImport.projectName;
             var jsonConfig = dataToImport.jsonConfig;
+            var userName = dataToImport.userName;
 
             $("#labelProjectName").text(projectName);
+            $("#labelUserName").text(userName);
 
             if(!jsonConfig) return;
 
