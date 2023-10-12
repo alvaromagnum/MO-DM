@@ -36,7 +36,19 @@ async function getCourses(req, res) {
     res.send(courses);
 }
 
+function getLoggedUserData(req, res) {
+
+    if(!global.user || !global.project) {
+        res.redirect('/');
+        return;
+    }
+
+    res.send({userName: global.user.name});
+
+}
+
 usersRoute.get('/get/projectUsers', getProjectUsers);
 usersRoute.get('/get/courses', getCourses);
+usersRoute.get('/get/loggedUserData', getLoggedUserData);
 
 module.exports = usersRoute;

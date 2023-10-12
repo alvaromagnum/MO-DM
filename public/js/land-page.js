@@ -4,10 +4,6 @@ $('#loginButton').click(function () {
     var password = $('#inputPassword').val();
     var key = $('#inputKey').val();
 
-    $('#inputLogin').val('');
-    $('#inputPassword').val('');
-    $('#inputKey').val('');
-
     $.ajax({
 
         method: "POST",

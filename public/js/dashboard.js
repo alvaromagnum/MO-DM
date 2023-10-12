@@ -172,6 +172,18 @@ function addUserNode(optionText, optionValue) {
 function importDefaultData() {
 
     $.ajax({
+        method: "GET",
+        url: "/users/get/loggedUserData",
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+    }).done(function (dataToImport) {
+        if(dataToImport) {
+            var userName = dataToImport.userName;
+            $("#labelUserName").text(userName);
+        }
+    });
+
+    $.ajax({
 
         method: "GET",
         url: "/project/loadConfig",
@@ -186,10 +198,8 @@ function importDefaultData() {
 
             var projectName = dataToImport.projectName;
             var jsonConfig = dataToImport.jsonConfig;
-            var userName = dataToImport.userName;
 
             $("#labelProjectName").text(projectName);
-            $("#labelUserName").text(userName);
 
             if(!jsonConfig) return;
 
@@ -257,7 +267,7 @@ function generateProjectSankeyChart(nodes, links) {
         sourceIdField: "from",
         targetIdField: "to",
         valueField: "value",
-        paddingRight: 400
+        paddingRight: 450
     }));
 
     series.nodes.setAll({
