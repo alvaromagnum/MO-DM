@@ -56,10 +56,11 @@ function processProjectConfigDelayed() {
 
 async function processProjectConfig() {
 
-    var configData = await getConfigData(configEditor.getJson());
+    var editorJson = configEditor.getJson();
+    var configData = await getConfigData(editorJson);
     var linksNodes = await getSankeyChartDataFromConfig(configData);
 
-    // console.log(JSON.stringify(JSON.parse(configEditor.getJson()),null,'\t'));
+    // console.log(JSON.stringify(JSON.parse(editorJson),null,'\t'));
     // console.log(JSON.stringify(configData,null,'\t'));
     // console.log(JSON.stringify(linksNodes.nodes,null,'\t'));
     // console.log(JSON.stringify(linksNodes.links,null,'\t'));
@@ -96,18 +97,18 @@ async function getSankeyChartDataFromConfig(steps) {
                 allStakeholders.push(stakeholder);
             }
 
+            allStakeholders = _.uniq(allStakeholders, true, (o)=>{return o.idUser});
+
             nodes.push({ id: decision.id, type: "DECISAO", name: decision.question, info : `Stakeholders: ${decision.stakeholders.length}`, fill: am5.color(0x1a2035) });
-            links.push({ from: step.id, to: decision.id, value: 1 });
+            links.push({ from: step.id, to: decision.id, value: Math.max(1, decision.stakeholders.length) });
 
             if(decision.stakeholders.length === 0) {
                 links.push({ from: decision.id, to: 0, value: 1 });
             }
 
-            allStakeholders = _.uniq(allStakeholders, true, (o)=>{return o.idUser});
-
             for(const stakeholder of allStakeholders) {
                 nodes.push({ id: stakeholder.id, type: "STAKEHOLDER", name: stakeholder.stakeholderName, info : "", fill: am5.color(0x1a2035) });
-                if(_.contains(decision.stakeholders.map((o)=>{return o.id}), stakeholder.id)) links.push({ from: decision.id, to: stakeholder.id, value: 1 }); //baba
+                if(_.contains(decision.stakeholders.map((o)=>{return o.idUser}), stakeholder.idUser)) links.push({ from: decision.id, to: stakeholder.id, value: 1 }); //baba
             }
 
         }
@@ -182,6 +183,7 @@ function importDefaultData() {
     }).done(function (dataToImport) {
 
         if(dataToImport) {
+
             var projectName = dataToImport.projectName;
             var jsonConfig = dataToImport.jsonConfig;
 

@@ -35,13 +35,13 @@ export default class Drawflow {
 
         this.noderegister = {};
         this.render = render;
-        this.drawflow = {"drawflow": {"Home": {"data": {}}}};
+        this.drawflow = {"drawflow": {"Home": {"data": {}}}, "zoom": 1};
         // Configurable options
         this.module = 'Home';
         this.editor_mode = 'edit';
         this.zoom = 1;
         this.zoom_max = 1.6;
-        this.zoom_min = 0.5;
+        this.zoom_min = 0.1;
         this.zoom_value = 0.01;
         this.zoom_last_value = 1;
 
@@ -1483,7 +1483,7 @@ export default class Drawflow {
             inputs: json_inputs,
             outputs: json_outputs,
             pos_x: ele_pos_x,
-            pos_y: ele_pos_y,
+            pos_y: ele_pos_y
         }
         this.drawflow.drawflow[this.module].data[newNodeId] = json;
         this.dispatch('nodeCreated', newNodeId);
@@ -2123,18 +2123,22 @@ export default class Drawflow {
     }
 
     export() {
+        this.drawflow.zoom = this.zoom;
         const dataExport = JSON.parse(JSON.stringify(this.drawflow));
         this.dispatch('export', dataExport);
         return dataExport;
     }
 
     getJson() {
+        this.drawflow.zoom = this.zoom;
         return JSON.stringify(this.drawflow);
     }
 
     import(data, notifi = true) {
         this.clear();
         this.drawflow = JSON.parse(JSON.stringify(data));
+        this.zoom = this.drawflow.zoom;
+        this.zoom_refresh();
         this.load();
         if (notifi) {
             this.dispatch('import', 'import');
