@@ -359,8 +359,9 @@ export default class Drawflow {
             this.updateConnection(e_pos_x, e_pos_y);
         }
         if (this.editor_selected) {
-            x = this.canvas_x + (-(this.pos_x - e_pos_x))
-            y = this.canvas_y + (-(this.pos_y - e_pos_y))
+            x = this.canvas_x + (-(this.pos_x - e_pos_x));
+            y = this.canvas_y + (-(this.pos_y - e_pos_y));
+            console.log(`${x}, ${y}`);
             this.dispatch('translate', {x: x, y: y});
             this.precanvas.style.transform = "translate(" + x + "px, " + y + "px) scale(" + this.zoom + ")";
         }
@@ -2124,6 +2125,8 @@ export default class Drawflow {
 
     export() {
         this.drawflow.zoom = this.zoom;
+        this.drawflow.x = this.canvas_x;
+        this.drawflow.y = this.canvas_y;
         const dataExport = JSON.parse(JSON.stringify(this.drawflow));
         this.dispatch('export', dataExport);
         return dataExport;
@@ -2139,6 +2142,7 @@ export default class Drawflow {
         this.drawflow = JSON.parse(JSON.stringify(data));
         this.zoom = this.drawflow.zoom;
         this.zoom_refresh();
+        this.precanvas.style.transform = "translate(" + this.drawflow.x + "px, " + this.drawflow.y + "px) scale(" + this.zoom + ")";
         this.load();
         if (notifi) {
             this.dispatch('import', 'import');
