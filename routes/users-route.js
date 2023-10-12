@@ -1,4 +1,5 @@
 const express = require('express');
+const _ = require('underscore');
 const messages = require('../messages');
 const databaseConfig = require('../database-config');
 
@@ -12,6 +13,8 @@ async function getProjectUsers(req, res) {
     }
 
     var usersFromDb = await global.project.getUsers();
+    usersFromDb = _.sortBy(usersFromDb, function(o) { return o.name; })
+
     var users = [];
 
     for(const userFromDb of usersFromDb) {

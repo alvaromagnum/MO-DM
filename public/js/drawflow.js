@@ -1189,9 +1189,9 @@ export default class Drawflow {
                         <div class="text-center">
                             <input type="hidden" df-user_id>
                             <input type="hidden" df-user_name>
-                            <img src="/img/kal-visuals-square.jpg" alt="kal" class="border-radius-lg avatar-xl"/>
+                            <img src="/img/student-avatar.jpg" alt="kal" class="border-radius-lg avatar-xl"/>
                             <br/><br/>
-                            <div class="node-user-name">${userName}</div>
+                            <div class="node-user-name"><b>${userName}</b></div>
                         </div>
                     </div>
                 `;
