@@ -42,10 +42,15 @@ function loadMyDecisions(req, res) {
 
 }
 
+function processDecisionsData(req, res) {
+    res.send("");
+}
+
 projectRoute.post('/saveConfig', saveProjectConfig);
 
 projectRoute.get('/loadConfig', loadProjectConfig);
 
 projectRoute.get('/decisions', loadMyDecisions);
+projectRoute.post('/decisions', processDecisionsData);
 
 module.exports = projectRoute;

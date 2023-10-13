@@ -6,6 +6,10 @@ function activateTooltips() {
     });
 }
 
+function activateEditables() {
+    $('.input').jinplace({});
+}
+
 var projectId;
 
 var starRatingControl;
@@ -168,7 +172,7 @@ function addNewDecisionOption(table, decisionId) {
                 <i class="material-icons opacity-10">psychology_alt</i>&nbsp;
               </div>
               <div class="d-flex flex-column justify-content-center">
-                <h6 class="mb-0 text-sm">Clique aqui para mudar o título da opção de decisão</h6>
+                <h6 class="mb-0 text-sm input" id="${elementId}">Clique aqui para mudar o título da opção de decisão</h6>
               </div>
             </div>
         </td>
@@ -220,6 +224,7 @@ function addNewDecisionOption(table, decisionId) {
 
     activateStarRating();
     activateTooltips();
+    activateEditables();
 
 }
 
@@ -229,11 +234,12 @@ $("#btSave").click(function() {
 
         var id = $(el).attr("uuid");
         var decisionId = $(el).attr("decisionId");
+        var option = $("#"+id).text();
         var e = $(el).val();
         var v = $( "#selectValue_" + decisionId + "_" + id).val();
         var c = $( "#selectCost_" + decisionId + "_" + id).val();
 
-        console.log({projectId: projectId,decisionId: decisionId, optionId: id, e: e, v: v, c: c});
+        console.log({projectId: projectId,decisionId: decisionId, option: option, optionId: id, e: e, v: v, c: c});
 
     });
 
