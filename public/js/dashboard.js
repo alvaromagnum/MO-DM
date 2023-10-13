@@ -59,10 +59,10 @@ async function processProjectConfig() {
     var configData = await getConfigData(editorJson);
     var linksNodes = await getSankeyChartDataFromConfig(configData);
 
-    console.log(JSON.stringify(JSON.parse(editorJson),null,'\t'));
-    console.log(JSON.stringify(configData,null,'\t'));
-    console.log(JSON.stringify(linksNodes.nodes,null,'\t'));
-    console.log(JSON.stringify(linksNodes.links,null,'\t'));
+    // console.log(JSON.stringify(JSON.parse(editorJson),null,'\t'));
+    // console.log(JSON.stringify(configData,null,'\t'));
+    // console.log(JSON.stringify(linksNodes.nodes,null,'\t'));
+    // console.log(JSON.stringify(linksNodes.links,null,'\t'));
 
     generateProjectSankeyChart(linksNodes.nodes, linksNodes.links);
 

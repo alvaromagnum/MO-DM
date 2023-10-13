@@ -66,6 +66,11 @@ const Evaluation = sequelize.define('Evaluation', {
         allowNull: false
     },
 
+    idStep: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+
     option: {
         type: DataTypes.STRING,
         allowNull: false

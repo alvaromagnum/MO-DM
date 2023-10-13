@@ -21,70 +21,91 @@ function activateStarRating() {
     });
 }
 
+function processNoDecision() {
+
+    $("#labelInfo").text("SEM DECISÕES CADASTRADAS!");
+
+    Swal.fire({
+
+        title: 'Atenção!',
+        text: "Não existem decisões cadastradas para você.",
+        icon: 'info',
+        showCancelButton: false,
+        cancelButtonText: "CANCELAR",
+        confirmButtonText: 'OK'
+
+    });
+
+}
+
 async function processDecisions(jsonConfig) {
 
     var configData = await getConfigData(jsonConfig);
 
-    var queryDecisions = '[*.[${"stepId": id, "decisions": decisions[1 in stakeholders.idUser].[${"stepId": %.id, "decisionId": id, "question": question}].*}][$count(decisions)>0]]';
+    var queryDecisions = '[*.[${"stepId": id, "decisions": [decisions['+userId+' in stakeholders.idUser].[${"stepId": %.id, "decisionId": id, "question": question}].*]}][$count(decisions)>0]]';
     var allData = await jsonata(queryDecisions).evaluate(configData);
 
-    for(var data of allData) {
+    if(allData.length === 0 ) {
+        processNoDecision();
+    }
 
-        for(var decision of data.decisions) {
+    for(var step of allData) {
+
+        for(var decision of step.decisions) {
 
             var card = $("<div></div>").html(`
-                    <div class="card">
-                      <div class="card-body px-0 pb-2">
-                        <div class="table-responsive">
-                          <table class="table align-items-center mb-0">
-                            <thead>
+                <div class="card">
+                  <div class="card-body px-0 pb-2">
+                    <div class="table-responsive">
+                      <table class="table align-items-center mb-0">
+                        <thead>
+                        <tr>
+                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7">Decisão</th>
+                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 ps-2">Expectativa<sup><i data-toggle="tooltip" title="O quanto você acredita que essa opção é exequível" class="material-icons text-sm my-auto me-1">info</i></sup></th>
+                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 ps-2">Valor<sup><i data-toggle="tooltip" title="O quanto você deseja essa opção" class="material-icons text-sm my-auto me-1">info</i></sup></th>
+                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 ps-2">Custo<sup><i data-toggle="tooltip" title="O quão custosa você acha que é essa opção" class="material-icons text-sm my-auto me-1">info</i></sup></th>
+                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 ps-2">Opções</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tableQuestions_${decision.decisionId}">
                             <tr>
-                              <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7">Decisão</th>
-                              <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 ps-2">Expectativa</th>
-                              <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 ps-2">Valor</th>
-                              <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 ps-2">Custo</th>
-                              <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 ps-2">Opções</th>
+                                <td>
+                                    <div class="d-flex px-2 py-1">
+                                      <div>
+                                        <i class="material-icons opacity-10">not_listed_location</i>&nbsp;
+                                      </div>
+                                      <div class="d-flex flex-column justify-content-center">
+                                        <h6 class="mb-0 text-sm">${decision.question.toUpperCase()}</h6>
+                                      </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="mt-2">
+                                      ---
+                                </td>
+                                <td>
+                                    <div class="mt-2">
+                                      ---
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="mt-2">
+                                      ---
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <button onclick="addNewDecisionOption(${"tableQuestions_"+decision.decisionId}, ${decision.decisionId}, ${step.stepId})" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Adicionar Opção"><i class="material-icons icon-button">add</i></button>
+                                </td>
                             </tr>
-                            </thead>
-                            <tbody id="tableQuestions_${decision.decisionId}">
-                                <tr>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                          <div>
-                                            <i class="material-icons opacity-10">not_listed_location</i>&nbsp;
-                                          </div>
-                                          <div class="d-flex flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm">${decision.question.toUpperCase()}</h6>
-                                          </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="mt-2">
-                                          ---
-                                    </td>
-                                    <td>
-                                        <div class="mt-2">
-                                          ---
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="mt-2">
-                                          ---
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <button onclick="addNewDecisionOption(${"tableQuestions_"+decision.decisionId}, ${decision.decisionId})" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Adicionar Opção"><i class="material-icons icon-button">add</i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
+                        </tbody>
+                      </table>
                     </div>
-                    <br/><br/>
-                    <hr class="horizontal light mt-0 mb-2">
-                    <br/><br/>
-                `);
+                  </div>
+                </div>
+                <br/><br/>
+                <hr class="horizontal light mt-0 mb-2">
+                <br/><br/>
+            `);
 
             $("#decisionCards").append(card);
 
@@ -130,22 +151,8 @@ function importDefaultData() {
             $("#labelProjectName").text(projectName);
 
             if(!jsonConfig) {
-
-                $("#labelInfo").text("SEM DECISÕES CADASTRADAS!");
-
-                Swal.fire({
-
-                    title: 'Atenção!',
-                    text: "Não existem decisões cadastradas para você.",
-                    icon: 'info',
-                    showCancelButton: false,
-                    cancelButtonText: "CANCELAR",
-                    confirmButtonText: 'OK'
-
-                });
-
+                processNoDecision();
                 return;
-
             }
 
             processDecisions(jsonConfig).then(()=>{activateTooltips();});
@@ -179,7 +186,7 @@ function removeDecisionOption(row) {
 
 }
 
-function addNewDecisionOption(table, decisionId) {
+function addNewDecisionOption(table, decisionId, stepId) {
 
     var elementId = crypto.randomUUID();
 
@@ -197,7 +204,7 @@ function addNewDecisionOption(table, decisionId) {
         </td>
         <td>
             <div class="mt-2">
-              <select id="selectExpectancy_${decisionId}_${elementId}" decisionId="${decisionId}" uuid="${elementId}" class="star-rating">
+              <select id="selectExpectancy_${decisionId}_${elementId}" decisionId="${decisionId}" stepId="${stepId}" uuid="${elementId}" class="star-rating">
                 <option value="0">0</option>
                 <option value="6">6</option>
                 <option value="5">5</option>
@@ -210,7 +217,7 @@ function addNewDecisionOption(table, decisionId) {
         </td>
         <td>
             <div class="mt-2">
-              <select id="selectValue_${decisionId}_${elementId}" decisionId="${decisionId}" uuid="${elementId}" class="star-rating">
+              <select id="selectValue_${decisionId}_${elementId}" decisionId="${decisionId}" stepId="${stepId}" uuid="${elementId}" class="star-rating">
                 <option value="0">0</option>
                 <option value="6">6</option>
                 <option value="5">5</option>
@@ -223,7 +230,7 @@ function addNewDecisionOption(table, decisionId) {
         </td>
         <td>
             <div class="mt-2">
-              <select id="selectCost_${decisionId}_${elementId}" decisionId="${decisionId}" uuid="${elementId}" class="star-rating">
+              <select id="selectCost_${decisionId}_${elementId}" decisionId="${decisionId}" stepId="${stepId}" uuid="${elementId}" class="star-rating">
                 <option value="0">0</option>
                 <option value="6">6</option>
                 <option value="5">5</option>
@@ -255,7 +262,9 @@ $("#btSave").click(function() {
 
         var id = $(el).attr("uuid");
         var decisionId = $(el).attr("decisionId");
+        var stepId = $(el).attr("stepId");
         var option = $("#"+id).text();
+
         var e = $(el).val();
         var v = $( "#selectValue_" + decisionId + "_" + id).val();
         var c = $( "#selectCost_" + decisionId + "_" + id).val();
@@ -264,11 +273,9 @@ $("#btSave").click(function() {
         v = v ? v : 0;
         c = c ? c : 0;
 
-        evaluations.push({projectId: projectId, decisionId: decisionId, userId: userId, option: option, optionId: id, e: e, v: v, c: c});
+        evaluations.push({projectId: projectId, decisionId: decisionId, stepId: stepId, userId: userId, option: option, optionId: id, e: e, v: v, c: c});
 
     });
-
-    console.log(evaluations);
 
     $.notify("Operação realizada com sucesso!", "success");
 
