@@ -53,6 +53,41 @@ const Course = sequelize.define('Course', {
 
 });
 
+const Evaluation = sequelize.define('Evaluation', {
+
+    id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+    },
+
+    idDecision: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+
+    option: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+
+    e: {
+        type: DataTypes.TINYINT,
+        allowNull: false
+    },
+
+    v: {
+        type: DataTypes.TINYINT,
+        allowNull: false
+    },
+
+    c: {
+        type: DataTypes.TINYINT,
+        allowNull: false
+    },
+
+});
+
 const Project = sequelize.define('Project', {
 
     id: {
@@ -68,7 +103,7 @@ const Project = sequelize.define('Project', {
     },
 
     jsonConfig: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true
     },
 
@@ -83,11 +118,16 @@ const Project = sequelize.define('Project', {
 const ProjectUser = sequelize.define('ProjectUser', {});
 
 Project.belongsToMany(User, { through: ProjectUser });
-
 User.belongsToMany(Project, { through: ProjectUser });
 
 Course.hasMany(User);
 User.belongsTo(Course)
+
+Evaluation.belongsTo(User);
+User.hasMany(Evaluation);
+
+Evaluation.belongsTo(Project);
+Project.hasMany(Evaluation);
 
 function databaseConnected() {
 
@@ -98,6 +138,7 @@ function databaseConnected() {
     ProjectUser.sync({ force: true }).then(() => {console.log(messages.projectUsersTableCreated)});
     User.sync({ force: true }).then(() => {console.log(messages.usersTableCreated)});
     Project.sync({ force: true }).then(() => {console.log(messages.projectsTableCreated)});
+    Evaluation.sync({ force: true }).then(() => {console.log(messages.evaluationsTableCreated)});
 
     Course.sync({ force: true }).then(() => {
 
@@ -182,4 +223,5 @@ module.exports = {
     Project: Project,
     ProjectUser: ProjectUser,
     Course: Course,
+    Evaluation: Evaluation,
 };

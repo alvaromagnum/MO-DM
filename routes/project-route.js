@@ -32,6 +32,19 @@ function loadProjectConfig(req, res) {
 
 }
 
+function saveEvaluations(req, res) {
+
+    if(!global.user || !global.project) {
+        res.redirect('/');
+        return;
+    }
+
+    var evaluations = req.body.evaluations;
+
+    res.send({jsonConfig: global.project.jsonConfig, projectName: global.project.name, projectId: global.project.id});
+
+}
+
 function loadMyDecisions(req, res) {
 
     if(!global.user || !global.project) {
@@ -49,6 +62,8 @@ function processDecisionsData(req, res) {
 }
 
 projectRoute.post('/saveConfig', saveProjectConfig);
+
+projectRoute.post('/saveEvaluations', saveEvaluations);
 
 projectRoute.get('/loadConfig', loadProjectConfig);
 

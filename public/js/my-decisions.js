@@ -21,33 +21,18 @@ function activateStarRating() {
     });
 }
 
-function importDefaultData() {
+async function processDecisions(jsonConfig) {
 
-    $.ajax({
-        method: "GET",
-        url: "/users/get/loggedUserData",
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-        Swal.fire('Erro!', jqXHR.responseText, 'error');
-    }).done(function (dataToImport) {
-        if(dataToImport) {
-            var userName = dataToImport.userName;
-            userId = dataToImport.userId;
-            $("#labelUserName").text(userName);
-        }
-    });
+    var configData = await getConfigData(jsonConfig);
 
-    async function processDecisions(jsonConfig) {
+    var queryDecisions = '[*.[${"stepId": id, "decisions": decisions[1 in stakeholders.idUser].[${"stepId": %.id, "decisionId": id, "question": question}].*}][$count(decisions)>0]]';
+    var allData = await jsonata(queryDecisions).evaluate(configData);
 
-        var configData = await getConfigData(jsonConfig);
+    for(var data of allData) {
 
-        var queryDecisions = '[*.[${"stepId": id, "decisions": decisions[1 in stakeholders.idUser].[${"stepId": %.id, "decisionId": id, "question": question}].*}][$count(decisions)>0]]';
-        var allData = await jsonata(queryDecisions).evaluate(configData);
+        for(var decision of data.decisions) {
 
-        for(var data of allData) {
-
-            for(var decision of data.decisions) {
-
-                var card = $("<div></div>").html(`
+            var card = $("<div></div>").html(`
                     <div class="card">
                       <div class="card-body px-0 pb-2">
                         <div class="table-responsive">
@@ -101,13 +86,28 @@ function importDefaultData() {
                     <br/><br/>
                 `);
 
-                $("#decisionCards").append(card);
-
-            }
+            $("#decisionCards").append(card);
 
         }
 
     }
+
+}
+
+function importDefaultData() {
+
+    $.ajax({
+        method: "GET",
+        url: "/users/get/loggedUserData",
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+    }).done(function (dataToImport) {
+        if(dataToImport) {
+            var userName = dataToImport.userName;
+            userId = dataToImport.userId;
+            $("#labelUserName").text(userName);
+        }
+    });
 
     $.ajax({
 
@@ -129,7 +129,24 @@ function importDefaultData() {
 
             $("#labelProjectName").text(projectName);
 
-            if(!jsonConfig) return;
+            if(!jsonConfig) {
+
+                $("#labelInfo").text("SEM DECISÕES CADASTRADAS!");
+
+                Swal.fire({
+
+                    title: 'Atenção!',
+                    text: "Não existem decisões cadastradas para você.",
+                    icon: 'info',
+                    showCancelButton: false,
+                    cancelButtonText: "CANCELAR",
+                    confirmButtonText: 'OK'
+
+                });
+
+                return;
+
+            }
 
             processDecisions(jsonConfig).then(()=>{activateTooltips();});
 
@@ -232,6 +249,8 @@ function addNewDecisionOption(table, decisionId) {
 
 $("#btSave").click(function() {
 
+    var evaluations = [];
+
     $( "select[id^='selectExpectancy_']" ).each(function(index, el){
 
         var id = $(el).attr("uuid");
@@ -245,9 +264,11 @@ $("#btSave").click(function() {
         v = v ? v : 0;
         c = c ? c : 0;
 
-        console.log({projectId: projectId, decisionId: decisionId, userId: userId, option: option, optionId: id, e: e, v: v, c: c});
+        evaluations.push({projectId: projectId, decisionId: decisionId, userId: userId, option: option, optionId: id, e: e, v: v, c: c});
 
     });
+
+    console.log(evaluations);
 
     $.notify("Operação realizada com sucesso!", "success");
 

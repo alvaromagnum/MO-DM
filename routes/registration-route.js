@@ -64,7 +64,7 @@ function saveUser(req, res) {
 
 }
 
-function saveProject(req, res) {
+async function saveProject(req, res) {
 
     var projectName = req.body.projectName;
     var key = req.body.key;
@@ -76,20 +76,25 @@ function saveProject(req, res) {
         return;
     }
 
-    databaseConfig.Project.findOne({ where: { key: key } }).then((project)=>{
+    var project = await databaseConfig.Project.findOne({ where: { key: key } });
 
-        if(project !== null) {
-            res.status(500).send(messages.createProjectError);
-            return;
-        }
+    if(project !== null) {
+        res.status(500).send(messages.createProjectError);
+        return;
+    }
 
-        databaseConfig.Project.create({
-            name: projectName,
-            key: key,
-        }).then(() => {
-            res.send(`${messages.projectCreatedSuccess} <b>${key}</b>`);
-        });
+    project = await databaseConfig.Project.findOne({ where: { name: projectName } });
 
+    if(project !== null) {
+        res.status(500).send(messages.projectWithSameNameError);
+        return;
+    }
+
+    databaseConfig.Project.create({
+        name: projectName,
+        key: key,
+    }).then(() => {
+        res.send(`${messages.projectCreatedSuccess} <b>${key}</b>`);
     });
 
 }
