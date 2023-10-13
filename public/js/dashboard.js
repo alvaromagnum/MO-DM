@@ -165,7 +165,7 @@ function importUsersNodes() {
 }
 
 function addUserNode(optionText, optionValue) {
-    $('#selectNodeType').append(`<option value="${optionValue}">${optionText} </option>`);
+    $('#selectNodeType').append(`<option value="${optionValue}">${optionText}&nbsp;&nbsp;&nbsp;</option>`);
 }
 
 function importDefaultData() {
