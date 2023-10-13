@@ -277,6 +277,8 @@ $("#btSave").click(function() {
 
     });
 
+    console.log(JSON.stringify(evaluations, null, "\t"));
+
     $.notify("Operação realizada com sucesso!", "success");
 
 });
