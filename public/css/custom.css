@@ -18,6 +18,10 @@
     background: #f0f2f5;
 }
 
+.margin-top-10 {
+    margin-top: 10px;
+}
+
 .icon-button {
     width: 100%;!important
     height: 100%!important;
