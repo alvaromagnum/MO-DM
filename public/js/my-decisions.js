@@ -1,9 +1,20 @@
 darkMode(true);
 
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-    $('.toast').toast();
-});
+function activateTooltips() {
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+}
+
+var projectId;
+
+var starRatingControl;
+function activateStarRating() {
+    starRatingControl = new StarRating('.star-rating',{
+        tooltip: false,
+        clearable: true,
+    });
+}
 
 function importDefaultData() {
 
@@ -52,51 +63,26 @@ function importDefaultData() {
                                             <i class="material-icons opacity-10">not_listed_location</i>&nbsp;
                                           </div>
                                           <div class="d-flex flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm">${decision.question}</h6>
+                                            <h6 class="mb-0 text-sm">${decision.question.toUpperCase()}</h6>
                                           </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="mt-2">
-                                          <select id="selectExpectancy_${decision.decisionId}" class="star-rating">
-                                            <option value="0">0</option>
-                                            <option value="6">6</option>
-                                            <option value="5">5</option>
-                                            <option value="4">4</option>
-                                            <option value="3">3</option>
-                                            <option value="2">2</option>
-                                            <option value="1">1</option>
-                                          </select>
+                                          ---
+                                    </td>
+                                    <td>
+                                        <div class="mt-2">
+                                          ---
                                         </div>
                                     </td>
                                     <td>
                                         <div class="mt-2">
-                                          <select id="selectValue_${decision.decisionId}" class="star-rating">
-                                            <option value="0">0</option>
-                                            <option value="6">6</option>
-                                            <option value="5">5</option>
-                                            <option value="4">4</option>
-                                            <option value="3">3</option>
-                                            <option value="2">2</option>
-                                            <option value="1">1</option>
-                                          </select>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="mt-2">
-                                          <select id="selectCost_${decision.decisionId}" class="star-rating">
-                                            <option value="0">0</option>
-                                            <option value="6">6</option>
-                                            <option value="5">5</option>
-                                            <option value="4">4</option>
-                                            <option value="3">3</option>
-                                            <option value="2">2</option>
-                                            <option value="1">1</option>
-                                          </select>
+                                          ---
                                         </div>
                                     </td>
                                     <td class="text-center">
-                                        <button id="btZoomOut" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Adicionar Opção"><i class="material-icons icon-button">add</i></button>
+                                        <button onclick="addNewDecisionOption(${"tableQuestions_"+decision.decisionId}, ${decision.decisionId})" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Adicionar Opção"><i class="material-icons icon-button">add</i></button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -130,6 +116,8 @@ function importDefaultData() {
 
         if(dataToImport) {
 
+            projectId = dataToImport.projectId;
+
             var projectName = dataToImport.projectName;
             var jsonConfig = dataToImport.jsonConfig;
 
@@ -137,19 +125,120 @@ function importDefaultData() {
 
             if(!jsonConfig) return;
 
-            processDecisions(jsonConfig).then(()=>{
-
-                var starRatingControl = new StarRating('.star-rating',{
-                    tooltip: false,
-                    clearable: true,
-                });
-
-            });
+            processDecisions(jsonConfig).then(()=>{activateTooltips();});
 
         }
 
     });
 
 }
+
+function removeDecisionOption(row) {
+
+
+    Swal.fire({
+
+        title: 'Atenção!',
+        text: "Tem certeza de que deseja remover a opção de decisão?",
+        icon: 'info',
+        showCancelButton: true,
+        cancelButtonText: "CANCELAR",
+        confirmButtonText: 'SIM'
+
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+            row.remove();
+            $.notify("Operação realizada com sucesso!", "success");
+        }
+
+    });
+
+}
+
+function addNewDecisionOption(table, decisionId) {
+
+    var elementId = crypto.randomUUID();
+
+    var row = $("<tr></tr>").html(`
+        <td>
+            <div class="d-flex px-2 py-1">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <div>
+                <i class="material-icons opacity-10">psychology_alt</i>&nbsp;
+              </div>
+              <div class="d-flex flex-column justify-content-center">
+                <h6 class="mb-0 text-sm">Clique aqui para mudar o título da opção de decisão</h6>
+              </div>
+            </div>
+        </td>
+        <td>
+            <div class="mt-2">
+              <select id="selectExpectancy_${decisionId}_${elementId}" decisionId="${decisionId}" uuid="${elementId}" class="star-rating">
+                <option value="0">0</option>
+                <option value="6">6</option>
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+              </select>
+            </div>
+        </td>
+        <td>
+            <div class="mt-2">
+              <select id="selectValue_${decisionId}_${elementId}" decisionId="${decisionId}" uuid="${elementId}" class="star-rating">
+                <option value="0">0</option>
+                <option value="6">6</option>
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+              </select>
+            </div>
+        </td>
+        <td>
+            <div class="mt-2">
+              <select id="selectCost_${decisionId}_${elementId}" decisionId="${decisionId}" uuid="${elementId}" class="star-rating">
+                <option value="0">0</option>
+                <option value="6">6</option>
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+              </select>
+            </div>
+        </td>
+        <td class="text-center">
+            <button onclick="removeDecisionOption(this.parentElement.parentElement)" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Remover Opção"><i class="material-icons icon-button">remove</i></button>
+        </td>
+    `);
+
+    $("#"+table.id).append(row);
+
+    activateStarRating();
+    activateTooltips();
+
+}
+
+$("#btSave").click(function() {
+
+    $( "select[id^='selectExpectancy_']" ).each(function(index, el){
+
+        var id = $(el).attr("uuid");
+        var decisionId = $(el).attr("decisionId");
+        var e = $(el).val();
+        var v = $( "#selectValue_" + decisionId + "_" + id).val();
+        var c = $( "#selectCost_" + decisionId + "_" + id).val();
+
+        console.log({projectId: projectId,decisionId: decisionId, optionId: id, e: e, v: v, c: c});
+
+    });
+
+    $.notify("Operação realizada com sucesso!", "success");
+
+});
 
 importDefaultData();

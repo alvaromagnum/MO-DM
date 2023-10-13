@@ -6,7 +6,6 @@ darkMode(true);
 
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
-    $('.toast').toast();
 });
 
 var configCanvas = document.getElementById("projectConfigCanvas");
