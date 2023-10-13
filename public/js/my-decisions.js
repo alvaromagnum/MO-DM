@@ -80,6 +80,7 @@ function importDefaultData() {
                           </select>
                         </div>
                     </td>
+                    <td class="text-center">---</td>
                 `);
 
                 $("#tableQuestions").append(row);
