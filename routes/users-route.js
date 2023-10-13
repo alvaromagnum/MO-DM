@@ -43,7 +43,7 @@ function getLoggedUserData(req, res) {
         return;
     }
 
-    res.send({userName: global.user.name});
+    res.send({userName: global.user.name, userId: global.user.id});
 
 }
 

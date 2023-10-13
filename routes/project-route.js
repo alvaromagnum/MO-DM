@@ -1,5 +1,6 @@
 const express = require('express');
 const messages = require('../messages');
+const crypto = require('crypto');
 const databaseConfig = require('../database-config');
 const path = require("path");
 
@@ -43,6 +44,7 @@ function loadMyDecisions(req, res) {
 }
 
 function processDecisionsData(req, res) {
+    console.log(crypto.randomUUID());
     res.send("");
 }
 

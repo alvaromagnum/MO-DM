@@ -11,6 +11,7 @@ function activateEditables() {
 }
 
 var projectId;
+var userId;
 
 var starRatingControl;
 function activateStarRating() {
@@ -30,6 +31,7 @@ function importDefaultData() {
     }).done(function (dataToImport) {
         if(dataToImport) {
             var userName = dataToImport.userName;
+            userId = dataToImport.userId;
             $("#labelUserName").text(userName);
         }
     });
@@ -239,7 +241,11 @@ $("#btSave").click(function() {
         var v = $( "#selectValue_" + decisionId + "_" + id).val();
         var c = $( "#selectCost_" + decisionId + "_" + id).val();
 
-        console.log({projectId: projectId,decisionId: decisionId, option: option, optionId: id, e: e, v: v, c: c});
+        e = e ? e : 0;
+        v = v ? v : 0;
+        c = c ? c : 0;
+
+        console.log({projectId: projectId, decisionId: decisionId, userId: userId, option: option, optionId: id, e: e, v: v, c: c});
 
     });
 
