@@ -76,8 +76,8 @@ async function getSankeyChartDataFromConfig(steps) {
     var links = [];
     var allStakeholders = [];
 
-    nodes.push({ id: -1, type: "DECISAO", name: "SEM DECISÕES", info : "---", fill: am5.color(0x000000) });
-    nodes.push({ id: 0, type: "STAKEHOLDER", name: "SEM STAKEHOLDERS", info : "---", fill: am5.color(0x000000) });
+    nodes.push({ id: -1, type: "DECISAO", name: "SEM DECISÕES", info : "---", fill: am5.color(0x1a2035) });
+    nodes.push({ id: 0, type: "STAKEHOLDER", name: "SEM STAKEHOLDERS", info : "---", fill: am5.color(0x1a2035) });
 
     for(const step of steps) {
 
@@ -241,15 +241,24 @@ function generateProjectSankeyChart(nodes, links) {
         sourceIdField: "from",
         targetIdField: "to",
         valueField: "value",
-        paddingRight: 450
+        paddingRight: 450,
+        nodeWidth: 10
     }));
 
     series.nodes.setAll({
-        nameField: "name"
+        nameField: "name",
     });
 
     series.links.template.setAll({
-        tooltipText: "[bold]{source.name}[/]\n{target.name}"
+        tooltipText: "[bold]{source.name}[/]\n{target.name}",
+        fillOpacity: 0.2
+    });
+
+    series.nodes.labels.template.setAll({
+        //fontSize: 20,
+        //maxWidth: 150,
+        fill: am5.color(0xffffff),
+        //oversizedBehavior: "wrap"
     });
 
     series.nodes.nodes.template.setAll({
@@ -264,7 +273,7 @@ function generateProjectSankeyChart(nodes, links) {
         cornerRadiusTR: 4,
         cornerRadiusBL: 4,
         cornerRadiusBR: 4,
-        tooltipText: "[bold]{name}[/]\n{info}",
+        tooltipText: "[bold]{name}[/]\n{info}"
     });
 
     series.nodes.data.setAll(nodes)

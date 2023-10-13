@@ -5,7 +5,33 @@
     border: 1px solid black;
     border-radius:10px;
     z-index: 999;
-    background: #f0f2f5;
+    background: lightslategray;
+}
+
+.editable-input {
+    width: 550px;
+}
+
+.card-white {
+    background: lightslategray!important;
+    border: #f0f2f5 2px solid!important;
+    box-shadow: 8px 8px black!important;
+}
+
+.hide-scroll {
+    overflow: hidden!important;
+}
+
+.header-decisions {
+    width:50%!important;
+}
+
+.header-evc {
+    width:150px!important;
+}
+
+.card-white-header {
+    color: black!important;
 }
 
 .sankeyChartDiv {
@@ -15,7 +41,7 @@
     border: 1px solid black;
     border-radius:10px;
     z-index: 999;
-    background: #f0f2f5;
+    background: lightslategray;
 }
 
 .margin-top-10 {

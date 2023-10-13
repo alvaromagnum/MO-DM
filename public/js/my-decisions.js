@@ -7,7 +7,7 @@ function activateTooltips() {
 }
 
 function activateEditables() {
-    $('.input').jinplace({});
+    $('.input').jinplace({"inputClass": "editable-input"});
 }
 
 var projectId;
@@ -54,50 +54,20 @@ async function processDecisions(jsonConfig) {
         for(var decision of step.decisions) {
 
             var card = $("<div></div>").html(`
-                <div class="card">
+                <div class="card card-white">
                   <div class="card-body px-0 pb-2">
-                    <div class="table-responsive">
+                    <div class="table-responsive hide-scroll">
                       <table class="table align-items-center mb-0">
                         <thead>
                         <tr>
-                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7">Decisão</th>
-                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 ps-2">Expectativa<sup><i data-toggle="tooltip" title="O quanto você acredita que essa opção é exequível" class="material-icons text-sm my-auto me-1">info</i></sup></th>
-                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 ps-2">Valor<sup><i data-toggle="tooltip" title="O quanto você deseja essa opção" class="material-icons text-sm my-auto me-1">info</i></sup></th>
-                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 ps-2">Custo<sup><i data-toggle="tooltip" title="O quão custosa você acha que é essa opção" class="material-icons text-sm my-auto me-1">info</i></sup></th>
-                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 ps-2">Opções</th>
+                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 header-decisions"><i class="material-icons opacity-10">not_listed_location</i>&nbsp;${decision.question.toUpperCase()}</th>
+                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7">Expectativa<sup><i data-toggle="tooltip" title="O quanto você acredita que essa opção é exequível" class="material-icons text-sm my-auto me-1">info</i></sup></th>
+                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7">Valor<sup><i data-toggle="tooltip" title="O quanto você deseja essa opção" class="material-icons text-sm my-auto me-1">info</i></sup></th>
+                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7">Custo<sup><i data-toggle="tooltip" title="O quão custosa você acha que é essa opção" class="material-icons text-sm my-auto me-1">info</i></sup></th>
+                          <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 text-center"><button onclick="addNewDecisionOption(${"tableQuestions_"+decision.decisionId}, ${decision.decisionId}, ${step.stepId})" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Adicionar Opção"><i class="material-icons icon-button">add</i></button></th>
                         </tr>
                         </thead>
-                        <tbody id="tableQuestions_${decision.decisionId}">
-                            <tr>
-                                <td>
-                                    <div class="d-flex px-2 py-1">
-                                      <div>
-                                        <i class="material-icons opacity-10">not_listed_location</i>&nbsp;
-                                      </div>
-                                      <div class="d-flex flex-column justify-content-center">
-                                        <h6 class="mb-0 text-sm">${decision.question.toUpperCase()}</h6>
-                                      </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="mt-2">
-                                      ---
-                                </td>
-                                <td>
-                                    <div class="mt-2">
-                                      ---
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="mt-2">
-                                      ---
-                                    </div>
-                                </td>
-                                <td class="text-center">
-                                    <button onclick="addNewDecisionOption(${"tableQuestions_"+decision.decisionId}, ${decision.decisionId}, ${step.stepId})" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Adicionar Opção"><i class="material-icons icon-button">add</i></button>
-                                </td>
-                            </tr>
-                        </tbody>
+                        <tbody id="tableQuestions_${decision.decisionId}"></tbody>
                       </table>
                     </div>
                   </div>
