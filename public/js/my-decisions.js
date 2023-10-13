@@ -30,7 +30,7 @@ function importDefaultData() {
 
             for(var decision of data.decisions) {
 
-                var row = $("tr").html(`
+                var row = $("<tr></tr>").html(`
                     <td>
                         <div class="d-flex px-2 py-1">
                           <div>
@@ -43,7 +43,7 @@ function importDefaultData() {
                     </td>
                     <td>
                         <div class="mt-2">
-                          <select id="selectExpectancy" class="star-rating">
+                          <select id="selectExpectancy${decision.decisionId}" class="star-rating">
                             <option value="0">0</option>
                             <option value="6">6</option>
                             <option value="5">5</option>
@@ -56,7 +56,7 @@ function importDefaultData() {
                     </td>
                     <td>
                         <div class="mt-2">
-                          <select id="selectValue" class="star-rating">
+                          <select id="selectValue${decision.decisionId}" class="star-rating">
                             <option value="0">0</option>
                             <option value="6">6</option>
                             <option value="5">5</option>
@@ -69,7 +69,7 @@ function importDefaultData() {
                     </td>
                     <td>
                         <div class="mt-2">
-                          <select id="selectCost" class="star-rating">
+                          <select id="selectCost${decision.decisionId}" class="star-rating">
                             <option value="0">0</option>
                             <option value="6">6</option>
                             <option value="5">5</option>
