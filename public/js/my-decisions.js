@@ -19,6 +19,77 @@ function importDefaultData() {
         }
     });
 
+    async function processDecisions(jsonConfig) {
+
+        var configData = await getConfigData(jsonConfig);
+
+        var queryDecisions = '[*.[${"stepId": id, "decisions": decisions[1 in stakeholders.idUser].[${"stepId": %.id, "decisionId": id, "question": question}].*}][$count(decisions)>0]]';
+        var allData = await jsonata(queryDecisions).evaluate(configData);
+
+        for(var data of allData) {
+
+            for(var decision of data.decisions) {
+
+                var row = $("tr").html(`
+                    <td>
+                        <div class="d-flex px-2 py-1">
+                          <div>
+                            <i class="material-icons opacity-10">not_listed_location</i>&nbsp;
+                          </div>
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">${decision.question}</h6>
+                          </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="mt-2">
+                          <select id="selectExpectancy" class="star-rating">
+                            <option value="0">0</option>
+                            <option value="6">6</option>
+                            <option value="5">5</option>
+                            <option value="4">4</option>
+                            <option value="3">3</option>
+                            <option value="2">2</option>
+                            <option value="1">1</option>
+                          </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="mt-2">
+                          <select id="selectValue" class="star-rating">
+                            <option value="0">0</option>
+                            <option value="6">6</option>
+                            <option value="5">5</option>
+                            <option value="4">4</option>
+                            <option value="3">3</option>
+                            <option value="2">2</option>
+                            <option value="1">1</option>
+                          </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="mt-2">
+                          <select id="selectCost" class="star-rating">
+                            <option value="0">0</option>
+                            <option value="6">6</option>
+                            <option value="5">5</option>
+                            <option value="4">4</option>
+                            <option value="3">3</option>
+                            <option value="2">2</option>
+                            <option value="1">1</option>
+                          </select>
+                        </div>
+                    </td>
+                `);
+
+                $("#tableQuestions").append(row);
+
+            }
+
+        }
+
+    }
+
     $.ajax({
 
         method: "GET",
@@ -39,19 +110,19 @@ function importDefaultData() {
 
             if(!jsonConfig) return;
 
-            //configEditor.import(JSON.parse(jsonConfig));
+            processDecisions(jsonConfig).then(()=>{
 
-            //processProjectConfig();
+                var starRatingControl = new StarRating('.star-rating',{
+                    tooltip: false,
+                    clearable: true,
+                });
+
+            });
 
         }
 
     });
 
 }
-
-var starRatingControl = new StarRating('.star-rating',{
-    tooltip: false,
-    clearable: true,
-});
 
 importDefaultData();
