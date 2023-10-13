@@ -1133,7 +1133,7 @@ export default class Drawflow {
         var pos_x = this.pos_x * (this.precanvas.clientWidth / (this.precanvas.clientWidth * this.zoom)) - (this.precanvas.getBoundingClientRect().x * (this.precanvas.clientWidth / (this.precanvas.clientWidth * this.zoom)));
         var pos_y = this.pos_y * (this.precanvas.clientHeight / (this.precanvas.clientHeight * this.zoom)) - (this.precanvas.getBoundingClientRect().y * (this.precanvas.clientHeight / (this.precanvas.clientHeight * this.zoom)));
 
-        var nodeValue = $('#selectNodeType').val();
+        var nodeValue = $('#selectNodeType').val().trim();
 
         switch (nodeValue) {
 
@@ -1158,6 +1158,7 @@ export default class Drawflow {
                 `;
 
                 this.addNode('step', 1, 2, pos_x, pos_y, 'step-node', {"step_name": 'ETAPA ' + this.nodeId}, stepNode);
+
                 break;
 
             case "0":
@@ -1175,11 +1176,12 @@ export default class Drawflow {
                 `;
 
                 this.addNode('decision', 1, 1, pos_x, pos_y, 'decision-node', {"question": 'DECISÃO ' + this.nodeId}, decisionNode);
+
                 break;
 
             default:
 
-                var userName = $('#selectNodeType option:selected').text();
+                var userName = $('#selectNodeType option:selected').text().trim();
 
                 var stakeholderNode = `
                     <div class="container">
@@ -1198,6 +1200,7 @@ export default class Drawflow {
                 `;
 
                 this.addNode('stakeholder', 1, 0, pos_x, pos_y, 'stakeholder-node', {"user_id": nodeValue, "user_name": userName}, stakeholderNode);
+
                 break;
 
         }
