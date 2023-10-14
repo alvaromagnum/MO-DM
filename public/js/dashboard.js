@@ -25,15 +25,26 @@ $('#btTest').click(function(){
 
 $('#btSave').click(function(){
 
+    $.LoadingOverlay("show");
+
     $.ajax({
+
         method: "POST",
         url: "/project/saveConfig",
         data: { jsonConfig: JSON.stringify(configEditor.export()) }
+
     }).fail(function(jqXHR, textStatus, errorThrown) {
+
+        $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
+
     }).done(function (msg) {
+
+        $.LoadingOverlay("hide");
         $.notify(msg, "success");
+
         processProjectConfig();
+
     });
 
 });
@@ -151,15 +162,19 @@ async function getSankeyChartDataFromConfig(steps) {
 
 function importUsersNodes() {
 
+    $.LoadingOverlay("show");
+
     $.ajax({
         method: "GET",
         url: "/users/get/projectUsers",
     }).fail(function(jqXHR, textStatus, errorThrown) {
+        $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
     }).done(function (users) {
         for(var user of users) {
             addUserNode(`${user.name} - ${user.courseName}`, user.id)
         }
+        $.LoadingOverlay("hide");
     });
 
 }
@@ -170,17 +185,23 @@ function addUserNode(optionText, optionValue) {
 
 function importDefaultData() {
 
+    $.LoadingOverlay("show");
+
     $.ajax({
         method: "GET",
         url: "/users/get/loggedUserData",
     }).fail(function(jqXHR, textStatus, errorThrown) {
+        $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
     }).done(function (dataToImport) {
+        $.LoadingOverlay("hide");
         if(dataToImport) {
             var userName = dataToImport.userName;
             $("#labelUserName").text(userName);
         }
     });
+
+    $.LoadingOverlay("show");
 
     $.ajax({
 
@@ -189,6 +210,7 @@ function importDefaultData() {
 
     }).fail(function(jqXHR, textStatus, errorThrown) {
 
+        $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
 
     }).done(function (dataToImport) {
@@ -207,6 +229,8 @@ function importDefaultData() {
             processProjectConfig();
 
         }
+
+        $.LoadingOverlay("hide");
 
     });
 

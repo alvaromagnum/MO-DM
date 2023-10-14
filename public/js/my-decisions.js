@@ -87,18 +87,24 @@ async function processDecisions(jsonConfig) {
 
 function importDefaultData() {
 
+    $.LoadingOverlay("show");
+
     $.ajax({
         method: "GET",
         url: "/users/get/loggedUserData",
     }).fail(function(jqXHR, textStatus, errorThrown) {
+        $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
     }).done(function (dataToImport) {
         if(dataToImport) {
             var userName = dataToImport.userName;
             userId = dataToImport.userId;
             $("#labelUserName").text(userName);
+            $.LoadingOverlay("hide");
         }
     });
+
+    $.LoadingOverlay("show");
 
     $.ajax({
 
@@ -107,6 +113,7 @@ function importDefaultData() {
 
     }).fail(function(jqXHR, textStatus, errorThrown) {
 
+        $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
 
     }).done(function (dataToImport) {
@@ -129,12 +136,13 @@ function importDefaultData() {
 
         }
 
+        $.LoadingOverlay("hide");
+
     });
 
 }
 
 function removeDecisionOption(row) {
-
 
     Swal.fire({
 
@@ -226,6 +234,8 @@ function addNewDecisionOption(table, decisionId, stepId) {
 
 $("#btSave").click(function() {
 
+    $.LoadingOverlay("show");
+
     var evaluations = [];
 
     $( "select[id^='selectExpectancy_']" ).each(function(index, el){
@@ -247,9 +257,17 @@ $("#btSave").click(function() {
 
     });
 
-    console.log(JSON.stringify(evaluations, null, "\t"));
-
-    $.notify("Operação realizada com sucesso!", "success");
+    $.ajax({
+        method: "POST",
+        url: "/project/saveEvaluations",
+        data: { evaluations: evaluations }
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        $.LoadingOverlay("hide");
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+    }).done(function (msg) {
+        $.LoadingOverlay("hide");
+        $.notify(msg, "success");
+    });
 
 });
 

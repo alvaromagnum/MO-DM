@@ -3,6 +3,7 @@ const messages = require('../messages');
 const crypto = require('crypto');
 const databaseConfig = require('../database-config');
 const path = require("path");
+const {forEach} = require("underscore");
 
 var projectRoute = express.Router();
 
@@ -32,7 +33,12 @@ function loadProjectConfig(req, res) {
 
 }
 
-function saveEvaluations(req, res) {
+async function isEvaluationIdUnique(id) {
+    var existingEvaluation = await databaseConfig.User.findOne({ where: { id: id } });
+    return existingEvaluation !== null;
+}
+
+async function saveEvaluations(req, res) {
 
     if(!global.user || !global.project) {
         res.redirect('/');
@@ -41,7 +47,31 @@ function saveEvaluations(req, res) {
 
     var evaluations = req.body.evaluations;
 
-    res.send({jsonConfig: global.project.jsonConfig, projectName: global.project.name, projectId: global.project.id});
+    for(var evaluation of evaluations) {
+
+        var id = evaluation.optionId;
+
+        while(await !isEvaluationIdUnique(id)) {
+            id = crypto.randomUUID();
+        }
+
+        await databaseConfig.Evaluation.create({
+
+            id: id,
+            idDecision: evaluation.decisionId,
+            idStep: evaluation.stepId,
+            option: evaluation.option,
+            UserId: evaluation.userId,
+            ProjectId: evaluation.projectId,
+            e: evaluation.e,
+            v: evaluation.v,
+            c: evaluation.c,
+
+        });
+
+    }
+
+    res.send(messages.decisionsSavedSuccess);
 
 }
 
@@ -57,7 +87,6 @@ function loadMyDecisions(req, res) {
 }
 
 function processDecisionsData(req, res) {
-    console.log(crypto.randomUUID());
     res.send("");
 }
 
