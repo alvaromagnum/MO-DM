@@ -107,14 +107,14 @@ async function getEvaluations(req, res) {
 
     var evaluations = await databaseConfig.Evaluation.findAll({
         where: {
-            UserId: global.user.id,
+            // UserId: global.user.id,
             ProjectId: global.project.id,
-            idStep: {
-                [Op.in]: stepIds,
-            },
-            idDecision: {
-                [Op.in]: decisionIds,
-            },
+            // idStep: {
+            //     [Op.in]: stepIds,
+            // },
+            // idDecision: {
+            //     [Op.in]: decisionIds,
+            // },
         }
     });
 
