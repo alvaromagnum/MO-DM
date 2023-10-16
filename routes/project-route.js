@@ -3,6 +3,7 @@ const messages = require('../messages');
 const crypto = require('crypto');
 const databaseConfig = require('../database-config');
 const path = require("path");
+const { Op } = require("sequelize");
 const {forEach} = require("underscore");
 
 var projectRoute = express.Router();
@@ -75,6 +76,33 @@ async function saveEvaluations(req, res) {
 
 }
 
+async function getEvaluations(req, res) {
+
+    if(!global.user || !global.project) {
+        res.redirect('/');
+        return;
+    }
+
+    var stepIds = req.body.stepIds;
+    var decisionIds = req.body.decisionIds;
+
+    var evaluations = await databaseConfig.Evaluation.findAll({
+        where: {
+            UserId: global.user.id,
+            ProjectId: global.project.id,
+            idStep: {
+                [Op.in]: stepIds,
+            },
+            idDecision: {
+                [Op.in]: decisionIds,
+            },
+        }
+    });
+
+    res.send(evaluations);
+
+}
+
 function loadMyDecisions(req, res) {
 
     if(!global.user || !global.project) {
@@ -93,6 +121,8 @@ function processDecisionsData(req, res) {
 projectRoute.post('/saveConfig', saveProjectConfig);
 
 projectRoute.post('/saveEvaluations', saveEvaluations);
+
+projectRoute.post('/getEvaluations', getEvaluations);
 
 projectRoute.get('/loadConfig', loadProjectConfig);
 

@@ -13,7 +13,7 @@ async function getConfigData(json) {
             var queryStakeholders = `[drawflow.Home.data.*[name='stakeholder' and '${decision.id}' in inputs.input_1.connections.node].[\${'id': id, 'idUser':$number(data.user_id), 'stakeholderName': $trim(data.user_name)}].*]`;
             var stakeholders = await jsonata(queryStakeholders).evaluate(JSON.parse(json));
 
-            decision.stakeholders = _.uniq(stakeholders, true, (o)=>{return o.idUser});
+            decision.stakeholders = _.uniq(stakeholders, false, (o)=>{return o.idUser});
 
         }
 

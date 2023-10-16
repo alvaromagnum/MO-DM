@@ -101,13 +101,13 @@ async function getSankeyChartDataFromConfig(steps) {
 
         for(const decision of step.decisions) {
 
-            decision.stakeholders = _.uniq(decision.stakeholders, true, (o)=>{return o.idUser});
+            decision.stakeholders = _.uniq(decision.stakeholders, false, (o)=>{return o.idUser});
 
             for(const stakeholder of decision.stakeholders) {
                 allStakeholders.push(stakeholder);
             }
 
-            allStakeholders = _.uniq(allStakeholders, true, (o)=>{return o.idUser});
+            allStakeholders = _.uniq(allStakeholders, false, (o)=>{return o.idUser});
 
             nodes.push({ id: decision.id, type: "DECISAO", name: decision.question, info : `Stakeholders: ${decision.stakeholders.length}`, fill: am5.color(0x1a2035) });
             links.push({ from: step.id, to: decision.id, value: Math.max(1, decision.stakeholders.length) });
@@ -125,8 +125,8 @@ async function getSankeyChartDataFromConfig(steps) {
 
     }
 
-    nodes = _.uniq(nodes, true, (o)=> {return o.id});
-    links = _.uniq(links, true, (o)=> {return o.from + "_" + o.to});
+    nodes = _.uniq(nodes, false, (o)=> {return o.id});
+    links = _.uniq(links, false, (o)=> {return o.from + "_" + o.to});
 
     var stakeholdersQuery = `[*[type='STAKEHOLDER']]`;
     var uniqueStakeholders = await jsonata(stakeholdersQuery).evaluate(nodes);
