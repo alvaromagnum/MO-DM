@@ -222,7 +222,10 @@ function importDefaultData() {
 
             $("#labelProjectName").text(projectName);
 
-            if(!jsonConfig) return;
+            if(!jsonConfig) {
+                $.LoadingOverlay("hide");
+                return;
+            }
 
             configEditor.import(JSON.parse(jsonConfig));
 
