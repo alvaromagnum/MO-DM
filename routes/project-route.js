@@ -34,8 +34,8 @@ function loadProjectConfig(req, res) {
 
 }
 
-async function isEvaluationIdUnique(id) {
-    var existingEvaluation = await databaseConfig.User.findOne({ where: { id: id } });
+async function evaluationAlreadyExists(id) {
+    var existingEvaluation = await databaseConfig.Evaluation.findOne({ where: { id: id } });
     return existingEvaluation !== null;
 }
 
@@ -46,33 +46,52 @@ async function saveEvaluations(req, res) {
         return;
     }
 
-    var evaluations = req.body.evaluations;
+    const transaction = await databaseConfig.sequelize.transaction();
 
-    for(var evaluation of evaluations) {
+    try {
 
-        var id = evaluation.optionId;
-
-        while(await !isEvaluationIdUnique(id)) {
-            id = crypto.randomUUID();
-        }
-
-        await databaseConfig.Evaluation.create({
-
-            id: id,
-            idDecision: evaluation.decisionId,
-            idStep: evaluation.stepId,
-            option: evaluation.option,
-            UserId: evaluation.userId,
-            ProjectId: evaluation.projectId,
-            e: evaluation.e,
-            v: evaluation.v,
-            c: evaluation.c,
-
+        await databaseConfig.Evaluation.destroy({
+            where: {
+                ProjectId: global.project.id,
+                UserId: global.user.id
+            }
         });
 
-    }
+        var evaluations = req.body.evaluations;
 
-    res.send(messages.decisionsSavedSuccess);
+        for(var evaluation of evaluations) {
+
+            var id = evaluation.optionId;
+
+            while(await evaluationAlreadyExists(id)) {
+                id =  crypto.randomUUID();
+            }
+
+            await databaseConfig.Evaluation.create({
+
+                id: id,
+                idDecision: evaluation.decisionId,
+                idStep: evaluation.stepId,
+                option: evaluation.option,
+                UserId: evaluation.userId,
+                ProjectId: evaluation.projectId,
+                e: evaluation.e,
+                v: evaluation.v,
+                c: evaluation.c,
+
+            });
+
+        }
+
+        await transaction.commit();
+        res.send(messages.decisionsSavedSuccess);
+
+    } catch (error) {
+
+        await transaction.rollback();
+        res.status(500).send(messages.genericTaskError);
+
+    }
 
 }
 

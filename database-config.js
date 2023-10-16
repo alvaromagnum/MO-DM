@@ -229,4 +229,5 @@ module.exports = {
     ProjectUser: ProjectUser,
     Course: Course,
     Evaluation: Evaluation,
+    sequelize: sequelize
 };
