@@ -22,14 +22,14 @@ app.use('/dashboard', dashboardRoute);
 app.use('/project', projectRoute);
 app.use('/users', usersRoute);
 
-app.use(function(err, req, res, next) {
-    // Maybe log the error for later reference?
-    // If this is development, maybe show the stack here in this response?
-    res.status(err.status || 500);
-    res.send({
-        'message': err.message
-    });
-});
+// app.use(function(err, req, res, next) {
+//     // Maybe log the error for later reference?
+//     // If this is development, maybe show the stack here in this response?
+//     res.status(err.status || 500);
+//     res.send({
+//         'message': err.message
+//     });
+// });
 
 global.resetDatabase = false;
 

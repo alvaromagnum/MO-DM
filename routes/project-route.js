@@ -4,7 +4,8 @@ const crypto = require('crypto');
 const databaseConfig = require('../database-config');
 const path = require("path");
 const { Op } = require("sequelize");
-const {forEach} = require("underscore");
+const _ = require("underscore");
+const jsonata = require('jsonata');
 
 var projectRoute = express.Router();
 
@@ -46,6 +47,20 @@ async function saveEvaluations(req, res) {
     try {
 
         var evaluations = req.body.evaluations;
+        var existingDecisionOptions = await global.project.getEvaluationOptions();
+        var evaluationsToDelete = [];
+
+        for(var existingDecisionOption of existingDecisionOptions) {
+
+            var existingEvaluations = await existingDecisionOption.getEvaluations();
+
+            existingEvaluations = _.filter(existingEvaluations, (o)=> o.UserId === global.user.id);
+
+            evaluationsToDelete = _.union(evaluationsToDelete, existingEvaluations);
+
+        }
+
+        evaluationsToDelete.every(async evaluation => await evaluation.destroy());
 
         for(var evaluation of evaluations) {
 
@@ -76,13 +91,6 @@ async function saveEvaluations(req, res) {
                 });
 
             }
-
-            await databaseConfig.Evaluation.destroy({
-                where: {
-                    EvaluationOptionId: id,
-                    UserId: global.user.id
-                }
-            });
 
             await databaseConfig.Evaluation.create({
 
@@ -117,23 +125,53 @@ async function getEvaluations(req, res) {
         return;
     }
 
-    //var stepIds = req.body.stepIds;
-    //var decisionIds = req.body.decisionIds;
+    var stepIds = req.body.stepIds;
+    var decisionIds = req.body.decisionIds;
+
+    if(!stepIds) stepIds = [];
+    if(!decisionIds) decisionIds = [];
 
     var evaluationOptions = await databaseConfig.EvaluationOption.findAll({
+
         where: {
-            // UserId: global.user.id,
+
             ProjectId: global.project.id,
-            // idStep: {
-            //     [Op.in]: stepIds,
-            // },
-            // idDecision: {
-            //     [Op.in]: decisionIds,
-            // },
+
+            idStep: {
+                [Op.in]: stepIds,
+            },
+
+            idDecision: {
+                [Op.in]: decisionIds,
+            },
+
         }
+
     });
 
-    res.send(evaluationOptions);
+    var evaluations = [];
+
+    for(var evaluationOption of evaluationOptions) {
+
+        var allEvaluations = await evaluationOption.getEvaluations();
+        var userEvaluations = _.filter(allEvaluations, function(o){ return o.UserId === global.user.id; });
+
+        if(userEvaluations.length === 0) {
+            evaluations.push({id: evaluationOption.id, idDecision: evaluationOption.idDecision, idStep: evaluationOption.idStep, option: evaluationOption.option, e: 0, v: 0, c: 0});
+        }
+        else {
+
+            userEvaluations = _.map(userEvaluations, function(evaluation){
+                return {id: evaluationOption.id, idDecision: evaluationOption.idDecision, idStep: evaluationOption.idStep, option: evaluationOption.option, e: evaluation.e, v: evaluation.v, c: evaluation.c};
+            });
+
+            evaluations = _.union(evaluations, userEvaluations);
+
+        }
+
+    }
+
+    res.send(evaluations);
 
 }
 

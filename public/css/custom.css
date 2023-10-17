@@ -189,8 +189,8 @@
 
     --dfLineWidth: 5px;
     --dfLineColor: rgba(0, 0, 0, 1);
-    --dfLineHoverColor: #4682b4;
-    --dfLineSelectedColor: #43b993;
+    --dfLineHoverColor: white;
+    --dfLineSelectedColor: white;
 
     --dfRerouteBorderWidth: 2px;
     --dfRerouteBorderColor: #000000;
