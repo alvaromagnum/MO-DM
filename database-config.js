@@ -80,6 +80,13 @@ const EvaluationOption = sequelize.define('EvaluationOption', {
 
 const Evaluation = sequelize.define('Evaluation', {
 
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+
     e: {
         type: DataTypes.TINYINT,
         allowNull: false

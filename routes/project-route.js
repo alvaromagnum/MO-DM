@@ -34,11 +34,6 @@ function loadProjectConfig(req, res) {
 
 }
 
-async function evaluationAlreadyExists(id) {
-    var existingEvaluation = await databaseConfig.Evaluation.findOne({ where: { id: id } });
-    return existingEvaluation !== null;
-}
-
 async function saveEvaluations(req, res) {
 
     if(!global.user || !global.project) {
@@ -50,45 +45,65 @@ async function saveEvaluations(req, res) {
 
     try {
 
-        await databaseConfig.Evaluation.destroy({
-            where: {
-                ProjectId: global.project.id,
-                UserId: global.user.id
-            }
-        });
-
         var evaluations = req.body.evaluations;
 
         for(var evaluation of evaluations) {
 
             var id = evaluation.optionId;
 
-            while(await evaluationAlreadyExists(id)) {
-                id =  crypto.randomUUID();
+            var evaluationOption = await databaseConfig.EvaluationOption.findOne({ where: { id: id } });
+
+            if(evaluationOption !== null) {
+
+                evaluationOption.idDecision = evaluation.decisionId;
+                evaluationOption.idStep = evaluation.stepId;
+                evaluationOption.option = evaluation.option;
+                evaluationOption.ProjectId = evaluation.projectId;
+
+                await evaluationOption.save();
+
             }
+            else {
+
+                evaluationOption = await databaseConfig.EvaluationOption.create({
+
+                    id: id,
+                    idDecision: evaluation.decisionId,
+                    idStep: evaluation.stepId,
+                    option: evaluation.option,
+                    ProjectId: evaluation.projectId
+
+                });
+
+            }
+
+            await databaseConfig.Evaluation.destroy({
+                where: {
+                    EvaluationOptionId: id,
+                    UserId: global.user.id
+                }
+            });
 
             await databaseConfig.Evaluation.create({
 
-                id: id,
-                idDecision: evaluation.decisionId,
-                idStep: evaluation.stepId,
-                option: evaluation.option,
+                EvaluationOptionId: evaluationOption.id,
                 UserId: evaluation.userId,
-                ProjectId: evaluation.projectId,
                 e: evaluation.e,
                 v: evaluation.v,
-                c: evaluation.c,
+                c: evaluation.c
 
             });
 
         }
 
         await transaction.commit();
+
         res.send(messages.decisionsSavedSuccess);
 
     } catch (error) {
 
         await transaction.rollback();
+
         res.status(500).send(messages.genericTaskError);
 
     }
