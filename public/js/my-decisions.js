@@ -124,9 +124,9 @@ async function processDecisions(jsonConfig) {
 
             }
 
-            $.LoadingOverlay("hide");
-
         }
+
+        $.LoadingOverlay("hide");
 
     });
 
@@ -147,8 +147,8 @@ function importDefaultData() {
             var userName = dataToImport.userName;
             userId = dataToImport.userId;
             $("#labelUserName").text(userName);
-            $.LoadingOverlay("hide");
         }
+        $.LoadingOverlay("hide");
     });
 
     $.LoadingOverlay("show");
@@ -176,6 +176,7 @@ function importDefaultData() {
 
             if(!jsonConfig) {
                 processNoDecision();
+                $.LoadingOverlay("hide");
                 return;
             }
 

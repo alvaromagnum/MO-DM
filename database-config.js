@@ -33,7 +33,7 @@ const User = sequelize.define('User', {
     gender: {
         type: DataTypes.CHAR,
         allowNull: true
-    },
+    }
 
 });
 
@@ -49,11 +49,11 @@ const Course = sequelize.define('Course', {
     name: {
         type: DataTypes.STRING,
         allowNull: false
-    },
+    }
 
 });
 
-const Evaluation = sequelize.define('Evaluation', {
+const EvaluationOption = sequelize.define('EvaluationOption', {
 
     id: {
         type: DataTypes.STRING,
@@ -74,7 +74,11 @@ const Evaluation = sequelize.define('Evaluation', {
     option: {
         type: DataTypes.STRING,
         allowNull: false
-    },
+    }
+
+});
+
+const Evaluation = sequelize.define('Evaluation', {
 
     e: {
         type: DataTypes.TINYINT,
@@ -89,7 +93,7 @@ const Evaluation = sequelize.define('Evaluation', {
     c: {
         type: DataTypes.TINYINT,
         allowNull: false
-    },
+    }
 
 });
 
@@ -116,7 +120,7 @@ const Project = sequelize.define('Project', {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false
-    },
+    }
 
 });
 
@@ -128,11 +132,14 @@ User.belongsToMany(Project, { through: ProjectUser });
 Course.hasMany(User);
 User.belongsTo(Course)
 
+EvaluationOption.belongsTo(Project);
+Project.hasMany(EvaluationOption);
+
 Evaluation.belongsTo(User);
 User.hasMany(Evaluation);
 
-Evaluation.belongsTo(Project);
-Project.hasMany(Evaluation);
+Evaluation.belongsTo(EvaluationOption);
+EvaluationOption.hasMany(Evaluation);
 
 function databaseConnected() {
 
@@ -143,7 +150,8 @@ function databaseConnected() {
     ProjectUser.sync({ force: true }).then(() => {console.log(messages.projectUsersTableCreated)});
     User.sync({ force: true }).then(() => {console.log(messages.usersTableCreated)});
     Project.sync({ force: true }).then(() => {console.log(messages.projectsTableCreated)});
-    Evaluation.sync({ force: true }).then(() => {console.log(messages.evaluationsTableCreated)});
+    EvaluationOption.sync({ force: true }).then(() => {console.log(messages.evaluationsTableCreated)});
+    Evaluation.sync({ force: true }).then(() => {console.log(messages.evaluationOptionsTableCreated)});
 
     Course.sync({ force: true }).then(() => {
 
@@ -228,6 +236,7 @@ module.exports = {
     Project: Project,
     ProjectUser: ProjectUser,
     Course: Course,
+    EvaluationOption: EvaluationOption,
     Evaluation: Evaluation,
     sequelize: sequelize
 };

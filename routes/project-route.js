@@ -102,10 +102,10 @@ async function getEvaluations(req, res) {
         return;
     }
 
-    var stepIds = req.body.stepIds;
-    var decisionIds = req.body.decisionIds;
+    //var stepIds = req.body.stepIds;
+    //var decisionIds = req.body.decisionIds;
 
-    var evaluations = await databaseConfig.Evaluation.findAll({
+    var evaluationOptions = await databaseConfig.EvaluationOption.findAll({
         where: {
             // UserId: global.user.id,
             ProjectId: global.project.id,
@@ -118,7 +118,7 @@ async function getEvaluations(req, res) {
         }
     });
 
-    res.send(evaluations);
+    res.send(evaluationOptions);
 
 }
 
