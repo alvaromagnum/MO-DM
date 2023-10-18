@@ -8,10 +8,6 @@
     background: lightslategray;
 }
 
-.cursor-pointer:hover {
-    cursor: pointer;
-}
-
 .stakeholder-node-fixed-size {
     width:400px!important;
 }
