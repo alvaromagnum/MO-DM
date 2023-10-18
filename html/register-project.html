@@ -65,8 +65,8 @@
                 <div class="card-body">
                   <form role="form" id="formProject">
                     <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Nome do Projeto</label>
-                      <input id="inputProjectName" type="text" class="form-control">
+                      <label for="inputProjectName" class="form-label">Nome do Projeto</label>
+                      <input onClick="this.select();" id="inputProjectName" type="text" class="form-control">
                     </div>
                     <div class="text-center">
                       <button type="button" id="createProjectButton" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Criar</button>
@@ -103,7 +103,7 @@
   <!-- Github buttons -->
   <script async defer src="/js/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="/js/material-dashboard.min.js"></script>
+  <script src="/js/material-dashboard.js"></script>
   <script src="/js/jquery.min.js"></script>
   <script src="/js/sweet-alert.js"></script>
   <script src="/js/register-project.js"></script>

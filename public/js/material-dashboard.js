@@ -843,8 +843,13 @@ if (indicators) {
           if (entry.isIntersecting) {
             resetCurrentActiveIndicator();
             const element = entry.target;
-            const indicator = document.querySelector(`a[href='#${element.id}']`);
-            indicator.classList.add("active");
+            try{
+              const indicator = document.querySelector(`a[href='#${element.id}']`);
+              indicator.classList.add("active");
+            }
+            catch{
+              return;
+            }
             return;
           }
         });

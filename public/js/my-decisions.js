@@ -227,8 +227,8 @@ function addNewDecisionOption(table, decisionId, stepId, elementId, title) {
             </div>
         </td>
         <td>
-            <div class="mt-2">
-              <select id="selectExpectancy_${decisionId}_${elementId}" decisionId="${decisionId}" stepId="${stepId}" uuid="${elementId}" class="star-rating">
+            <div class="mt-2" onmouseover="$(\`#myForm\`).trigger(\`jip:submit\`)">
+              <select  id="selectExpectancy_${decisionId}_${elementId}" decisionId="${decisionId}" stepId="${stepId}" uuid="${elementId}" class="star-rating">
                 <option value="0">0</option>
                 <option value="6">6</option>
                 <option value="5">5</option>
@@ -240,7 +240,7 @@ function addNewDecisionOption(table, decisionId, stepId, elementId, title) {
             </div>
         </td>
         <td>
-            <div class="mt-2">
+            <div class="mt-2" onmouseover="$(\`#myForm\`).trigger(\`jip:submit\`)">
               <select id="selectValue_${decisionId}_${elementId}" decisionId="${decisionId}" stepId="${stepId}" uuid="${elementId}" class="star-rating">
                 <option value="0">0</option>
                 <option value="6">6</option>
@@ -253,7 +253,7 @@ function addNewDecisionOption(table, decisionId, stepId, elementId, title) {
             </div>
         </td>
         <td>
-            <div class="mt-2">
+            <div class="mt-2" onmouseover="$(\`#myForm\`).trigger(\`jip:submit\`)">
               <select id="selectCost_${decisionId}_${elementId}" decisionId="${decisionId}" stepId="${stepId}" uuid="${elementId}" class="star-rating">
                 <option value="0">0</option>
                 <option value="6">6</option>

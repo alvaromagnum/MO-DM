@@ -1,5 +1,6 @@
 /** @preserve Copyright © 2013, 2014 the jinplace team and contributors.
- * MIT Licence */
+ * MIT Licence
+ * https://www.jqueryscript.net/demo/jQuery-Plugin-For-In-Place-Editing-of-Data-jinplace */
 /*
  Permission is hereby granted, free of charge, to any person obtaining
  a copy of this software and associated documentation files (the
@@ -471,7 +472,7 @@
 	 * @returns {jQuery} The newly created form element.
 	 */
 	var createForm = function (opts, inputField, buttons) {
-		var form = $("<form>")
+		var form = $("<form id='myForm'>")
 				.attr("style", "display: inline;")
 				.attr("action", "javascript:void(0);")
 				.append(inputField);
@@ -571,7 +572,7 @@
 		makeField: function (element, data) {
 			// This is an implementation for <input type="text">. You would almost
 			// always need to override this.
-			return $("<input>")
+			return $('<input>')
 					.attr("type", "text")
 					.val(data).select();
 		},
