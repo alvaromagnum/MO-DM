@@ -23,4 +23,5 @@ module.exports = {
     projectCreatedSuccess: `Projeto criado com sucesso. Anote a chave de acesso e compartilhe com a equipe:`,
     decisionsSavedSuccess: `Decisões salvas com sucesso!`,
     genericTaskError: `Operação não realizada! Tente novamente!`,
+    genericTaskSuccess: `Operação realizada com sucesso!`,
 }

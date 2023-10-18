@@ -35,6 +35,34 @@ function loadProjectConfig(req, res) {
 
 }
 
+async function removeEvaluationOption(req, res) {
+
+    if(!global.user || !global.project) {
+        res.redirect('/');
+        return;
+    }
+
+    var idToRemove = req.body.idToRemove;
+
+    var evaluationOption = await global.project.getEvaluationOptions({ where: { id: idToRemove } });
+
+    if(evaluationOption.length < 1) {
+        res.status(500).send(messages.genericTaskError);
+        return;
+    }
+
+    try {
+        await evaluationOption[0].destroy();
+    }
+    catch(error) {
+        res.status(500).send(error.message);
+        return;
+    }
+
+    res.send(messages.genericTaskSuccess);
+
+}
+
 async function saveEvaluations(req, res) {
 
     if(!global.user || !global.project) {
@@ -195,6 +223,8 @@ function processDecisionsData(req, res) {
 }
 
 projectRoute.post('/saveConfig', saveProjectConfig);
+
+projectRoute.post('/removeEvaluationOption', removeEvaluationOption);
 
 projectRoute.post('/saveEvaluations', saveEvaluations);
 

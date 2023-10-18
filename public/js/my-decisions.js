@@ -195,7 +195,7 @@ function removeDecisionOption(row) {
     Swal.fire({
 
         title: 'Atenção!',
-        text: "Tem certeza de que deseja remover a opção de decisão?",
+        html: "Tem certeza de que deseja remover a opção de decisão?<br/><br/><i class='text-xs'>É importante destacar que todas as avaliações já realizadas por outros usuários, para esta opção, também serão removidas.</i>",
         icon: 'info',
         showCancelButton: true,
         cancelButtonText: "CANCELAR",
@@ -204,8 +204,22 @@ function removeDecisionOption(row) {
     }).then((result) => {
 
         if (result.isConfirmed) {
-            row.remove();
-            $.notify("Operação realizada com sucesso!", "success");
+
+            $.LoadingOverlay("show");
+
+            $.ajax({
+                method: "POST",
+                url: "/project/removeEvaluationOption",
+                data: { idToRemove: $(row).attr("uuid") }
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                $.LoadingOverlay("hide");
+                Swal.fire('Erro!', jqXHR.responseText, 'error');
+            }).done(function (msg) {
+                row.remove();
+                $.LoadingOverlay("hide");
+                $.notify(msg, "success");
+            });
+
         }
 
     });
@@ -214,7 +228,7 @@ function removeDecisionOption(row) {
 
 function addNewDecisionOption(table, decisionId, stepId, elementId, title) {
 
-    var row = $("<tr></tr>").html(`
+    var row = $(`<tr uuid="${elementId}"></tr>`).html(`
         <td>
             <div class="d-flex px-2 py-1">
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
