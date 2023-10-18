@@ -1183,7 +1183,7 @@ export default class Drawflow {
                 var userName = $('#selectNodeType option:selected').text().trim();
 
                 var stakeholderNode = `
-                    <div class="container">
+                    <div class="container stakeholder-node-fixed-size">
                         <div class="col rounded stakeholder-node-header">
                             <i class="bi-person"></i> Stakeholder
                         </div>

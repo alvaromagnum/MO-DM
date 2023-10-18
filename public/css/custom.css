@@ -8,6 +8,10 @@
     background: lightslategray;
 }
 
+.stakeholder-node-fixed-size {
+    width:400px!important;
+}
+
 .editable-input {
     width: 550px;
 }
