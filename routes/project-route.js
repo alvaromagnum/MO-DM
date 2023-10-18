@@ -47,12 +47,16 @@ async function saveEvaluations(req, res) {
     try {
 
         var evaluations = req.body.evaluations;
-        var existingDecisionOptions = await global.project.getEvaluationOptions();
         var evaluationsToDelete = [];
+
+        var existingDecisionOptions = await databaseConfig.EvaluationOption.findAll({
+            where: { ProjectId: global.project.id },
+            include: databaseConfig.Evaluation
+        });
 
         for(var existingDecisionOption of existingDecisionOptions) {
 
-            var existingEvaluations = await existingDecisionOption.getEvaluations();
+            var existingEvaluations = existingDecisionOption.Evaluations;
 
             existingEvaluations = _.filter(existingEvaluations, (o)=> o.UserId === global.user.id);
 
@@ -112,7 +116,7 @@ async function saveEvaluations(req, res) {
 
         await transaction.rollback();
 
-        res.status(500).send(messages.genericTaskError);
+        res.status(500).send(error.message);
 
     }
 
