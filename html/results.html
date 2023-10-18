@@ -63,7 +63,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white active bg-gradient-dark" href="/project/decisions">
+          <a class="nav-link text-white" href="/project/decisions">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">quiz</i>
             </div>
@@ -71,7 +71,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white " href="/project/results">
+          <a class="nav-link text-white active bg-gradient-dark" href="/project/results">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">military_tech</i>
             </div>
@@ -92,9 +92,9 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Páginas</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Minhas Decisões</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Resultados</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0">MINHAS DECISÕES <label class="project-name">&nbsp;</label></h6>
+          <h6 class="font-weight-bolder mb-0">RESULTADOS <label id="labelProjectName" class="project-name">---</label></h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -120,21 +120,77 @@
           <div class="card">
             <div class="card-header p-3 pt-2">
               <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
-                <i class="material-icons opacity-10">fact_check</i>
+                <i class="material-icons opacity-10">workspace_premium</i>
               </div>
-              <div class="text-end pt-1">
-                DECISÕES PARA TOMAR | <b>PROJETO:</b> <span id="labelProjectName">---</span><br/>
-                <br/>
-                <button id="btSave" class="btn btn-outline-white" data-toggle="tooltip" title="Salvar decisões" onmouseover="$(`#myForm`).trigger(`jip:submit`)"><i class="material-icons icon-button">save</i></button>
+              <div class="pt-1 padding-left-80">
+                <label id="labelDecision" CLASS="text-2xl">DECISÃO</label>
               </div>
             </div>
             <div class="card-body">
               <hr class="dark horizontal my-0">
               <div class="col-lg-12 col-md-6 mb-md-0 mb-4" id="decisionCards"></div>
-              <br/><br/>
+              <div style="width: 90%; margin: auto">
+                <div style="padding:10px" class="container-fluid">
+                  <div class="container" style="background: lightslategray; border: 4px solid white; border-radius: 5px">
+                    <div class="row" style="background: white; color: black">
+                      <div class="col-sm text-center text-2xl">
+                        MAIS DESEJADOS
+                      </div>
+                      <div class="col-sm text-center text-2xl">
+                        MOTIVAÇÃO
+                      </div>
+                      <div class="col-sm text-center text-2xl">
+                        CONCORDÂNCIA
+                      </div>
+                    </div>
+                    <div class="row" style="margin:20px">
+                      <div class="col-sm">
+                        <ol class="list-group list-group-numbered dragable-item sortable" id="sortable1">
+                          <li class="list-group-item input filtered bg-info">Etapa 1</li>
+                          <li class="list-group-item input dragable">Qual o projeto trabalhado?</li>
+                          <li class="list-group-item input dragable">Quem será o gerente do projeto?</li>
+                          <li class="list-group-item input dragable">Qual a linguagem de programação será utilizada?</li>
+                          <li class="list-group-item input dragable">Qual a plataforma?</li>
+                        </ol>
+                      </div>
+                      <div class="col-sm">
+                        <ol class="list-group list-group-numbered dragable-item sortable" id="sortable2">
+                          <li class="list-group-item input filtered bg-info">Etapa 1</li>
+                          <li class="list-group-item input dragable">Qual o projeto trabalhado?</li>
+                          <li class="list-group-item input dragable">Quem será o gerente do projeto?</li>
+                          <li class="list-group-item input dragable">Qual a linguagem de programação será utilizada?</li>
+                          <li class="list-group-item input dragable">Qual a plataforma?</li>
+                        </ol>
+                      </div>
+                      <div class="col-sm">
+                        <ol class="list-group list-group-numbered dragable-item sortable" id="sortable3">
+                          <li class="list-group-item input filtered bg-info">Etapa 1</li>
+                          <li class="list-group-item input dragable">Qual o projeto trabalhado?</li>
+                          <li class="list-group-item input dragable">Quem será o gerente do projeto?</li>
+                          <li class="list-group-item input dragable">Qual a linguagem de programação será utilizada?</li>
+                          <li class="list-group-item input dragable">Qual a plataforma?</li>
+                        </ol>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br/>
+              <div class="text-center">
+                <button id="btDecide" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para fazer a escolha da decisão"><i class="material-icons icon-button">ads_click</i></button>
+              </div>
+              <br/>
               <div class="d-flex">
                 <i class="material-icons text-sm my-auto me-1">info</i>
-                <p class="mb-0 text-sm" id="labelInfo"> Clique em uma opção para modificá-la. </p>
+                <p class="mb-0 text-sm"> Em caso de empate nos rankings, é possível segurar e arrastar as opções para reordená-las. </p>
+              </div>
+              <div class="d-flex">
+                <i class="material-icons text-sm my-auto me-1">info</i>
+                <p class="mb-0 text-sm"> Uma concordância a partir de 65% é considerada boa. </p>
+              </div>
+              <div class="d-flex">
+                <i class="material-icons text-sm my-auto me-1">info</i>
+                <p class="mb-0 text-sm"> Quando a primeira opção dos dois rankings forem iguais e a condordância for maior ou igual a 65%, será possível tomar uma decisão. </p>
               </div>
             </div>
           </div>
@@ -182,10 +238,11 @@
   <script src="/js/animated.js"></script>
   <script src="/js/core/bootstrap.bundle.min.js"></script>
   <script src="/js/star-rating.js"></script>
+  <script src="/js/Sortable.js"></script>
   <script src="/js/jinplace.js"></script>
   <script src="/js/loadingoverlay.min.js"></script>
   <script src="/js/common.js"></script>
-  <script src="/js/my-decisions.js"></script>
+  <script src="/js/results.js"></script>
 </body>
 
 </html>

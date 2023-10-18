@@ -1,0 +1,7 @@
+. Remover avaliações quando um nodo ou uma conexão for removida da configuração do projeto.
+
+. Upload de fotos.
+
+. Adicionar sexo e data de nascimento (para idade) no perfil
+
+. Separar html / js / css

@@ -218,13 +218,30 @@ function loadMyDecisions(req, res) {
 
 }
 
+function processResults(req, res) {
+
+    if(!global.user || !global.project) {
+        res.redirect('/');
+        return;
+    }
+
+    res.sendFile(path.resolve(__dirname, '..') + '/html/results.html');
+
+}
+
 function processDecisionsData(req, res) {
     res.send("");
+}
+
+function makeDecision(req, res) {
+    res.send(messages.genericTaskSuccess);
 }
 
 projectRoute.post('/saveConfig', saveProjectConfig);
 
 projectRoute.post('/removeEvaluationOption', removeEvaluationOption);
+
+projectRoute.post('/makeDecision', makeDecision);
 
 projectRoute.post('/saveEvaluations', saveEvaluations);
 
@@ -234,5 +251,7 @@ projectRoute.get('/loadConfig', loadProjectConfig);
 
 projectRoute.get('/decisions', loadMyDecisions);
 projectRoute.post('/decisions', processDecisionsData);
+
+projectRoute.get('/results', processResults);
 
 module.exports = projectRoute;

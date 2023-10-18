@@ -8,6 +8,14 @@
     background: lightslategray;
 }
 
+.dragable-item {
+    cursor: pointer;
+}
+
+.padding-left-80 {
+    padding-left: 80px;
+}
+
 .stakeholder-node-fixed-size {
     width:400px!important;
 }
@@ -17,7 +25,7 @@
 }
 
 .card-white {
-    background: lightslategray!important;
+    background: #202940!important;
     border: #f0f2f5 2px solid!important;
     box-shadow: 8px 8px black!important;
 }
