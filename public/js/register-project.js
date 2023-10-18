@@ -33,6 +33,8 @@ $('#createProjectButton').click(function () {
 
         });
 
+        activateTooltips();
+
     });
 
 });
@@ -44,3 +46,16 @@ $("#formProject").keypress(function(e){
         return false;
     }
 });
+
+function copyKey() {
+    const textToCopy = $('#keyToCopy').text();
+    navigator.clipboard.writeText(textToCopy).then(()=>{
+        $.notify('Chave copiada com sucesso!', "success")
+    });
+}
+
+function activateTooltips() {
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+}
