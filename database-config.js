@@ -160,11 +160,11 @@ function databaseConnected() {
 
     if(!global.resetDatabase) return;
 
+    Evaluation.sync({ force: true }).then(() => {console.log(messages.evaluationOptionsTableCreated)});
+    EvaluationOption.sync({ force: true }).then(() => {console.log(messages.evaluationsTableCreated)});
     ProjectUser.sync({ force: true }).then(() => {console.log(messages.projectUsersTableCreated)});
     User.sync({ force: true }).then(() => {console.log(messages.usersTableCreated)});
     Project.sync({ force: true }).then(() => {console.log(messages.projectsTableCreated)});
-    EvaluationOption.sync({ force: true }).then(() => {console.log(messages.evaluationsTableCreated)});
-    Evaluation.sync({ force: true }).then(() => {console.log(messages.evaluationOptionsTableCreated)});
 
     Course.sync({ force: true }).then(() => {
 
