@@ -40,7 +40,7 @@ function activateTooltips() {
     });
 }
 
-$("#btDecide").click(function() {
+$(".bt-decide").click(function() {
 
     Swal.fire({
 
@@ -78,6 +78,7 @@ $("#btDecide").click(function() {
 Sortable.create(sortable1, {animation: 150, filter: '.filtered', preventOnFilter: true, draggable: ".dragable",});
 Sortable.create(sortable2, {animation: 150, filter: '.filtered', preventOnFilter: true, draggable: ".dragable",});
 Sortable.create(sortable3, {animation: 150, filter: '.filtered', preventOnFilter: true, draggable: ".dragable",});
+Sortable.create(sortable4, {animation: 150, filter: '.filtered', preventOnFilter: true, draggable: ".dragable",});
 
 importDefaultData();
 activateTooltips();
