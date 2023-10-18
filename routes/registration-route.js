@@ -94,7 +94,7 @@ async function saveProject(req, res) {
         name: projectName,
         key: key,
     }).then(() => {
-        res.send(`${messages.projectCreatedSuccess} <b id="keyToCopy">${key}</b> <i data-toggle="tooltip" title="Clique para COPIAR A CHAVE projeto" class="material-icons opacity-10" id="buttonCopyKey" style="cursor:pointer" onclick="copyKey()">content_copy</i>`);
+        res.send(`${messages.projectCreatedSuccess} <b id="keyToCopy">${key}</b> <i data-toggle="tooltip" title="Clique para COPIAR A CHAVE de acesso do projeto" class="material-icons opacity-10" id="buttonCopyKey" style="cursor:pointer" onclick="copyKey()">content_copy</i>`);
     });
 
 }
