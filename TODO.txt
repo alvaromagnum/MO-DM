@@ -5,3 +5,7 @@
 . Adicionar sexo e data de nascimento (para idade) no perfil
 
 . Separar html / js / css
+
+. Criar página do ADMIN
+
+. Colocar a chave do projeto no topo da página

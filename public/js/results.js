@@ -32,6 +32,22 @@ function importDefaultData() {
 
     });
 
+    $.LoadingOverlay("show");
+
+    $.ajax({
+        method: "GET",
+        url: "/users/get/loggedUserData",
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        $.LoadingOverlay("hide");
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+    }).done(function (dataToImport) {
+        $.LoadingOverlay("hide");
+        if(dataToImport) {
+            var userName = dataToImport.userName;
+            $("#labelUserName").text(userName);
+        }
+    });
+
 }
 
 function activateTooltips() {
@@ -77,8 +93,6 @@ $(".bt-decide").click(function() {
 
 Sortable.create(sortable1, {animation: 150, filter: '.filtered', preventOnFilter: true, draggable: ".dragable",});
 Sortable.create(sortable2, {animation: 150, filter: '.filtered', preventOnFilter: true, draggable: ".dragable",});
-Sortable.create(sortable3, {animation: 150, filter: '.filtered', preventOnFilter: true, draggable: ".dragable",});
-Sortable.create(sortable4, {animation: 150, filter: '.filtered', preventOnFilter: true, draggable: ".dragable",});
 
 importDefaultData();
 activateTooltips();
