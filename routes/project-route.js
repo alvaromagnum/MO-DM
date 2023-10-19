@@ -150,6 +150,23 @@ async function saveEvaluations(req, res) {
 
 }
 
+async function getResults(req, res) {
+
+    if(!global.user || !global.project) {
+        res.redirect('/');
+        return;
+    }
+
+    var evaluationOptions = await databaseConfig.EvaluationOption.findAll({
+        where: { ProjectId: global.project.id },
+        include: databaseConfig.Evaluation
+    });
+
+
+    res.send(evaluationOptions);
+
+}
+
 async function getEvaluations(req, res) {
 
     if(!global.user || !global.project) {
@@ -218,7 +235,7 @@ function loadMyDecisions(req, res) {
 
 }
 
-function processResults(req, res) {
+function showResults(req, res) {
 
     if(!global.user || !global.project) {
         res.redirect('/');
@@ -252,6 +269,7 @@ projectRoute.get('/loadConfig', loadProjectConfig);
 projectRoute.get('/decisions', loadMyDecisions);
 projectRoute.post('/decisions', processDecisionsData);
 
-projectRoute.get('/results', processResults);
+projectRoute.get('/results', showResults);
+projectRoute.post('/results', getResults);
 
 module.exports = projectRoute;

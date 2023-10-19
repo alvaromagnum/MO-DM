@@ -26,6 +26,29 @@ function importDefaultData() {
                 return;
             }
 
+            getConfigData(jsonConfig).then((steps)=> {
+
+                $.LoadingOverlay("show");
+
+                $.ajax({
+                    method: "POST",
+                    url: "/project/results",
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    $.LoadingOverlay("hide");
+                    Swal.fire('Erro!', jqXHR.responseText, 'error');
+                }).done(function (optionsWithEvaluations) {
+                    $.LoadingOverlay("hide");
+                    if(optionsWithEvaluations) {
+                        //console.log(JSON.stringify(steps, null, "\t"));
+                        //console.log(JSON.stringify(optionsWithEvaluations, null, "\t"));
+                        joinDataAddScores(steps, optionsWithEvaluations).then((result)=>{
+                            //console.log(JSON.stringify(result, null, "\t"))
+                        });
+                    }
+                });
+
+            });
+
         }
 
         $.LoadingOverlay("hide");
@@ -47,6 +70,42 @@ function importDefaultData() {
             $("#labelUserName").text(userName);
         }
     });
+
+}
+
+async function joinDataAddScores(steps, optionsWithEvaluations) {
+
+    for(var step of steps) {
+
+        var decisions = step.decisions;
+
+        for(var decision of decisions) {
+
+            console.log("ENTRANDO EM " + decision.question);
+
+            var queryOptions = `[*[idDecision=${decision.id}]]`;
+            var options = await jsonata(queryOptions).evaluate(optionsWithEvaluations);
+
+            var queryAllvs = "[*.[${\"id\": id, \"allV\": [Evaluations.v]}].*]";
+            var allVs = await jsonata(queryAllvs).evaluate(options);
+
+            var newVs = allVs.map((o)=> {
+                return {id: o.id, allV: o.allV.map((x)=>(x-1)/5)}
+            });
+
+            var weights = newVs.map((o)=>{
+                return {id: o.id, weight: math.mean(o.allV)};
+            });
+
+            console.log(weights);
+
+            decision.options = options;
+
+        }
+
+    }
+
+    return steps;
 
 }
 

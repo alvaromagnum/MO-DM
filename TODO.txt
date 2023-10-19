@@ -8,4 +8,4 @@
 
 . Criar página do ADMIN
 
-. Colocar a chave do projeto no topo da página
+. Ver --> https://mathjs.org/docs/reference/functions/variance.html
