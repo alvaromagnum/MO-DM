@@ -66,8 +66,6 @@ function processProjectConfigDelayed() {
 
 async function processProjectConfig() {
 
-    $.LoadingOverlay("show");
-
     var editorJson = configEditor.getJson();
     var configData = await getConfigData(editorJson);
     var linksNodes = await getSankeyChartDataFromConfig(configData);
@@ -78,8 +76,6 @@ async function processProjectConfig() {
     // console.log(JSON.stringify(linksNodes.links,null,'\t'));
 
     generateProjectSankeyChart(linksNodes.nodes, linksNodes.links);
-
-    $.LoadingOverlay("hide");
 
     return({configData: configData, nodes: linksNodes.nodes, links: linksNodes.links});
 
