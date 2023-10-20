@@ -81,13 +81,13 @@ async function generateRankings(data) {
 
             var idDecision = decision.id;
 
-            var queryWeightRanking = `[decisions.options[idDecision=${idDecision}]^(>weight).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
+            var queryWeightRanking = `[decisions.options[idDecision=${idDecision} and isComplete=true]^(>weight).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
             var weightRankingItems = await jsonata(queryWeightRanking).evaluate(data);
 
-            var queryEvcRanking = `[decisions.options[idDecision=${idDecision}]^(>meanEvc).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
+            var queryEvcRanking = `[decisions.options[idDecision=${idDecision} and isComplete=true]^(>meanEvc).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
             var evcRankingItems = await jsonata(queryEvcRanking).evaluate(data);
 
-            var queryAgreementRanking = `[decisions.options[idDecision=${idDecision}]^(>agreement).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
+            var queryAgreementRanking = `[decisions.options[idDecision=${idDecision} and isComplete=true]^(>agreement).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
             var agreementRankingItems = await jsonata(queryAgreementRanking).evaluate(data);
 
             var dashboard = $("<div></div>").html(`
@@ -214,6 +214,8 @@ async function joinDataAddScores(steps, optionsWithEvaluations) {
 
         for(var decision of decisions) {
 
+            var numberOfStakeholders = decision.stakeholders.length;
+
             var queryOptions = `[*[idDecision=${decision.id}]]`;
             var options = await jsonata(queryOptions).evaluate(optionsWithEvaluations);
 
@@ -251,6 +253,12 @@ async function joinDataAddScores(steps, optionsWithEvaluations) {
             }
 
             for(var option of options) {
+
+                var hasZero = _.some(option.Evaluations, (o)=> o.e === 0 || o.v === 0 || o.c === 0);
+                var hasEvaluations = option.Evaluations.length > 0;
+                var hasAllStakeholders = option.Evaluations.length === numberOfStakeholders;
+
+                option.isComplete = !hasZero && hasEvaluations && hasAllStakeholders;
 
                 option.weight = _.find(weights, (o)=>o.id === option.id).weight.toFixed(2);
                 option.meanEvc = _.find(evcMeans, (o)=>o.id === option.id).meanEvc.toFixed(2);
