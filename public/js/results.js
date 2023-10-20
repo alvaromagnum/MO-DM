@@ -326,7 +326,3 @@ $(".bt-decide").click(function() {
 
 importDefaultData();
 activateTooltips();
-
-$('#resultsPerUserModal').modalJ({
-    fadeDuration: 100
-});
