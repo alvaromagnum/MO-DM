@@ -99,7 +99,7 @@ async function generateRankings(data) {
                         <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
                           <i class="material-icons opacity-10">workspace_premium</i>
                         </div>
-                        <div class="padding-left-80 pt-1 text-2xl text-yellow">
+                        <div class="padding-left-80 pt-1 text-yellow">
                           ${decision.question}
                         </div>
                       </div>
@@ -110,13 +110,13 @@ async function generateRankings(data) {
                           <div class="container-fluid div-results-2">
                             <div class="container container-results">
                               <div class="row row-results-header">
-                                <div class="col-sm text-center text-2xl">
+                                <div class="col-sm text-xl-center">
                                   <b>MAIS DESEJADOS</b>
                                 </div>
-                                <div class="col-sm text-center text-2xl">
-                                  <b>MOTIVAÇÃO</b>
+                                <div class="col-sm text-xl-center">
+                                  <b>MAIS MOTIVAÇÃO/ENGAJAMENTO</b>
                                 </div>
-                                <div class="col-sm text-center text-2xl">
+                                <div class="col-sm text-xl-center">
                                   <b>CONCORDÂNCIA</b>
                                 </div>
                               </div>
