@@ -182,7 +182,6 @@ async function getResults(req, res) {
         include: databaseConfig.Evaluation
     });
 
-
     res.send(evaluationOptions);
 
 }

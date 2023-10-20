@@ -109,11 +109,17 @@ async function getSankeyChartDataFromConfig(steps) {
 
             allStakeholders = _.uniq(allStakeholders, false, (o)=>{return o.idUser});
 
+            console.log("ENTRANDO PARA DECISÃO " + decision.id);
+
             var isDecisionFinished = await isFinished(decision.id);
+            var hasEvaluations = await hasAnyEvaluation(steps, decision.id);
 
-            console.log(isDecisionFinished);
+            console.log(`ISFINISHED = ${isDecisionFinished} | HASEVALUATIONS = ${hasEvaluations}`);
 
-            var nodeColor = isDecisionFinished ? 0x90EE90 : 0x1a2035;
+            var nodeColor = 0x1a2035;
+
+            if(isDecisionFinished) nodeColor = 0x90EE90;
+            else if(hasEvaluations) nodeColor = 0xFFA500;
 
             nodes.push({ id: decision.id, type: "DECISAO", name: decision.question, info : `Stakeholders: ${decision.stakeholders.length}`, fill: am5.color(nodeColor) });
             links.push({ from: step.id, to: decision.id, value: Math.max(1, decision.stakeholders.length) });
@@ -163,6 +169,28 @@ async function getSankeyChartDataFromConfig(steps) {
     }
 
     return({nodes: nodes, links: links});
+
+}
+
+async function hasAnyEvaluation(steps, idDecision) {
+
+    // return $.ajax({
+    //     method: "POST",
+    //     url: "/project/results",
+    // }).fail(function(jqXHR, textStatus, errorThrown) {
+    //     Swal.fire('Erro!', jqXHR.responseText, 'error');
+    //     return false;
+    // }).done(async function (optionsWithEvaluations) {
+    //     if(optionsWithEvaluations) {
+    //         var queryNumberOfEvaluations = `$max([0, $sum(*[idDecision=${idDecision}].$count(Evaluations))])`;
+    //         var numberOfEvaluations = await jsonata(queryNumberOfEvaluations).evaluate(optionsWithEvaluations);
+    //         console.log(numberOfEvaluations);
+    //         return numberOfEvaluations > 0;
+    //     }
+    //     return false;
+    // });
+
+    return false;
 
 }
 
