@@ -102,6 +102,26 @@ function generateAndShowImpactsPopup(allData, option) {
 
     for(data of allData) {
 
+        var classE = "bg-gradient-success";
+
+        if(data.e < 70) classE = "bg-gradient-warning";
+        if(data.e < 40) classE = "bg-gradient-danger";
+
+        var classV = "bg-gradient-success";
+
+        if(data.v < 70) classV = "bg-gradient-warning";
+        if(data.v < 40) classV = "bg-gradient-danger";
+
+        var classC = "bg-gradient-danger";
+
+        if(data.c < 70) classC = "bg-gradient-warning";
+        if(data.c < 40) classC = "bg-gradient-success";
+
+        var classEVC = "bg-gradient-success";
+
+        if(data.evc < 70) classEVC = "bg-gradient-warning";
+        if(data.evc < 40) classEVC = "bg-gradient-danger";
+
         var row = $("<tr></tr>").html(`
           <td>
             <div class="d-flex px-2 py-1">
@@ -122,7 +142,7 @@ function generateAndShowImpactsPopup(allData, option) {
               </div>
             </div>
             <div class="progress">
-              <div class="progress-bar bg-gradient-info w-60" role="progressbar" style="width: ${data.e}%!important" aria-valuenow="${data.e}" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar ${classE}" role="progressbar" style="width: ${data.e}%!important" aria-valuenow="${data.e}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </td>
           <td>
@@ -132,7 +152,7 @@ function generateAndShowImpactsPopup(allData, option) {
               </div>
             </div>
             <div class="progress">
-              <div class="progress-bar bg-gradient-success w-100" role="progressbar" style="width: ${data.v}%!important" aria-valuenow="${data.v}" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar ${classV}" role="progressbar" style="width: ${data.v}%!important" aria-valuenow="${data.v}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </td>
           <td>
@@ -142,7 +162,7 @@ function generateAndShowImpactsPopup(allData, option) {
               </div>
             </div>
             <div class="progress">
-              <div class="progress-bar bg-gradient-warning w-60" role="progressbar" style="width: ${data.c}%!important" aria-valuenow="${data.c}" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar ${classC}" role="progressbar" style="width: ${data.c}%!important" aria-valuenow="${data.c}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </td>
           <td>
@@ -152,7 +172,7 @@ function generateAndShowImpactsPopup(allData, option) {
               </div>
             </div>
             <div class="progress">
-              <div class="progress-bar bg-gradient-secondary w-60" role="progressbar" style="width: ${data.evc}%!important" aria-valuenow="${data.evc}" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar ${classEVC}" role="progressbar" style="width: ${data.evc}%!important" aria-valuenow="${data.evc}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </td>
         `);

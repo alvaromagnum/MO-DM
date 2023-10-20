@@ -132,6 +132,14 @@
     color: yellow!important;
 }
 
+.text-red {
+    color: palevioletred!important;
+}
+
+.text-green {
+    color: lawngreen!important;
+}
+
 .card-white {
     background: #202940!important;
     border: #f0f2f5 2px solid!important;
