@@ -109,12 +109,8 @@ async function getSankeyChartDataFromConfig(steps) {
 
             allStakeholders = _.uniq(allStakeholders, false, (o)=>{return o.idUser});
 
-            console.log("ENTRANDO PARA DECISÃO " + decision.id);
-
             var isDecisionFinished = await isFinished(decision.id);
-            var hasEvaluations = await hasAnyEvaluation(steps, decision.id);
-
-            console.log(`ISFINISHED = ${isDecisionFinished} | HASEVALUATIONS = ${hasEvaluations}`);
+            var hasEvaluations = await hasAnyEvaluation(decision.id);
 
             var nodeColor = 0x1a2035;
 
@@ -172,25 +168,18 @@ async function getSankeyChartDataFromConfig(steps) {
 
 }
 
-async function hasAnyEvaluation(steps, idDecision) {
+async function hasAnyEvaluation(idDecision) {
 
-    // return $.ajax({
-    //     method: "POST",
-    //     url: "/project/results",
-    // }).fail(function(jqXHR, textStatus, errorThrown) {
-    //     Swal.fire('Erro!', jqXHR.responseText, 'error');
-    //     return false;
-    // }).done(async function (optionsWithEvaluations) {
-    //     if(optionsWithEvaluations) {
-    //         var queryNumberOfEvaluations = `$max([0, $sum(*[idDecision=${idDecision}].$count(Evaluations))])`;
-    //         var numberOfEvaluations = await jsonata(queryNumberOfEvaluations).evaluate(optionsWithEvaluations);
-    //         console.log(numberOfEvaluations);
-    //         return numberOfEvaluations > 0;
-    //     }
-    //     return false;
-    // });
-
-    return false;
+    return $.ajax({
+        method: "POST",
+        url: "/project/hasAnyEvaluation",
+        data: { idDecision: idDecision }
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+        return false;
+    }).done(function (result) {
+        return result;
+    });
 
 }
 

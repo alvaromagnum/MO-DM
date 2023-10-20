@@ -186,6 +186,31 @@ async function getResults(req, res) {
 
 }
 
+async function hasAnyEvaluation(req, res) {
+
+    if(!global.user || !global.project) {
+        res.redirect('/');
+        return;
+    }
+
+    var idDecision = req.body.idDecision;
+
+    var evaluationOptions = await databaseConfig.EvaluationOption.findAll({
+        where: { ProjectId: global.project.id },
+        include: databaseConfig.Evaluation
+    });
+
+    var numberOfEvaluations = 0;
+
+    for(var item of evaluationOptions) {
+        if(item.idDecision != idDecision) continue;
+        numberOfEvaluations += item.Evaluations.length;
+    }
+
+    res.send(numberOfEvaluations > 0);
+
+}
+
 async function getEvaluations(req, res) {
 
     if(!global.user || !global.project) {
@@ -333,6 +358,8 @@ projectRoute.post('/getEvaluations', getEvaluations);
 projectRoute.get('/loadConfig', loadProjectConfig);
 
 projectRoute.post('/isDecisionFinished', isDecisionFinished);
+
+projectRoute.post('/hasAnyEvaluation', hasAnyEvaluation);
 
 projectRoute.get('/decisions', loadMyDecisions);
 projectRoute.post('/decisions', processDecisionsData);
