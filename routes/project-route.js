@@ -63,6 +63,25 @@ async function removeEvaluationOption(req, res) {
 
 }
 
+async function getImpacts(req, res) {
+
+    if(!global.user || !global.project) {
+        res.redirect('/');
+        return;
+    }
+
+    var impactResultsIncomplete = JSON.parse(req.body.impactResultsIncomplete);
+    var impactResultsComplete = [];
+
+    for(var o of impactResultsIncomplete) {
+        var user = await databaseConfig.User.findOne({where: {id: o.UserId}});
+        impactResultsComplete.push({user: user.name, e: Number(((o.e - 1)/5).toFixed(2))*100, v: Number(((o.v - 1)/5).toFixed(2))*100, c: Number(((o.c - 1)/5).toFixed(2))*100, evc: o.evc*100});
+    }
+
+    res.send(_.sortBy(impactResultsComplete, function(o){ return o.evc; }));
+
+}
+
 async function saveEvaluations(req, res) {
 
     if(!global.user || !global.project) {
@@ -256,6 +275,8 @@ function makeDecision(req, res) {
 }
 
 projectRoute.post('/saveConfig', saveProjectConfig);
+
+projectRoute.post('/getImpacts', getImpacts);
 
 projectRoute.post('/removeEvaluationOption', removeEvaluationOption);
 

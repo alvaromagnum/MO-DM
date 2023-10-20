@@ -1,3 +1,5 @@
+var evaluationData;
+
 function importDefaultData() {
 
     $.LoadingOverlay("show");
@@ -71,7 +73,105 @@ function importDefaultData() {
 
 }
 
+async function getImpactsFrom(id, option) {
+
+    var queryImpactResults = `[decisions.options.Evaluations[EvaluationOptionId="${id}"]]`;
+    var impactResultsIncomplete = await jsonata(queryImpactResults).evaluate(evaluationData);
+
+    $.LoadingOverlay("show");
+
+    $.ajax({
+        method: "POST",
+        url: "/project/getImpacts",
+        data: { impactResultsIncomplete: JSON.stringify(impactResultsIncomplete) }
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        $.LoadingOverlay("hide");
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+    }).done(function (impactResultsComplete) {
+        $.LoadingOverlay("hide");
+        generateAndShowImpactsPopup(impactResultsComplete, option);
+    });
+
+}
+
+function generateAndShowImpactsPopup(allData, option) {
+
+    $("#labelImpactOption").text(option);
+
+    $("#tableImpacted").html("");
+
+    for(data of allData) {
+
+        var row = $("<tr></tr>").html(`
+          <td>
+            <div class="d-flex px-2 py-1">
+              <div>
+                <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-toggle="tooltip" title="${data.user}">
+                  <img src="/img/student-avatar.jpg" alt="user5">
+                </a>
+              </div>
+              <div class="d-flex flex-column justify-content-center">
+                <h6 class="mb-0 text-sm">&nbsp;${data.user}</h6>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="progress-info">
+              <div class="progress-percentage">
+                <span class="text-xs font-weight-bold">${data.e}%</span>
+              </div>
+            </div>
+            <div class="progress">
+              <div class="progress-bar bg-gradient-info w-60" role="progressbar" style="width: ${data.e}%!important" aria-valuenow="${data.e}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </td>
+          <td>
+            <div class="progress-info">
+              <div class="progress-percentage">
+                <span class="text-xs font-weight-bold">${data.v}%</span>
+              </div>
+            </div>
+            <div class="progress">
+              <div class="progress-bar bg-gradient-success w-100" role="progressbar" style="width: ${data.v}%!important" aria-valuenow="${data.v}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </td>
+          <td>
+            <div class="progress-info">
+              <div class="progress-percentage">
+                <span class="text-xs font-weight-bold">${data.c}%</span>
+              </div>
+            </div>
+            <div class="progress">
+              <div class="progress-bar bg-gradient-warning w-60" role="progressbar" style="width: ${data.c}%!important" aria-valuenow="${data.c}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </td>
+          <td>
+            <div class="progress-info">
+              <div class="progress-percentage">
+                <span class="text-xs font-weight-bold">${data.evc}%</span>
+              </div>
+            </div>
+            <div class="progress">
+              <div class="progress-bar bg-gradient-secondary w-60" role="progressbar" style="width: ${data.evc}%!important" aria-valuenow="${data.evc}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </td>
+        `);
+
+        $("#tableImpacted").append(row);
+
+        activateTooltips();
+
+    }
+
+    $('#resultsPerUserModal').modalJ({
+        fadeDuration: 100
+    });
+
+}
+
 async function generateRankings(data) {
+
+    evaluationData = data;
 
     for(var step of data) {
 
@@ -190,11 +290,13 @@ async function generateRankings(data) {
 
     }
 
-    $('li.li-ranking').click(function(){
-        console.log("clicou");
-        $('#resultsPerUserModal').modalJ({
-            fadeDuration: 100
-        });
+    $('li.li-ranking').click(function(event){
+
+        var id = $(event.currentTarget).attr("uuid");
+        var option = $(event.currentTarget).attr("option");
+
+        getImpactsFrom(id, option);
+
     });
 
 }
@@ -206,7 +308,7 @@ function generateRankingItem(id, label, value, draggable) {
     var percentual = (value * 100).toFixed(2);
 
     return `
-        <li id="li_${id}" uuid="${id}" class="li-ranking cursor-pointer ${itemClass}" style="--i: ${value}">
+        <li id="li_${id}" uuid="${id}" option="${label}" class="li-ranking cursor-pointer ${itemClass}" style="--i: ${value}">
           <div class="h3-ranking">${label} |&nbsp;<b>${percentual}%</b></div>
         </li>
     `;
