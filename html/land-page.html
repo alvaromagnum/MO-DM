@@ -37,6 +37,7 @@
   <link href="/css/iconsRound.css" rel="stylesheet">
   <!-- CSS Files -->
   <link id="pagestyle" href="/css/material-dashboard.css" rel="stylesheet" />
+  <link href="/css/custom.css" rel="stylesheet" />
 </head>
 
 <body class="bg-gray-200">
@@ -54,7 +55,7 @@
         <div class="col-lg-4 col-md-8 col-12 mx-auto">
           <div class="card z-index-0 fadeIn3 fadeInBottom">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-              <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+              <div class="bg-gradient-dark shadow-dark border-radius-lg py-3 pe-1 white-border">
                 <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">
                   <img class="img-80" alt="MO-DM Logo" src="/img/mo-dm-logo.png"/>
                 </h4>
@@ -66,25 +67,25 @@
             <div class="card-body">
               <form id="formLogin" role="form" class="text-start">
                 <div class="input-group input-group-outline my-3">
-                  <label class="form-label">Login</label>
+                  <label for="inputLogin" class="form-label">Login</label>
                   <input id="inputLogin" onClick="this.select();" type="text" class="form-control">
                 </div>
                 <div class="input-group input-group-outline mb-3">
-                  <label class="form-label">Senha</label>
+                  <label for="inputPassword" class="form-label">Senha</label>
                   <input id="inputPassword" onClick="this.select();" type="password" class="form-control">
                 </div>
                 <div class="input-group input-group-outline mb-3">
-                  <label class="form-label">Chave-Convite do Projeto</label>
+                  <label for="inputKey" class="form-label">Chave-Convite do Projeto</label>
                   <input id="inputKey" onClick="this.select();" type="text" class="form-control">
                 </div>
                 <div class="text-center">
-                  <button id="loginButton" type="button" class="btn bg-gradient-primary w-100 my-4 mb-2">Entrar</button>
+                  <button id="loginButton" type="button" class="btn bg-gradient-dark w-100 my-4 mb-2 white-border">Entrar</button>
                 </div>
                 <p class="mt-4 text-sm text-center">
                   Não tem uma conta?
-                  <a href="/register/user" class="text-primary text-gradient font-weight-bold">Criar Conta</a><br/>
+                  <a href="/register/user" class="text-white font-weight-bold">Criar Conta</a><br/>
                   Criar novo projeto?
-                  <a href="/register/project" class="text-primary text-gradient font-weight-bold">Criar Projeto</a>
+                  <a href="/register/project" class="text-white font-weight-bold">Criar Projeto</a>
                 </p>
               </form>
             </div>

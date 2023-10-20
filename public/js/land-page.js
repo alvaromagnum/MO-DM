@@ -1,3 +1,5 @@
+darkMode(true);
+
 $('#loginButton').click(function () {
 
     var login = $('#inputLogin').val();

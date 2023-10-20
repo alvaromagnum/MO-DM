@@ -1,3 +1,5 @@
+darkMode(true);
+
 $('#signUpButton').click(function () {
 
     var loginInput = $('#inputTextLogin').val();

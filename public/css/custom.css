@@ -3,6 +3,10 @@
     height: 300px!important;
 }
 
+.white-border {
+    border: 1px solid slategrey!important;
+}
+
 .ol-ranking { /*https://codepen.io/michellebarker/pen/poLoeRq*/
     list-style: none;
     counter-reset: list;
@@ -228,18 +232,20 @@
     border: 1px solid lightgrey!important;
     border-radius: 5px!important;
     padding: 5px!important;
+    color: lightgrey!important;
+    background: #202940;
 }
 
 .select-course-selected {
-    border: 2px solid #e91e63!important;
+    border: 2px solid lightslategrey!important;
 }
 
 .select-course:focus {
-    border: 2px solid #e91e63!important;
+    border: 2px solid lightslategrey!important;
 }
 
 .select-course:focus-visible {
-    border: 2px solid #e91e63!important;
+    border: 2px solid lightslategrey!important;
 }
 
 .select-course-label {

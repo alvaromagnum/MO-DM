@@ -1,3 +1,5 @@
+darkMode(true);
+
 $('#createProjectButton').click(function () {
 
     var projectName = $('#inputProjectName').val();

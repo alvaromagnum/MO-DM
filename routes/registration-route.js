@@ -76,6 +76,11 @@ async function saveProject(req, res) {
         return;
     }
 
+    if(projectName.trim() === '') {
+        res.status(500).send(messages.invalidProjectName);
+        return;
+    }
+
     var project = await databaseConfig.Project.findOne({ where: { key: key } });
 
     if(project !== null) {
