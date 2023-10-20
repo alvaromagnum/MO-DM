@@ -200,12 +200,8 @@ async function hasAnyEvaluation(req, res) {
         include: databaseConfig.Evaluation
     });
 
-    var numberOfEvaluations = 0;
-
-    for(var item of evaluationOptions) {
-        if(item.idDecision != idDecision) continue;
-        numberOfEvaluations += item.Evaluations.length;
-    }
+    var queryNumberOfEvaluations = `$max([0, $sum(*[idDecision=${idDecision}].$count(Evaluations))])`;
+    var numberOfEvaluations = await jsonata(queryNumberOfEvaluations).evaluate(evaluationOptions);
 
     res.send(numberOfEvaluations > 0);
 
