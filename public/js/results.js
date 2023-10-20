@@ -256,7 +256,7 @@ async function generateRankings(data) {
                         </div>
                         <br/>
                         <div class="text-center">
-                          <button id="btDecide${decision.id}" onclick="showDecisionModal(${decision.id})" class="bt-decide btn btn-outline-white" data-toggle="tooltip" title="Clique para decidir"><i class="material-icons icon-button">ads_click</i></button>
+                          <button id="btDecide${decision.id}" onclick="showDecisionModal(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para decidir"><i class="material-icons icon-button">ads_click</i></button>
                         </div>
                         <br/>
                         <div class="d-flex">
@@ -343,7 +343,42 @@ async function generateRankings(data) {
 }
 
 function makeDecisionFor(decisionId) {
+
     var optionId = $('#selectChosenOption'+decisionId).val();
+    var option = $('#selectChosenOption'+decisionId+" option:selected").text();
+
+    Swal.fire({
+
+        title: 'Atenção!',
+        html: `Tem certeza que deseja decidir por esta opção?<br/><b class='text-2xl'>[${option}]</b>`,
+        icon: 'info',
+        showCancelButton: true,
+        cancelButtonText: "NÃO",
+        confirmButtonText: 'SIM'
+
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            $.LoadingOverlay("show");
+
+            $.ajax({
+                method: "POST",
+                url: "/project/makeDecision",
+                data: { idDecision: decisionId, idOption: optionId }
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                $.LoadingOverlay("hide");
+                Swal.fire('Erro!', jqXHR.responseText, 'error');
+            }).done(function (msg) {
+                $.modalJ.close();
+                $.LoadingOverlay("hide");
+                $.notify(msg, "success");
+            });
+
+        }
+
+    });
+
 }
 
 function showDecisionModal(id) {
@@ -441,41 +476,6 @@ function activateTooltips() {
         $('[data-toggle="tooltip"]').tooltip();
     });
 }
-
-$(".bt-decide").click(function() {
-
-    Swal.fire({
-
-        title: 'Atenção!',
-        html: "Tem certeza que deseja decidir por esta opção? <b class='text-2xl'>[ESCOLHA]</b>",
-        icon: 'info',
-        showCancelButton: true,
-        cancelButtonText: "NÃO",
-        confirmButtonText: 'SIM'
-
-    }).then((result) => {
-
-        if (result.isConfirmed) {
-
-            $.LoadingOverlay("show");
-
-            $.ajax({
-                method: "POST",
-                url: "/project/makeDecision",
-                data: { data: "" }
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                $.LoadingOverlay("hide");
-                Swal.fire('Erro!', jqXHR.responseText, 'error');
-            }).done(function (msg) {
-                $.LoadingOverlay("hide");
-                $.notify(msg, "success");
-            });
-
-        }
-
-    });
-
-});
 
 importDefaultData();
 activateTooltips();

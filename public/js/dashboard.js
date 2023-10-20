@@ -109,7 +109,13 @@ async function getSankeyChartDataFromConfig(steps) {
 
             allStakeholders = _.uniq(allStakeholders, false, (o)=>{return o.idUser});
 
-            nodes.push({ id: decision.id, type: "DECISAO", name: decision.question, info : `Stakeholders: ${decision.stakeholders.length}`, fill: am5.color(0x1a2035) });
+            var isDecisionFinished = await isFinished(decision.id);
+
+            console.log(isDecisionFinished);
+
+            var nodeColor = isDecisionFinished ? 0x90EE90 : 0x1a2035;
+
+            nodes.push({ id: decision.id, type: "DECISAO", name: decision.question, info : `Stakeholders: ${decision.stakeholders.length}`, fill: am5.color(nodeColor) });
             links.push({ from: step.id, to: decision.id, value: Math.max(1, decision.stakeholders.length) });
 
             if(decision.stakeholders.length === 0) {
@@ -157,6 +163,21 @@ async function getSankeyChartDataFromConfig(steps) {
     }
 
     return({nodes: nodes, links: links});
+
+}
+
+async function isFinished(idDecision) {
+
+    return $.ajax({
+        method: "POST",
+        url: "/project/isDecisionFinished",
+        data: { idDecision: idDecision }
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+        return false;
+    }).done(function (result) {
+        return result;
+    });
 
 }
 

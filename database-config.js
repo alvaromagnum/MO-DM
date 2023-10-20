@@ -54,6 +54,27 @@ const Course = sequelize.define('Course', {
 
 });
 
+const Decision = sequelize.define('Decision', {
+
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+
+    idProject: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+
+    idDecision: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    }
+
+});
+
 const EvaluationOption = sequelize.define('EvaluationOption', {
 
     id: {
@@ -145,6 +166,9 @@ User.belongsToMany(Project, { through: ProjectUser });
 Course.hasMany(User);
 User.belongsTo(Course);
 
+EvaluationOption.hasOne(Decision);
+Decision.belongsTo(EvaluationOption)
+
 EvaluationOption.belongsTo(Project,{
     onDelete: 'CASCADE'
 });
@@ -167,6 +191,7 @@ function databaseConnected() {
     if(!global.resetDatabase) return;
 
     Evaluation.sync({ force: true }).then(() => {console.log(messages.evaluationOptionsTableCreated)});
+    Decision.sync({ force: true }).then(() => {console.log(messages.decisionsTableCreated)});
     EvaluationOption.sync({ force: true }).then(() => {console.log(messages.evaluationsTableCreated)});
     ProjectUser.sync({ force: true }).then(() => {console.log(messages.projectUsersTableCreated)});
     User.sync({ force: true }).then(() => {console.log(messages.usersTableCreated)});
@@ -257,5 +282,6 @@ module.exports = {
     Course: Course,
     EvaluationOption: EvaluationOption,
     Evaluation: Evaluation,
+    Decision: Decision,
     sequelize: sequelize
 };

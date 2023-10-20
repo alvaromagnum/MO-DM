@@ -270,8 +270,53 @@ function processDecisionsData(req, res) {
     res.send("");
 }
 
-function makeDecision(req, res) {
+async function makeDecision(req, res) {
+
+    if(!global.user || !global.project) {
+        res.redirect('/');
+        return;
+    }
+
+    var idProject = global.project.id;
+    var idDecision = req.body.idDecision;
+    var idOption = req.body.idOption;
+
+    var decision = await databaseConfig.Decision.findOne({where: {idProject: idProject, idDecision: idDecision}});
+
+    if(decision !== null) {
+        decision.EvaluationOptionId = idOption;
+        await decision.save();
+    }
+    else {
+
+        await databaseConfig.Decision.create({
+
+            idProject: idProject,
+            idDecision: idDecision,
+            EvaluationOptionId: idOption
+
+        });
+
+    }
+
     res.send(messages.genericTaskSuccess);
+
+}
+
+async function isDecisionFinished(req, res) {
+
+    if(!global.user || !global.project) {
+        res.redirect('/');
+        return;
+    }
+
+    var idProject = global.project.id;
+    var idDecision = req.body.idDecision;
+
+    var decision = await databaseConfig.Decision.findOne({where: {idProject: idProject, idDecision: idDecision}});
+
+    res.send(decision !== null);
+
 }
 
 projectRoute.post('/saveConfig', saveProjectConfig);
@@ -287,6 +332,8 @@ projectRoute.post('/saveEvaluations', saveEvaluations);
 projectRoute.post('/getEvaluations', getEvaluations);
 
 projectRoute.get('/loadConfig', loadProjectConfig);
+
+projectRoute.post('/isDecisionFinished', isDecisionFinished);
 
 projectRoute.get('/decisions', loadMyDecisions);
 projectRoute.post('/decisions', processDecisionsData);

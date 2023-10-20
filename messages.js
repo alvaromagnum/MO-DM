@@ -14,6 +14,7 @@ module.exports = {
     projectsTableCreated: 'Tabela PROJETOS criada!',
     evaluationsTableCreated: 'Tabela AVALIAÇÕES criada!',
     evaluationOptionsTableCreated: 'Tabela OPÇÕES DE AVALIAÇÕES criada!',
+    decisionsTableCreated: 'Tabela DECISÕES criada!',
     coursesTableCreated: 'Tabela CURSOS criada!',
     projectUsersTableCreated: 'Tabela de USUÁRIOS-PROJETOS criada!',
     loginError: 'Erro ao efetuar o login! Tente novamente!',
