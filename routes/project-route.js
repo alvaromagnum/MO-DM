@@ -130,7 +130,8 @@ async function saveEvaluations(req, res) {
                 UserId: evaluation.userId,
                 e: evaluation.e,
                 v: evaluation.v,
-                c: evaluation.c
+                c: evaluation.c,
+                evc: ((((0.3 * evaluation.e + 0.3 * evaluation.v) - 0.4 * evaluation.c) + 1.8) / 5).toFixed(2)
 
             });
 

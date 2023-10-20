@@ -119,6 +119,10 @@
     width: 550px;
 }
 
+.text-yellow {
+    color: yellow!important;
+}
+
 .card-white {
     background: #202940!important;
     border: #f0f2f5 2px solid!important;

@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes} = require('sequelize');
 const messages = require('./messages');
+const {number} = require("mathjs");
 
 const sequelize = new Sequelize({
     dialect: "sqlite",
@@ -99,6 +100,11 @@ const Evaluation = sequelize.define('Evaluation', {
 
     c: {
         type: DataTypes.TINYINT,
+        allowNull: false
+    },
+
+    evc: {
+        type: DataTypes.FLOAT,
         allowNull: false
     }
 
