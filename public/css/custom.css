@@ -4,6 +4,10 @@
     padding: 0 1rem;
 }
 
+.li-ranking:hover {
+    box-shadow: 0.1rem 0.1rem 1.5rem white;
+}
+
 .li-ranking {
     --stop: calc(100% / var(--length) * var(--i));
     --l: 62%;

@@ -31,7 +31,7 @@ function loadProjectConfig(req, res) {
         return;
     }
 
-    res.send({jsonConfig: global.project.jsonConfig, projectName: `[${global.project.name} | ${global.project.key}]`, projectId: global.project.id});
+    res.send({jsonConfig: global.project.jsonConfig, projectName: `[${global.project.name} ➤ ${global.project.key}]`, projectId: global.project.id});
 
 }
 
