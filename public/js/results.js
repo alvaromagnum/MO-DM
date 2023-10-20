@@ -192,6 +192,9 @@ async function generateRankings(data) {
 
     $('li.li-ranking').click(function(){
         console.log("clicou");
+        $('#resultsPerUserModal').modal({
+            fadeDuration: 100
+        });
     });
 
 }
