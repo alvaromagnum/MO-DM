@@ -256,7 +256,7 @@ async function generateRankings(data) {
                         </div>
                         <br/>
                         <div class="text-center">
-                          <button id="btDecide${decision.id}" class="bt-decide btn btn-outline-white" data-toggle="tooltip" title="Clique para fazer a escolha da decisão"><i class="material-icons icon-button">ads_click</i></button>
+                          <button id="btDecide${decision.id}" class="bt-decide btn btn-outline-white" data-toggle="tooltip" title="Clique para decidir"><i class="material-icons icon-button">ads_click</i></button>
                         </div>
                         <br/>
                         <div class="d-flex">
@@ -303,6 +303,33 @@ async function generateRankings(data) {
 
             Sortable.create(document.getElementById("weightRanking" + decision.id), {animation: 350, filter: '.filtered', preventOnFilter: true, draggable: ".draggable",});
             Sortable.create(document.getElementById("evcRanking" + decision.id), {animation: 350, filter: '.filtered', preventOnFilter: true, draggable: ".draggable",});
+
+            var popup = $("<div></div>").html(`
+                <div class="card modal modal-decision" id="decisionModal${decision.id}">
+                    <br/>
+                    <br/>
+                    <div class="container-fluid text-center">
+                      <label for="selectChosenOption${decision.id}">OPÇÃO ESCOLHIDA:</label>
+                      <select id="selectChosenOption${decision.id}" class="select-decision">
+                      </select>
+                      <br/>
+                      <br/>
+                      <button id="btMakeChoice${decision.id}" type="button" class="btn bg-gradient-light w-100 my-4 mb-2">DECIDIR</button>
+                    </div>
+                  </div>
+            `);
+
+            $("#divPopups").append(popup);
+
+            for(var item of evcRankingItems) {
+                $('#selectChosenOption'+decision.id).append($('<option/>').val(item.id).text(item.option));
+            }
+
+            $("#btDecide"+decision.id).click(function (){
+                $('#decisionModal'+decision.id).modalJ({
+                    fadeDuration: 100
+                });
+            });
 
             activateTooltips();
 
