@@ -10,12 +10,10 @@ $('#signUpButton').click(function () {
     var passwordInput2 = $('#inputTextPassword2').val();
 
     $('#selectCourse').val(0);
+
     checkSelectedCourse();
 
-    $('#inputTextLogin').val('');
-    $('#inputTextPassword1').val('');
-    $('#inputTextPassword2').val('');
-    $('#inputTextName').val('');
+    $.LoadingOverlay("show");
 
     $.ajax({
 
@@ -26,6 +24,7 @@ $('#signUpButton').click(function () {
     }).fail(function(jqXHR, textStatus, errorThrown) {
 
         Swal.fire('Erro!', jqXHR.responseText, 'error');
+        $.LoadingOverlay("hide");
 
     }).done(function (msg) {
 
@@ -44,6 +43,8 @@ $('#signUpButton').click(function () {
             }
 
         });
+
+        $.LoadingOverlay("hide");
 
     });
 

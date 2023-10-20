@@ -5,7 +5,7 @@ $('#createProjectButton').click(function () {
     var projectName = $('#inputProjectName').val();
     var key = crypto.randomUUID();
 
-    $('#inputProjectName').val('');
+    $.LoadingOverlay("show");
 
     $.ajax({
 
@@ -16,6 +16,7 @@ $('#createProjectButton').click(function () {
     }).fail(function(jqXHR, textStatus, errorThrown) {
 
         Swal.fire('Erro!', jqXHR.responseText, 'error');
+        $.LoadingOverlay("hide");
 
     }).done(function (msg) {
 
@@ -34,6 +35,8 @@ $('#createProjectButton').click(function () {
             }
 
         });
+
+        $.LoadingOverlay("hide");
 
         activateTooltips();
 
