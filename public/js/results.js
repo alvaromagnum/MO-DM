@@ -190,6 +190,10 @@ async function generateRankings(data) {
 
     }
 
+    $('li.li-ranking').click(function(){
+        console.log("clicou");
+    });
+
 }
 
 function generateRankingItem(id, label, value, draggable) {
@@ -319,3 +323,7 @@ $(".bt-decide").click(function() {
 
 importDefaultData();
 activateTooltips();
+
+$('#resultsPerUserModal').modal({
+    fadeDuration: 100
+});

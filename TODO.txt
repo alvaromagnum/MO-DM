@@ -8,4 +8,5 @@
 
 . Criar página do ADMIN
 
-. Ver --> https://mathjs.org/docs/reference/functions/variance.html
+. Ver para adicionar evento no Sortable --> https://api.jquery.com/category/events/
+

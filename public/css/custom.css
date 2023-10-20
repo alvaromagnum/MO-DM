@@ -73,6 +73,11 @@
     width: 100%;
 }
 
+.modal-results {
+    max-width: 60%!important;
+    max-height: 90%!important;
+}
+
 .row-results {
     margin:20px;
 }
