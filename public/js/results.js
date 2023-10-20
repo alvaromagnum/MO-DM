@@ -256,7 +256,7 @@ async function generateRankings(data) {
                         </div>
                         <br/>
                         <div class="text-center">
-                          <button id="btDecide${decision.id}" class="bt-decide btn btn-outline-white" data-toggle="tooltip" title="Clique para decidir"><i class="material-icons icon-button">ads_click</i></button>
+                          <button id="btDecide${decision.id}" onclick="showDecisionModal(${decision.id})" class="bt-decide btn btn-outline-white" data-toggle="tooltip" title="Clique para decidir"><i class="material-icons icon-button">ads_click</i></button>
                         </div>
                         <br/>
                         <div class="d-flex">
@@ -314,7 +314,7 @@ async function generateRankings(data) {
                       </select>
                       <br/>
                       <br/>
-                      <button id="btMakeChoice${decision.id}" type="button" class="btn bg-gradient-light w-100 my-4 mb-2">DECIDIR</button>
+                      <button id="btMakeChoice${decision.id}" onclick="makeDecisionFor(${decision.id})" type="button" class="btn bg-gradient-light w-100 my-4 mb-2">DECIDIR</button>
                     </div>
                   </div>
             `);
@@ -324,12 +324,6 @@ async function generateRankings(data) {
             for(var item of evcRankingItems) {
                 $('#selectChosenOption'+decision.id).append($('<option/>').val(item.id).text(item.option));
             }
-
-            $("#btDecide"+decision.id).click(function (){
-                $('#decisionModal'+decision.id).modalJ({
-                    fadeDuration: 100
-                });
-            });
 
             activateTooltips();
 
@@ -346,6 +340,16 @@ async function generateRankings(data) {
 
     });
 
+}
+
+function makeDecisionFor(decisionId) {
+    var optionId = $('#selectChosenOption'+decisionId).val();
+}
+
+function showDecisionModal(id) {
+    $('#decisionModal'+id).modalJ({
+        fadeDuration: 100
+    });
 }
 
 function generateRankingItem(id, label, value, draggable) {
