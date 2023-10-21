@@ -1,4 +1,4 @@
-var root = am5.Root.new("chartdiv");
+var root = am5.Root.new("lessMotivatedCoursetDiv");
 
 root.setThemes([
     am5themes_Animated.new(root)
@@ -18,7 +18,7 @@ var data = [{
     value2: 17
 }];
 
-var chart = root.container.children.push(
+var chartLessMotivatedCourse = root.container.children.push(
     am5radar.RadarChart.new(root, {
         panX: false,
         panY: false,
@@ -27,7 +27,7 @@ var chart = root.container.children.push(
     })
 );
 
-var cursor = chart.set("cursor", am5radar.RadarCursor.new(root, {}));
+var cursor = chartLessMotivatedCourse.set("cursor", am5radar.RadarCursor.new(root, {}));
 
 cursor.lineX.set("visible", false);
 cursor.lineY.set("visible", false);
@@ -41,7 +41,7 @@ xRenderer.labels.template.setAll({
     radius: 10
 });
 
-var xAxis = chart.xAxes.push(
+var xAxis = chartLessMotivatedCourse.xAxes.push(
     am5xy.CategoryAxis.new(root, {
         maxDeviation: 0,
         categoryField: "category",
@@ -52,17 +52,17 @@ var xAxis = chart.xAxes.push(
 
 xAxis.data.setAll(data);
 
-var yAxis = chart.yAxes.push(
+var yAxis = chartLessMotivatedCourse.yAxes.push(
     am5xy.ValueAxis.new(root, {
         renderer: am5radar.AxisRendererRadial.new(root, {})
     })
 );
 
-var names = ["Geral", "Aluno"];
+var names = ["Geral", "Física"];
 
 for (var i = 1; i <= 2; i++) {
 
-    var series = chart.series.push(
+    var series = chartLessMotivatedCourse.series.push(
         am5radar.RadarColumnSeries.new(root, {
             name: names[i-1],
             xAxis: xAxis,
@@ -83,11 +83,11 @@ for (var i = 1; i <= 2; i++) {
 
 }
 
-chart.appear(1000, 100);
+chartLessMotivatedCourse.appear(1000, 100);
 
-var legend = chart.children.push(am5.Legend.new(root, {}));
+var legend = chartLessMotivatedCourse.children.push(am5.Legend.new(root, {}));
 
-legend.data.setAll(chart.series.values);
+legend.data.setAll(chartLessMotivatedCourse.series.values);
 legend.valueLabels.template.set("forceHidden", true);
 
-//chart.series.getIndex(1).hide();
+setTimeout(()=>{chartLessMotivatedCourse.series.getIndex(0).hide()}, 1);
