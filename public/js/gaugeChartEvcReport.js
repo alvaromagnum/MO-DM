@@ -278,6 +278,6 @@ function generateGaugeChart(divId, evc1, evc2, colors, caption1, caption2, hideD
 // Make stuff animate on load
     chart.appear(1000, 100);
 
-    if(hideData1) setTimeout(()=>{chart.series.getIndex(0).hide()}, 1);
+    if(hideData1) setTimeout(()=>{axisDataItem1.hide();}, 1);
 
 }
