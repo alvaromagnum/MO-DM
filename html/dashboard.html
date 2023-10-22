@@ -165,7 +165,7 @@
         <div class="col-xl-12 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
             <div class="card-header p-3 pt-2">
-              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-info text-center border-radius-xl mt-n4 position-absolute">
                 <i class="material-icons opacity-10">arrow_forward</i>
               </div>
               <div class="text-end pt-1">
@@ -186,81 +186,105 @@
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
             <div class="card-header p-3 pt-2">
-              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-info text-center border-radius-xl mt-n4 position-absolute">
                 <i class="material-icons opacity-10">person</i>
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Aluno mais motivado</p>
                 <h4 class="mb-0">Fulano</h4>
               </div>
+              <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active custom-border-white" data-bs-toggle="tab" data-bs-target="#moreMotivatedStudentDiv" type="button" role="tab" aria-selected="true">E-V-C</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link custom-border-white" data-bs-toggle="tab" data-bs-target="#moreMotivatedStudentDiv2" type="button" role="tab" aria-selected="false">EVC</button>
+                </li>
+              </ul>
             </div>
-            <div class="card-body p-3 text-center">
-              <div id="moreMotivatedStudentDiv" class="radar-chart-motivated-v1"></div>
+            <div class="card-body p-3 text-center cart-margin-top tab-content">
+              <div id="moreMotivatedStudentDiv" class="radar-chart-motivated tab-pane fade show active"></div>
+              <div id="moreMotivatedStudentDiv2" class="radar-chart-motivated tab-pane fade"></div>
             </div>
             <hr class="dark horizontal my-0">
-            <div class="card-footer p-3 align-right">
-              <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><a href="#">[VER]</a></span></p>
-            </div>
           </div>
         </div>
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
             <div class="card-header p-3 pt-2">
-              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-info text-center border-radius-xl mt-n4 position-absolute">
                 <i class="material-icons opacity-10">person</i>
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Aluno menos motivado</p>
                 <h4 class="mb-0">Beltrano</h4>
               </div>
+              <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active custom-border-white" data-bs-toggle="tab" data-bs-target="#lessMotivatedStudentDiv" type="button" role="tab" aria-selected="true">E-V-C</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link custom-border-white" data-bs-toggle="tab" data-bs-target="#lessMotivatedStudentDiv2" type="button" role="tab" aria-selected="false">EVC</button>
+                </li>
+              </ul>
             </div>
-            <div class="card-body p-3 text-center">
-              <div id="lessMotivatedStudentDiv" class="radar-chart-motivated-v2"></div>
+            <div class="card-body p-3 text-center cart-margin-top tab-content">
+              <div id="lessMotivatedStudentDiv" class="radar-chart-motivated tab-pane fade show active"></div>
+              <div id="lessMotivatedStudentDiv2" class="radar-chart-motivated tab-pane fade"></div>
             </div>
             <hr class="dark horizontal my-0">
-            <div class="card-footer p-3 align-right">
-              <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><a href="#">[VER]</a></span></p>
-            </div>
           </div>
         </div>
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
             <div class="card-header p-3 pt-2">
-              <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-info text-center border-radius-xl mt-n4 position-absolute">
                 <i class="material-icons opacity-10">person</i>
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Curso mais motivado</p>
                 <h4 class="mb-0">Ciência da Computação</h4>
               </div>
+              <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active custom-border-white" data-bs-toggle="tab" data-bs-target="#moreMotivatedCoursetDiv" type="button" role="tab" aria-selected="true">E-V-C</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link custom-border-white" data-bs-toggle="tab" data-bs-target="#moreMotivatedCoursetDiv2" type="button" role="tab" aria-selected="false">EVC</button>
+                </li>
+              </ul>
             </div>
-            <div class="card-body p-3 text-center">
-              <div id="moreMotivatedCoursetDiv" class="radar-chart-motivated-v1"></div>
+            <div class="card-body p-3 text-center cart-margin-top tab-content">
+              <div id="moreMotivatedCoursetDiv" class="radar-chart-motivated tab-pane fade show active"></div>
+              <div id="moreMotivatedCoursetDiv2" class="radar-chart-motivated tab-pane fade"></div>
             </div>
             <hr class="dark horizontal my-0">
-            <div class="card-footer p-3 align-right">
-              <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><a href="#">[VER]</a></span></p>
-            </div>
           </div>
         </div>
         <div class="col-xl-3 col-sm-6">
           <div class="card">
             <div class="card-header p-3 pt-2">
-              <div class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
+              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-info text-center border-radius-xl mt-n4 position-absolute">
                 <i class="material-icons opacity-10">person</i>
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Curso menos motivado</p>
                 <h4 class="mb-0">Física</h4>
               </div>
+              <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active custom-border-white" data-bs-toggle="tab" data-bs-target="#lessMotivatedCoursetDiv" type="button" role="tab" aria-selected="true">E-V-C</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link custom-border-white" data-bs-toggle="tab" data-bs-target="#lessMotivatedCoursetDiv2" type="button" role="tab" aria-selected="false">EVC</button>
+                </li>
+              </ul>
             </div>
-            <div class="card-body p-3 text-center">
-              <div id="lessMotivatedCoursetDiv" class="radar-chart-motivated-v2"></div>
+            <div class="card-body p-3 text-center cart-margin-top tab-content">
+              <div id="lessMotivatedCoursetDiv" class="radar-chart-motivated tab-pane fade show active"></div>
+              <div id="lessMotivatedCoursetDiv2" class="radar-chart-motivated tab-pane fade"></div>
             </div>
             <hr class="dark horizontal my-0">
-            <div class="card-footer p-3 align-right">
-              <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><a href="#">[VER]</a></span></p>
-            </div>
           </div>
         </div>
       </div>
@@ -370,10 +394,7 @@
   <script src="/js/loadingoverlay.min.js"></script>
   <script src="/js/drawflow.js" type="module"></script>
   <script src="/js/dashboard.js" type="module"></script>
-  <script src="/js/reportChartsMoreMotivatedStudent.js"></script>
-  <script src="/js/reportChartsLessMotivatedStudent.js"></script>
-  <script src="/js/reportChartsMoreMotivatedCourse.js"></script>
-  <script src="/js/reportChartsLessMotivatedCourse.js"></script>
+  <script src="/js/radarChartEvcReport.js"></script>
 </body>
 
 </html>

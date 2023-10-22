@@ -3,18 +3,28 @@
     height: 300px!important;
 }
 
-.radar-chart-motivated-v1 {
-    width: 100%;
-    height: 350px;
-    background: #ececec;
-    border-radius: 10px;
+.custom-border-white {
+    border-color: #fff !important;
 }
 
-.radar-chart-motivated-v2 {
+.custom-border-white:hover {
+    border-color: lightskyblue !important;
+}
+
+.none {
+    display: none;
+}
+
+.cart-margin-top {
+    margin-top: -32px;
+}
+
+.radar-chart-motivated {
     width: 100%;
     height: 350px;
     background: white;
-    border-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .white-border {
