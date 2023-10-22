@@ -5,7 +5,6 @@ generateRadarChart("lessMotivatedCoursetDiv", [78, 74, 23], [75, 70, 28], [0x67b
 
 function generateRadarChart(divId, generalEvc, userEvc, colors, otherLabel, hideGeneral) {
 
-
     var root = am5.Root.new(divId);
 
     root.setThemes([
