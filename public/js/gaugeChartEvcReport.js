@@ -1,7 +1,7 @@
-generateGaugeChart("moreMotivatedStudentDiv2", 78, 85, [0x0f52ba, 0x008ecc], "Geral",  "Fulano", false);
-generateGaugeChart("lessMotivatedStudentDiv2", 78, 62, [0x627ccd, 0x2c375b], "Geral", "Beltrano", false);
-generateGaugeChart("moreMotivatedCoursetDiv2", 78, 82, [0x778899, 0xb2cbe5], "Geral", "Computação", false);
-generateGaugeChart("lessMotivatedCoursetDiv2", 78, 75, [0x67b7dc, 0x6794dc], "Geral", "Física", false);
+generateGaugeChart("moreMotivatedStudentDiv2", 78, 85, [0x000000, 0x767676], "Geral",  "Fulano", false);
+generateGaugeChart("lessMotivatedStudentDiv2", 78, 62, [0x000000, 0x767676], "Geral", "Beltrano", false);
+generateGaugeChart("moreMotivatedCoursetDiv2", 78, 82, [0x000000, 0x767676], "Geral", "Computação", false);
+generateGaugeChart("lessMotivatedCoursetDiv2", 78, 75, [0x000000, 0x767676], "Geral", "Física", false);
 
 function generateGaugeChart(divId, evc1, evc2, colors, caption1, caption2, hideData1) {
 
