@@ -1,9 +1,9 @@
-generateGaugeChart("moreMotivatedStudentDiv2");
-generateGaugeChart("lessMotivatedStudentDiv2");
-generateGaugeChart("moreMotivatedCoursetDiv2");
-generateGaugeChart("lessMotivatedCoursetDiv2");
+generateGaugeChart("moreMotivatedStudentDiv2", 78, 85, [0x0f52ba, 0x008ecc], "Geral",  "Fulano", false);
+generateGaugeChart("lessMotivatedStudentDiv2", 78, 62, [0x627ccd, 0x2c375b], "Geral", "Beltrano", false);
+generateGaugeChart("moreMotivatedCoursetDiv2", 78, 82, [0x778899, 0xb2cbe5], "Geral", "Computação", false);
+generateGaugeChart("lessMotivatedCoursetDiv2", 78, 75, [0x67b7dc, 0x6794dc], "Geral", "Física", false);
 
-function generateGaugeChart(divId) {
+function generateGaugeChart(divId, evc1, evc2, colors, caption1, caption2, hideData1) {
 
 // Create root element
 // https://www.amcharts.com/docs/v5/getting-started/#Root_element
@@ -50,55 +50,186 @@ function generateGaugeChart(divId) {
 
 // Add clock hand
 // https://www.amcharts.com/docs/v5/charts/radar-chart/gauge-charts/#Clock_hands
-    var axisDataItem = xAxis.makeDataItem({});
 
-    var clockHand = am5radar.ClockHand.new(root, {
-        pinRadius: am5.percent(20),
-        radius: am5.percent(100),
-        bottomWidth: 40
-    })
+// Measurement #1
 
-    var bullet = axisDataItem.set("bullet", am5xy.AxisBullet.new(root, {
-        sprite: clockHand
-    }));
+// Axis
+    var color1 = am5.color(colors[0]);
 
-    xAxis.createAxisRange(axisDataItem);
-
-    var label = chart.radarContainer.children.push(am5.Label.new(root, {
-        fill: am5.color(0x000000),
-        centerX: am5.percent(50),
-        textAlign: "center",
-        centerY: am5.percent(50),
-        fontSize: "14pt"
-    }));
-
-    axisDataItem.set("value", 50);
-    bullet.get("sprite").on("rotation", function () {
-        var value = axisDataItem.get("value");
-        var text = Math.round(axisDataItem.get("value")).toString();
-        var fill = am5.color(0x000000);
-        xAxis.axisRanges.each(function (axisRange) {
-            if (value >= axisRange.get("value") && value <= axisRange.get("endValue")) {
-                fill = axisRange.get("axisFill").get("fill");
-            }
-        })
-
-        label.set("text", Math.round(value).toString());
-
-        clockHand.pin.animate({ key: "fill", to: fill, duration: 500, easing: am5.ease.out(am5.ease.cubic) })
-        clockHand.hand.animate({ key: "fill", to: fill, duration: 500, easing: am5.ease.out(am5.ease.cubic) })
+    var axisRenderer1 = am5radar.AxisRendererCircular.new(root, {
+        radius: -10,
+        stroke: color1,
+        strokeOpacity: 0,
+        strokeWidth: 6,
+        inside: true
     });
 
-    setInterval(function () {
-        axisDataItem.animate({
-            key: "value",
-            to: Math.round(Math.random() * 100 - 0),
-            duration: 500,
-            easing: am5.ease.out(am5.ease.cubic)
-        });
-    }, 2000)
+    axisRenderer1.grid.template.setAll({
+        forceHidden: true
+    });
 
-    chart.bulletsContainer.set("mask", undefined);
+    axisRenderer1.ticks.template.setAll({
+        stroke: color1,
+        visible: true,
+        length: 10,
+        strokeOpacity: 1,
+        inside: true
+    });
+
+    axisRenderer1.labels.template.setAll({
+        radius: 15,
+        inside: true
+    });
+
+
+// Label
+//     var label1 = chart.seriesContainer.children.push(am5.Label.new(root, {
+//         fill: am5.color(0x000000),
+//         x: -20,
+//         y: -35,
+//         width: 35,
+//         centerX: am5.percent(50),
+//         textAlign: "center",
+//         centerY: am5.percent(50),
+//         fontSize: "10pt",
+//         text: "0",
+//         background: am5.RoundedRectangle.new(root, {
+//             fill: color1
+//         })
+//     }));
+
+// Add clock hand
+    var axisDataItem1 = xAxis.makeDataItem({
+        value: 0,
+        fill: color1,
+        name: caption1 + " | " + evc1
+    });
+
+    var clockHand1 = am5radar.ClockHand.new(root, {
+        pinRadius: 14,
+        radius: am5.percent(98),
+        bottomWidth: 10
+    });
+
+    clockHand1.pin.setAll({
+        fill: color1
+    });
+
+    clockHand1.hand.setAll({
+        fill: color1
+    });
+
+    var bullet1 = axisDataItem1.set("bullet", am5xy.AxisBullet.new(root, {
+        sprite: clockHand1
+    }));
+
+    xAxis.createAxisRange(axisDataItem1);
+
+    axisDataItem1.get("grid").set("forceHidden", true);
+    axisDataItem1.get("tick").set("forceHidden", true);
+
+
+// Measurement #2
+
+// Axis
+    var color2 = am5.color(colors[1]);
+
+    var axisRenderer2 = am5radar.AxisRendererCircular.new(root, {
+        //innerRadius: -40,
+        stroke: color2,
+        strokeOpacity: 0,
+        strokeWidth: 6
+    });
+
+    axisRenderer2.grid.template.setAll({
+        forceHidden: true
+    });
+
+    axisRenderer2.ticks.template.setAll({
+        stroke: color2,
+        visible: true,
+        length: 10,
+        strokeOpacity: 1
+    });
+
+    axisRenderer2.labels.template.setAll({
+        radius: 15
+    });
+
+
+// Label
+//     var label2 = chart.seriesContainer.children.push(am5.Label.new(root, {
+//         fill: am5.color(0x000000),
+//         x: 20,
+//         y: -35,
+//         width: 35,
+//         centerX: am5.percent(50),
+//         textAlign: "center",
+//         centerY: am5.percent(50),
+//         fontSize: "10pt",
+//         text: "0",
+//         background: am5.RoundedRectangle.new(root, {
+//             fill: color2
+//         })
+//     }));
+
+
+// Add clock hand
+    var axisDataItem2 = xAxis.makeDataItem({
+        value: 0,
+        fill: color2,
+        name: caption2 + " | " + evc2
+    });
+
+    var clockHand2 = am5radar.ClockHand.new(root, {
+        pinRadius: 10,
+        radius: am5.percent(98),
+        bottomWidth: 10
+    });
+
+    clockHand2.pin.setAll({
+        fill: color2
+    });
+
+    clockHand2.hand.setAll({
+        fill: color2
+    });
+
+    var bullet2 = axisDataItem2.set("bullet", am5xy.AxisBullet.new(root, {
+        sprite: clockHand2
+    }));
+
+    xAxis.createAxisRange(axisDataItem2);
+
+    axisDataItem2.get("grid").set("forceHidden", true);
+    axisDataItem2.get("tick").set("forceHidden", true);
+
+
+// Legend
+    var legend = chart.children.push(am5.Legend.new(root, {}));
+    legend.data.setAll([axisDataItem1, axisDataItem2]);
+    legend.valueLabels.template.set("forceHidden", true);
+
+
+    var value1 = evc1;
+    axisDataItem1.animate({
+        key: "value",
+        to: value1,
+        duration: 1000,
+        easing: am5.ease.out(am5.ease.cubic)
+    });
+
+    //label1.set("text", value1);
+
+    var value2 = evc2;
+    axisDataItem2.animate({
+        key: "value",
+        to: value2,
+        duration: 1000,
+        easing: am5.ease.out(am5.ease.cubic)
+    });
+
+    //label2.set("text", value2);
 
 
 // Create axis ranges bands
@@ -146,5 +277,7 @@ function generateGaugeChart(divId) {
 
 // Make stuff animate on load
     chart.appear(1000, 100);
+
+    if(hideData1) setTimeout(()=>{chart.series.getIndex(0).hide()}, 1);
 
 }

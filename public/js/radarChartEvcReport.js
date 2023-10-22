@@ -1,9 +1,9 @@
-generateRadarChart("moreMotivatedStudentDiv", [78, 74, 23], [85, 92, 19], [0x0f52ba, 0x008ecc], "Fulano", false);
-generateRadarChart("lessMotivatedStudentDiv", [78, 74, 23], [62, 67, 38], [0x627ccd, 0x2c375b], "Beltrano", false);
-generateRadarChart("moreMotivatedCoursetDiv", [78, 74, 23], [82, 89, 21], [0x778899, 0xb2cbe5], "Computação", false);
-generateRadarChart("lessMotivatedCoursetDiv", [78, 74, 23], [75, 70, 28], [0x67b7dc, 0x6794dc], "Física", false);
+generateRadarChart("moreMotivatedStudentDiv", [78, 74, 23], [85, 92, 19], [0x0f52ba, 0x008ecc], "Geral",  "Fulano", false);
+generateRadarChart("lessMotivatedStudentDiv", [78, 74, 23], [62, 67, 38], [0x627ccd, 0x2c375b], "Geral", "Beltrano", false);
+generateRadarChart("moreMotivatedCoursetDiv", [78, 74, 23], [82, 89, 21], [0x778899, 0xb2cbe5], "Geral", "Computação", false);
+generateRadarChart("lessMotivatedCoursetDiv", [78, 74, 23], [75, 70, 28], [0x67b7dc, 0x6794dc], "Geral", "Física", false);
 
-function generateRadarChart(divId, generalEvc, userEvc, colors, otherLabel, hideGeneral) {
+function generateRadarChart(divId, evc1, evc2, colors, caption1, caption2, hideData1) {
 
     var root = am5.Root.new(divId);
 
@@ -13,16 +13,16 @@ function generateRadarChart(divId, generalEvc, userEvc, colors, otherLabel, hide
 
     var data = [{
         category: "E",
-        value1: generalEvc[0],
-        value2: userEvc[0]
+        value1: evc1[0],
+        value2: evc2[0]
     }, {
         category: "V",
-        value1: generalEvc[1],
-        value2: userEvc[1]
+        value1: evc1[1],
+        value2: evc2[1]
     }, {
         category: "C",
-        value1: generalEvc[2],
-        value2: userEvc[2]
+        value1: evc1[2],
+        value2: evc2[2]
     }];
 
     var chart = root.container.children.push(
@@ -65,7 +65,7 @@ function generateRadarChart(divId, generalEvc, userEvc, colors, otherLabel, hide
         })
     );
 
-    var names = ["Geral", otherLabel];
+    var names = [caption1, caption2];
 
     for (var i = 1; i <= 2; i++) {
 
@@ -98,6 +98,6 @@ function generateRadarChart(divId, generalEvc, userEvc, colors, otherLabel, hide
     legend.data.setAll(chart.series.values);
     legend.valueLabels.template.set("forceHidden", true);
 
-    if(hideGeneral) setTimeout(()=>{chart.series.getIndex(0).hide()}, 1);
+    if(hideData1) setTimeout(()=>{chart.series.getIndex(0).hide()}, 1);
 
 }
