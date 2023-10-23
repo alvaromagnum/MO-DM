@@ -10,3 +10,7 @@
 
 . Ver para adicionar evento no Sortable --> https://api.jquery.com/category/events/
 
+. Ver para adicionar gráficos de acompanhamento
+
+    . Acompanhamento individual: https://www.amcharts.com/demos/line-with-custom-bullets/
+
