@@ -1,6 +1,6 @@
 generateGaugeChart("moreMotivatedStudentDiv2", 78, 85, [0x000000, 0x767676], "Geral",  "Fulano", false);
 generateGaugeChart("lessMotivatedStudentDiv2", 78, 62, [0x000000, 0x767676], "Geral", "Beltrano", false);
-generateGaugeChart("moreMotivatedCoursetDiv2", 78, 82, [0x000000, 0x767676], "Geral", "Computação", false);
+generateGaugeChart("moreMotivatedCoursetDiv2", 78, 82, [0x000000, 0x767676], "Geral", "Ciência da Computação", false);
 generateGaugeChart("lessMotivatedCoursetDiv2", 78, 75, [0x000000, 0x767676], "Geral", "Física", false);
 
 function generateGaugeChart(divId, evc1, evc2, colors, caption1, caption2, hideData1) {
@@ -210,6 +210,11 @@ function generateGaugeChart(divId, evc1, evc2, colors, caption1, caption2, hideD
     legend.data.setAll([axisDataItem1, axisDataItem2]);
     legend.valueLabels.template.set("forceHidden", true);
 
+    legend.labels.template.setAll({
+        fontSize: 12,
+        fontWeight: "400"
+    });
+
 
     var value1 = evc1;
     axisDataItem1.animate({
@@ -275,7 +280,7 @@ function generateGaugeChart(divId, evc1, evc2, colors, caption1, caption2, hideD
     });
 
 
-// Make stuff animate on load
+    // Make stuff animate on load
     chart.appear(1000, 100);
 
     if(hideData1) setTimeout(()=>{axisDataItem1.hide();}, 1);

@@ -1,6 +1,6 @@
 generateRadarChart("moreMotivatedStudentDiv", [78, 74, 23], [85, 92, 19], [0x0f52ba, 0x008ecc], "Geral",  "Fulano", false);
 generateRadarChart("lessMotivatedStudentDiv", [78, 74, 23], [62, 67, 38], [0x627ccd, 0x2c375b], "Geral", "Beltrano", false);
-generateRadarChart("moreMotivatedCoursetDiv", [78, 74, 23], [82, 89, 21], [0x778899, 0xb2cbe5], "Geral", "Computação", false);
+generateRadarChart("moreMotivatedCoursetDiv", [78, 74, 23], [82, 89, 21], [0x778899, 0xb2cbe5], "Geral", "Ciência da Computação", false);
 generateRadarChart("lessMotivatedCoursetDiv", [78, 74, 23], [75, 70, 28], [0x67b7dc, 0x6794dc], "Geral", "Física", false);
 
 function generateRadarChart(divId, evc1, evc2, colors, caption1, caption2, hideData1) {
@@ -97,6 +97,11 @@ function generateRadarChart(divId, evc1, evc2, colors, caption1, caption2, hideD
 
     legend.data.setAll(chart.series.values);
     legend.valueLabels.template.set("forceHidden", true);
+
+    legend.labels.template.setAll({
+        fontSize: 12,
+        fontWeight: "400"
+    });
 
     if(hideData1) setTimeout(()=>{chart.series.getIndex(0).hide()}, 1);
 
