@@ -210,15 +210,15 @@ function importUsersNodes() {
         Swal.fire('Erro!', jqXHR.responseText, 'error');
     }).done(function (users) {
         for(var user of users) {
-            addUserNode(`${user.name} - ${user.courseName}`, user.id)
+            addUserNode(user.name, user.id, user.courseName, user.courseId)
         }
         $.LoadingOverlay("hide");
     });
 
 }
 
-function addUserNode(optionText, optionValue) {
-    $('#selectNodeType').append(`<option value="${optionValue}">${optionText}&nbsp;&nbsp;&nbsp;</option>`);
+function addUserNode(userName, userId, courseName, courseId) {
+    $('#selectNodeType').append(`<option value="${userId}" courseId="${courseId}" courseName="${courseName}" userName="${userName}">${userName} - ${courseName}&nbsp;&nbsp;&nbsp;</option>`);
 }
 
 function importDefaultData() {

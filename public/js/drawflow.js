@@ -1180,7 +1180,9 @@ export default class Drawflow {
 
             default:
 
-                var userName = $('#selectNodeType option:selected').text().trim();
+                var userName = $('#selectNodeType option:selected').attr('userName');
+                var courseName = $('#selectNodeType option:selected').attr('courseName');
+                var courseId = $('#selectNodeType option:selected').attr('courseId');
 
                 var stakeholderNode = `
                     <div class="container stakeholder-node-fixed-size">
@@ -1190,15 +1192,17 @@ export default class Drawflow {
                         <div><br/></div>
                         <div class="text-center">
                             <input type="hidden" df-user_id>
+                            <input type="hidden" df-course_id>
                             <input type="hidden" df-user_name>
+                            <input type="hidden" df-course_name>
                             <img src="/img/student-avatar.jpg" alt="kal" class="border-radius-lg avatar-xl"/>
                             <br/><br/>
-                            <div class="node-user-name"><b>${userName}</b></div>
+                            <div class="node-user-name"><b>${userName} - ${courseName}</b></div>
                         </div>
                     </div>
                 `;
 
-                this.addNode('stakeholder', 1, 0, pos_x, pos_y, 'stakeholder-node', {"user_id": nodeValue, "user_name": userName}, stakeholderNode);
+                this.addNode('stakeholder', 1, 0, pos_x, pos_y, 'stakeholder-node', {"user_id": nodeValue, "user_name": userName, "course_name": courseName, "course_id": courseId}, stakeholderNode);
 
                 break;
 

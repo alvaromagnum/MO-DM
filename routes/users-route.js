@@ -18,17 +18,12 @@ async function getProjectUsers(req, res) {
     var users = [];
 
     for(const userFromDb of usersFromDb) {
-        var user = await getUserData(userFromDb);
-        users.push(user);
+        var course = await  userFromDb.getCourse();
+        users.push({id: userFromDb.id, name: userFromDb.name, courseName: course.name, courseId: course.id});
     }
 
     res.send(users);
 
-}
-
-async function getUserData(user) {
-    var course = await  user.getCourse();
-    return {id: user.id, name: user.name, courseName: course.name};
 }
 
 async function getCourses(req, res) {

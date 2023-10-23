@@ -28,25 +28,8 @@ function importDefaultData() {
                 return;
             }
 
-            getConfigData(jsonConfig).then((steps)=> {
-
-                $.LoadingOverlay("show");
-
-                $.ajax({
-                    method: "POST",
-                    url: "/project/results",
-                }).fail(function(jqXHR, textStatus, errorThrown) {
-                    $.LoadingOverlay("hide");
-                    Swal.fire('Erro!', jqXHR.responseText, 'error');
-                }).done(function (optionsWithEvaluations) {
-                    $.LoadingOverlay("hide");
-                    if(optionsWithEvaluations) {
-                        joinDataAddScores(steps, optionsWithEvaluations).then((result)=>{
-                            generateRankings(result);
-                        });
-                    }
-                });
-
+            getFullProjectData(jsonConfig).then((result)=>{
+                generateRankings(result);
             });
 
         }
@@ -398,76 +381,6 @@ function generateRankingItem(id, label, value, draggable) {
           <div class="h3-ranking">${label} |&nbsp;<b>${percentual}%</b></div>
         </li>
     `;
-
-}
-
-async function joinDataAddScores(steps, optionsWithEvaluations) {
-
-    for(var step of steps) {
-
-        var decisions = step.decisions;
-
-        for(var decision of decisions) {
-
-            var numberOfStakeholders = decision.stakeholders.length;
-
-            var queryOptions = `[*[idDecision=${decision.id}]]`;
-            var options = await jsonata(queryOptions).evaluate(optionsWithEvaluations);
-
-            var queryAllvs = "[*.[${\"id\": id, \"allV\": [Evaluations.v]}].*]";
-            var allVs = await jsonata(queryAllvs).evaluate(options);
-
-            var newVs = allVs.map((o)=> {
-                return {id: o.id, allV: o.allV.map((x)=>(x-1)/5)}
-            });
-
-            var weights = newVs.map((o)=>{
-                return {id: o.id, weight: math.mean(o.allV)};
-            });
-
-            var queryEvcMeans = "[*.[${\"id\": id, \"meanEvc\": $average(Evaluations.evc)}].*]";
-            var evcMeans = await jsonata(queryEvcMeans).evaluate(options);
-
-            var queryAllEvc = "[*.[${\"id\": id, \"allE\": [Evaluations.e], \"allV\": [Evaluations.v], \"allC\": [Evaluations.c]}].*]";
-            var allEvc = await jsonata(queryAllEvc).evaluate(options);
-
-            for(var singleEvc of allEvc) {
-
-                var var_e = math.variance(singleEvc.allE, 'uncorrected');
-                var var_v = math.variance(singleEvc.allV, 'uncorrected');
-                var var_c = math.variance(singleEvc.allC, 'uncorrected');
-
-                var mvar = math.mean(var_e, var_v, var_c);
-
-                var denominator = 6.25;
-
-                var agreement = 1 - (mvar/denominator);
-
-                singleEvc.agreement = agreement;
-
-            }
-
-            for(var option of options) {
-
-                var hasZero = _.some(option.Evaluations, (o)=> o.e === 0 || o.v === 0 || o.c === 0);
-                var hasEvaluations = option.Evaluations.length > 0;
-                var hasAllStakeholders = option.Evaluations.length === numberOfStakeholders;
-
-                option.isComplete = !hasZero && hasEvaluations && hasAllStakeholders;
-
-                option.weight = _.find(weights, (o)=>o.id === option.id).weight.toFixed(2);
-                option.meanEvc = _.find(evcMeans, (o)=>o.id === option.id).meanEvc.toFixed(2);
-                option.agreement = _.find(allEvc, (o)=>o.id === option.id).agreement.toFixed(2);
-
-            }
-
-            decision.options = options;
-
-        }
-
-    }
-
-    return steps;
 
 }
 
