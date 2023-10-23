@@ -166,8 +166,11 @@ User.belongsToMany(Project, { through: ProjectUser });
 Course.hasMany(User);
 User.belongsTo(Course);
 
+Course.hasMany(Evaluation);
+Evaluation.belongsTo(Course);
+
 EvaluationOption.hasOne(Decision);
-Decision.belongsTo(EvaluationOption)
+Decision.belongsTo(EvaluationOption);
 
 EvaluationOption.belongsTo(Project,{
     onDelete: 'CASCADE'

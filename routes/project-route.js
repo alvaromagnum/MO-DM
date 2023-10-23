@@ -143,10 +143,13 @@ async function saveEvaluations(req, res) {
 
             }
 
+            var course = await global.user.getCourse();
+
             await databaseConfig.Evaluation.create({
 
                 EvaluationOptionId: evaluationOption.id,
                 UserId: evaluation.userId,
+                CourseId: course.id,
                 e: evaluation.e,
                 v: evaluation.v,
                 c: evaluation.c,
