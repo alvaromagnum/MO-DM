@@ -1,12 +1,15 @@
 function generateGaugeChart(divId, evc1, evc2, colors, caption1, caption2, hideData1) {
 
-    // am5.array.each(am5.registry.rootElements,
-    //     function(root) {
-    //         if (root.dom.id == divId) {
-    //             root.dispose();
-    //         }
-    //     }
-    // );
+    am5.array.each(am5.registry.rootElements,
+        function(root) {
+            try{
+                if (root.dom.id == divId) {
+                    root.dispose();
+                }
+            }
+            catch(err){}
+        }
+    );
 
     var root = am5.Root.new(divId);
 
