@@ -26,6 +26,57 @@ async function getConfigData(json) {
 
 }
 
+async function getEvcRankings(editorJson) {
+
+    var fullData = await getFullProjectData(editorJson);
+
+    var queryAllUsers = `[$distinct(decisions.stakeholders)]`;
+    var allUsers = await jsonata(queryAllUsers).evaluate(fullData);
+
+    var queryAllCourses = `[$distinct(decisions.stakeholders.$.{"courseName": courseName, "idCourse": idCourse})]`;
+    var allCourses = await jsonata(queryAllCourses).evaluate(fullData);
+
+    var allUsersEvc = [];
+
+    for(var user of allUsers) {
+
+        var queryUserEvc = "${\"evc\": $average(decisions.options.Evaluations.evc[%.UserId="+user.idUser+"]), \"e\": $average($map(decisions.options.Evaluations.e[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options.Evaluations.v[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options.Evaluations.c[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5}))}";
+        var userEvc = await jsonata(queryUserEvc).evaluate(fullData);
+
+        allUsersEvc.push({idUser: user.idUser, userName: user.stakeholderName, evc: userEvc.evc.toFixed(2), e: userEvc.e.toFixed(2), v: userEvc.v.toFixed(2), c: userEvc.c.toFixed(2)})
+
+    }
+
+    var allCoursesEvc = [];
+
+    for(var course of allCourses) {
+
+        var queryCourseEvc = "${\"evc\": $average(decisions.options.Evaluations.evc[%.CourseId="+course.idCourse+"]), \"e\": $average($map(decisions.options.Evaluations.e[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options.Evaluations.v[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options.Evaluations.c[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5}))}";
+        var courseEvc = await jsonata(queryCourseEvc).evaluate(fullData);
+
+        allCoursesEvc.push({idCourse: course.idCourse, courseName: course.courseName, evc: courseEvc.evc.toFixed(2), e: courseEvc.e.toFixed(2), v: courseEvc.v.toFixed(2), c: courseEvc.c.toFixed(2)})
+
+    }
+
+    var queryAllUsersOrderedByEvc = `[*^(>evc)]`;
+    allUsersEvc = await jsonata(queryAllUsersOrderedByEvc).evaluate(allUsersEvc);
+
+    var queryAllCoursesOrderedByEvc = `[*^(>evc)]`;
+    allCoursesEvc = await jsonata(queryAllCoursesOrderedByEvc).evaluate(allCoursesEvc);
+
+    var queryGeneralEvc = "${\"evc\": $average(decisions.options.Evaluations.evc), \"e\": $average($map(decisions.options.Evaluations.e, function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options.Evaluations.v, function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options.Evaluations.c, function($v, $k) {($v-1)/5}))}";
+    var generalEvc = await jsonata(queryGeneralEvc).evaluate(fullData);
+
+    generalEvc = {evc: generalEvc.evc.toFixed(2), e: generalEvc.e.toFixed(2), v: generalEvc.v.toFixed(2), c: generalEvc.c.toFixed(2)};
+
+    var result = {generalEvc: generalEvc, allUsersEvc: allUsersEvc, allCoursesEvc: allCoursesEvc}
+
+    console.log(JSON.stringify(result, null, "\t"));
+
+    return result;
+
+}
+
 async function getFullProjectData(projectJson) {
 
     $.LoadingOverlay("show");

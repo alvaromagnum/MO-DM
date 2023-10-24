@@ -254,6 +254,10 @@ async function generateRankings(data) {
                           <i class="material-icons text-sm my-auto me-1">info</i>
                           <p class="mb-0 text-sm"> Quando a primeira opção dos dois rankings forem iguais e a condordância for maior ou igual a 65%, será possível tomar uma decisão. </p>
                         </div>
+                        <div class="d-flex">
+                          <i class="material-icons text-sm my-auto me-1">info</i>
+                          <p class="mb-0 text-sm"> Em caso de divergências, reavaliações podem ser efetuadas, ou você pode fazer uma escolha direta. </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -378,7 +382,7 @@ function generateRankingItem(id, label, value, draggable) {
 
     return `
         <li id="li_${id}" uuid="${id}" option="${label}" class="li-ranking cursor-pointer ${itemClass}" style="--i: ${value}">
-          <div class="h3-ranking">${label} |&nbsp;<b>${percentual}%</b></div>
+          <div class="h3-ranking">${label} &nbsp;<b>${percentual}%</b></div>
         </li>
     `;
 

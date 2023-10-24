@@ -76,6 +76,7 @@ async function processProjectConfig() {
     // console.log(JSON.stringify(linksNodes.links,null,'\t'));
 
     generateProjectSankeyChart(linksNodes.nodes, linksNodes.links);
+    getEvcRankings(editorJson);
 
     return({configData: configData, nodes: linksNodes.nodes, links: linksNodes.links});
 
