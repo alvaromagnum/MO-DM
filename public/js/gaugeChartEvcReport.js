@@ -1,8 +1,3 @@
-generateGaugeChart("moreMotivatedStudentDiv2", 78, 85, [0x000000, 0x767676], "Geral",  "Fulano", false);
-generateGaugeChart("lessMotivatedStudentDiv2", 78, 62, [0x000000, 0x767676], "Geral", "Beltrano", false);
-generateGaugeChart("moreMotivatedCoursetDiv2", 78, 82, [0x000000, 0x767676], "Geral", "Ciência da Computação", false);
-generateGaugeChart("lessMotivatedCoursetDiv2", 78, 75, [0x000000, 0x767676], "Geral", "Física", false);
-
 function generateGaugeChart(divId, evc1, evc2, colors, caption1, caption2, hideData1) {
 
 // Create root element

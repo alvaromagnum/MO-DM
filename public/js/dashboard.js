@@ -76,7 +76,37 @@ async function processProjectConfig() {
     // console.log(JSON.stringify(linksNodes.links,null,'\t'));
 
     generateProjectSankeyChart(linksNodes.nodes, linksNodes.links);
-    getEvcRankings(editorJson);
+
+    getEvcRankings(editorJson).then((allData)=> {
+
+        var countStudents = allData.allUsersEvc.length;
+        var countCourses = allData.allCoursesEvc.length;
+
+        var moreMotivatedStudent = countStudents > 0 ? allData.allUsersEvc[0] : {label: "" , evc: 0, e: 0, v: 0, c: 0};
+        var lessMotivatedStudent = countStudents > 0 ? allData.allUsersEvc[countStudents - 1] : {label: "" , evc: 0, e: 0, v: 0, c: 0};
+
+        var moreMotivatedCourse = countCourses > 0 ? allData.allCoursesEvc[0] : {label: "" , evc: 0, e: 0, v: 0, c: 0};
+        var lessMotivatedCourse = countCourses > 0 ? allData.allCoursesEvc[countCourses - 1] : {label: "" , evc: 0, e: 0, v: 0, c: 0};
+
+        var generalEvc = allData.generalEvc ? allData.generalEvc : {evc: 0, e: 0, v: 0, c: 0};
+
+        $('#labelMoreMotivatedStudent').text(moreMotivatedStudent.label);
+        $('#labelLessMotivatedStudent').text(lessMotivatedStudent.label);
+
+        $('#labelMoreMotivatedCourse').text(moreMotivatedCourse.label);
+        $('#labelLessMotivatedCourse').text(lessMotivatedCourse.label);
+
+        generateRadarChart("moreMotivatedStudentDiv", [generalEvc.e*100, generalEvc.v*100, generalEvc.c*100], [moreMotivatedStudent.e*100, moreMotivatedStudent.v*100, moreMotivatedStudent.c*100], [0x0f52ba, 0x008ecc], generalEvc.label,  moreMotivatedStudent.label, false);
+        generateRadarChart("lessMotivatedStudentDiv", [generalEvc.e*100, generalEvc.v*100, generalEvc.c*100], [lessMotivatedStudent.e*100, lessMotivatedStudent.v*100, lessMotivatedStudent.c*100], [0x627ccd, 0x2c375b], generalEvc.label, lessMotivatedStudent.label, false);
+        generateRadarChart("moreMotivatedCoursetDiv", [generalEvc.e*100, generalEvc.v*100, generalEvc.c*100], [moreMotivatedCourse.e*100, moreMotivatedCourse.v*100, moreMotivatedCourse.c*100], [0x778899, 0xb2cbe5], generalEvc.label, "Ciência da Computação", false);
+        generateRadarChart("lessMotivatedCoursetDiv", [generalEvc.e*100, generalEvc.v*100, generalEvc.c*100], [lessMotivatedCourse.e*100, lessMotivatedCourse.v*100, lessMotivatedCourse.c*100], [0x6f2da8, 0xaf69ee], generalEvc.label, "Física", false);
+
+        generateGaugeChart("moreMotivatedStudentDiv2", generalEvc.evc*100, moreMotivatedStudent.evc*100, [0x0f52ba, 0x008ecc], generalEvc.label,  moreMotivatedStudent.label, false);
+        generateGaugeChart("lessMotivatedStudentDiv2", generalEvc.evc*100, lessMotivatedStudent.evc*100, [0x627ccd, 0x2c375b], generalEvc.label, lessMotivatedStudent.label, false);
+        generateGaugeChart("moreMotivatedCoursetDiv2", generalEvc.evc*100, moreMotivatedCourse.evc*100, [0x778899, 0xb2cbe5], generalEvc.label, moreMotivatedCourse.label, false);
+        generateGaugeChart("lessMotivatedCoursetDiv2", generalEvc.evc*100, lessMotivatedCourse.evc*100, [0x6f2da8, 0xaf69ee], generalEvc.label, lessMotivatedCourse.label, false);
+
+    })
 
     return({configData: configData, nodes: linksNodes.nodes, links: linksNodes.links});
 

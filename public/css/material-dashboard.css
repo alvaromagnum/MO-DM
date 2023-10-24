@@ -23352,7 +23352,7 @@ hr.horizontal.gray-light {
 }
 
 .cursor-pointer {
-  cursor: pointer;
+  cursor: pointer!important;
 }
 
 .transform-translate-50 {
