@@ -239,12 +239,13 @@ async function generateRankings(data) {
                         </div>
                         <br/>
                         <div class="text-center">
-                          <button id="btDecide${decision.id}" onclick="showDecisionModal(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para decidir"><i class="material-icons icon-button">ads_click</i></button>
+                          <button id="btAcceptConvergence${decision.id}" onclick="showDecisionModal(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para aceitar a convergência"><i class="material-icons icon-button">adjust</i></button>
+                          <button id="btDecide${decision.id}" onclick="showDecisionModal(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para escolher"><i class="material-icons icon-button">ads_click</i></button>
                         </div>
                         <br/>
                         <div class="d-flex">
                           <i class="material-icons text-sm my-auto me-1">info</i>
-                          <p class="mb-0 text-sm"> Em caso de empate nos rankings, é possível segurar e arrastar as opções para reordená-las. </p>
+                          <p class="mb-0 text-sm"> Em caso de empate no topo dos rankings, é possível segurar e arrastar as opções para reordená-las. </p>
                         </div>
                         <div class="d-flex">
                           <i class="material-icons text-sm my-auto me-1">info</i>
@@ -252,11 +253,15 @@ async function generateRankings(data) {
                         </div>
                         <div class="d-flex">
                           <i class="material-icons text-sm my-auto me-1">info</i>
-                          <p class="mb-0 text-sm"> Quando a primeira opção dos dois rankings forem iguais e a condordância for maior ou igual a 65%, será possível tomar uma decisão. </p>
+                          <p class="mb-0 text-sm"> Quando a primeira opção dos dois rankings forem iguais e a condordância do item do topo for maior ou igual a 65%, haverá convergência. Caso contrário, existe divergência. </p>
                         </div>
                         <div class="d-flex">
                           <i class="material-icons text-sm my-auto me-1">info</i>
-                          <p class="mb-0 text-sm"> Em caso de divergências, reavaliações podem ser efetuadas, ou você pode fazer uma escolha direta. </p>
+                          <p class="mb-0 text-sm"> Em caso de divergências, pode-se evetuar uma nova rodada de avaliação pelos usuários, ou pode-se tomar uma decisão divergente. </p>
+                        </div>
+                        <div class="d-flex">
+                          <i class="material-icons text-sm my-auto me-1">info</i>
+                          <p class="mb-0 text-sm"> A ausência de opções no ranking possui duas justificativas: (1) ela ainda não foi avaliada por todos os stakeholder, ou (2) existe alguma avaliação inválida (com zero estrela). </p>
                         </div>
                       </div>
                     </div>
@@ -274,18 +279,18 @@ async function generateRankings(data) {
 
             for(var weightRankingItem of weightRankingItems) {
                 draggable = firstWeight === weightRankingItem.weight;
-                $("#weightRanking" + decision.id).append(generateRankingItem(weightRankingItem.id, weightRankingItem.option, weightRankingItem.weight, draggable));
+                $("#weightRanking" + decision.id).append(generateRankingItem(`weight_${weightRankingItem.id}`, weightRankingItem.option, weightRankingItem.weight, draggable));
             }
 
             var firstEvc = evcRankingItems[0] ? evcRankingItems[0].meanEVC : undefined;
 
             for(var evcRankingItem of evcRankingItems) {
                 draggable = firstEvc === evcRankingItem.meanEVC;
-                $("#evcRanking" + decision.id).append(generateRankingItem(evcRankingItem.id, evcRankingItem.option, evcRankingItem.meanEVC, draggable));
+                $("#evcRanking" + decision.id).append(generateRankingItem(`evc_${evcRankingItem.id}`, evcRankingItem.option, evcRankingItem.meanEVC, draggable));
             }
 
             for(var agreementRankingItem of agreementRankingItems) {
-                $("#agreementRanking" + decision.id).append(generateRankingItem(agreementRankingItem.id, agreementRankingItem.option, agreementRankingItem.agreement, false));
+                $("#agreementRanking" + decision.id).append(generateRankingItem(`agreement_${agreementRankingItem.id}`, agreementRankingItem.option, agreementRankingItem.agreement, false));
             }
 
             Sortable.create(document.getElementById("weightRanking" + decision.id), {animation: 350, filter: '.filtered', preventOnFilter: true, draggable: ".draggable",});
@@ -374,19 +379,29 @@ function makeDecisionFor(decisionId) {
 }
 
 function showDecisionModal(id) {
+
+    console.log(id);
+
     $('#decisionModal'+id).modalJ({
         fadeDuration: 100
     });
+
 }
 
 function generateRankingItem(id, label, value, draggable) {
+
+    var uuid = id;
+
+    uuid = uuid.replace("evc_", "");
+    uuid = uuid.replace("agreement_", "");
+    uuid = uuid.replace("weight_", "");
 
     var itemClass = draggable ? "draggable" : "filtered";
 
     var percentual = (value * 100).toFixed(2);
 
     return `
-        <li id="li_${id}" uuid="${id}" option="${label}" class="li-ranking cursor-pointer ${itemClass}" style="--i: ${value}">
+        <li id="li_${id}" uuid="${uuid}" option="${label}" class="li-ranking cursor-pointer ${itemClass}" style="--i: ${value}">
           <div class="h3-ranking">${label} &nbsp;<b>${percentual}%</b></div>
         </li>
     `;
