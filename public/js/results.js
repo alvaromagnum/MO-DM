@@ -291,11 +291,6 @@ async function generateRankings(data) {
             Sortable.create(document.getElementById("weightRanking" + decision.id), {animation: 350, filter: '.filtered', preventOnFilter: true, draggable: ".draggable",});
             Sortable.create(document.getElementById("evcRanking" + decision.id), {animation: 350, filter: '.filtered', preventOnFilter: true, draggable: ".draggable",});
 
-            document.addEventListener("update", (e) => {
-                console.log("EFETUOU TROCA!");
-                console.log(e);
-            });
-
             var popup = $("<div></div>").html(`
                 <div class="card modal modal-decision" id="decisionModal${decision.id}">
                     <br/>
@@ -330,6 +325,11 @@ async function generateRankings(data) {
 
         getImpactsFrom(id, option);
 
+    });
+
+    document.addEventListener("update", (e) => {
+        console.log("EFETUOU TROCA!");
+        console.log(e);
     });
 
 }
