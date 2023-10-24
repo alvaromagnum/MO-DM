@@ -38,6 +38,7 @@
   <!-- CSS Files -->
   <link id="pagestyle" href="/css/material-dashboard.css" rel="stylesheet" />
   <link href="/css/drawflow.css" rel="stylesheet" />
+  <link href="/css/jquery.modal.min.css" rel="stylesheet" />
   <link href="/css/custom.css" rel="stylesheet" />
 </head>
 
@@ -208,7 +209,7 @@
             </div>
             <hr class="dark horizontal my-0">
             <div class="card-footer p-3 align-right">
-              <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><a href="#">[MAIS]</a></span></p>
+              <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><a href="#" class="temp-class">[MAIS]</a></span></p>
             </div>
           </div>
         </div>
@@ -237,7 +238,7 @@
             </div>
             <hr class="dark horizontal my-0">
             <div class="card-footer p-3 align-right">
-              <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><a href="#">[MAIS]</a></span></p>
+              <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><a href="#" class="temp-class">[MAIS]</a></span></p>
             </div>
           </div>
         </div>
@@ -266,7 +267,7 @@
             </div>
             <hr class="dark horizontal my-0">
             <div class="card-footer p-3 align-right">
-              <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><a href="#">[MAIS]</a></span></p>
+              <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><a href="#" class="temp-class">[MAIS]</a></span></p>
             </div>
           </div>
         </div>
@@ -295,15 +296,15 @@
             </div>
             <hr class="dark horizontal my-0">
             <div class="card-footer p-3 align-right">
-              <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><a href="#">[MAIS]</a></span></p>
+              <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><a href="#" class="temp-class">[MAIS]</a></span></p>
             </div>
           </div>
         </div>
       </div>
       <div class="row mt-4">
         <div class="col-lg-4 col-md-6 mt-4 mb-4">
-          <div class="card z-index-2 ">
-            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+          <div class="card ">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 bg-transparent">
               <div class="bg-gradient-dark shadow-dark border-radius-lg py-3 pe-1">
                 <div class="chart">
                   <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
@@ -321,8 +322,8 @@
           </div>
         </div>
         <div class="col-lg-4 col-md-6 mt-4 mb-4">
-          <div class="card z-index-2  ">
-            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+          <div class="card  ">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 bg-transparent">
               <div class="bg-gradient-success shadow-success border-radius-lg py-3 pe-1">
                 <div class="chart">
                   <canvas id="chart-line" class="chart-canvas" height="170"></canvas>
@@ -340,8 +341,8 @@
           </div>
         </div>
         <div class="col-lg-4 mt-4 mb-3">
-          <div class="card z-index-2 ">
-            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+          <div class="card ">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 bg-transparent">
               <div class="bg-gradient-dark shadow-dark border-radius-lg py-3 pe-1">
                 <div class="chart">
                   <canvas id="chart-line-tasks" class="chart-canvas" height="170"></canvas>
@@ -380,6 +381,33 @@
           </div>
         </div>
       </footer>
+      <div id="divPopups">
+        <div class="card modal modal-chart" id="divChartsComparison">
+          <br/>
+          <span class="margin-left-50"><b>SELECIONE OS DADOS PARA GERAÇÃO DOS GRÁFICOS:</b></span>
+          <br/>
+          <br/>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm">
+                <select id="selectChart1Content" class="select-chart"></select>
+              </div>
+              <div class="col-sm">
+                <select id="selectChart2Content" class="select-chart"></select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm">
+                <div id="customRadarChartDiv" class="radar-chart-custom"></div>
+              </div>
+              <div class="col-sm">
+                <div id="customGaugeChartDiv" class="radar-chart-custom"></div>
+              </div>
+            </div>
+            <button id="btShowCustomChart" type="button" class="btn bg-gradient-light w-100 my-4 mb-2">EXIBIR</button>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
   <!--   Core JS Files   -->
@@ -403,6 +431,7 @@
   <script src="/js/core/bootstrap.bundle.min.js"></script>
   <script src="/js/math.js"></script>
   <script src="/js/existing.js"></script>
+  <script src="/js/jquery.modal.min.js"></script>
   <script src="/js/common.js"></script>
   <script src="/js/loadingoverlay.min.js"></script>
   <script src="/js/drawflow.js" type="module"></script>

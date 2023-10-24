@@ -2,6 +2,10 @@ import Drawflow from '../js/drawflow.js';
 
 var sankeyChartRoot = am5.Root.new("sankeyChartDiv");
 
+var pageAllUsersEvc;
+var pageAllCoursesEvc;
+var pageGeneralEvc;
+
 darkMode(true);
 
 $(function () {
@@ -82,13 +86,19 @@ async function processProjectConfig() {
         var countStudents = allData.allUsersEvc.length;
         var countCourses = allData.allCoursesEvc.length;
 
-        var moreMotivatedStudent = countStudents > 0 ? allData.allUsersEvc[0] : {label: "" , evc: 0, e: 0, v: 0, c: 0};
-        var lessMotivatedStudent = countStudents > 0 ? allData.allUsersEvc[countStudents - 1] : {label: "" , evc: 0, e: 0, v: 0, c: 0};
+        var moreMotivatedStudent = countStudents > 0 ? allData.allUsersEvc[0] : {label: "", id: 0, evc: 0, e: 0, v: 0, c: 0};
+        var lessMotivatedStudent = countStudents > 0 ? allData.allUsersEvc[countStudents - 1] : {label: "", id: 0, evc: 0, e: 0, v: 0, c: 0};
 
         var moreMotivatedCourse = countCourses > 0 ? allData.allCoursesEvc[0] : {label: "" , evc: 0, e: 0, v: 0, c: 0};
-        var lessMotivatedCourse = countCourses > 0 ? allData.allCoursesEvc[countCourses - 1] : {label: "" , evc: 0, e: 0, v: 0, c: 0};
+        var lessMotivatedCourse = countCourses > 0 ? allData.allCoursesEvc[countCourses - 1] : {label: "", id: 0, evc: 0, e: 0, v: 0, c: 0};
 
-        var generalEvc = allData.generalEvc ? allData.generalEvc : {evc: 0, e: 0, v: 0, c: 0};
+        var generalEvc = allData.generalEvc ? allData.generalEvc : {label: "Geral", id: 0, evc: 0, e: 0, v: 0, c: 0};
+
+        pageAllUsersEvc = allData.allUsersEvc;
+        pageAllCoursesEvc = allData.allCoursesEvc;
+        pageGeneralEvc = generalEvc;
+
+        populateCustomChartsSelect(generalEvc, pageAllUsersEvc, pageAllCoursesEvc);
 
         $('#labelMoreMotivatedStudent').text(moreMotivatedStudent.label);
         $('#labelLessMotivatedStudent').text(lessMotivatedStudent.label);
@@ -96,20 +106,55 @@ async function processProjectConfig() {
         $('#labelMoreMotivatedCourse').text(moreMotivatedCourse.label);
         $('#labelLessMotivatedCourse').text(lessMotivatedCourse.label);
 
-        generateRadarChart("moreMotivatedStudentDiv", [generalEvc.e*100, generalEvc.v*100, generalEvc.c*100], [moreMotivatedStudent.e*100, moreMotivatedStudent.v*100, moreMotivatedStudent.c*100], [0x0f52ba, 0x008ecc], generalEvc.label,  moreMotivatedStudent.label, false);
-        generateRadarChart("lessMotivatedStudentDiv", [generalEvc.e*100, generalEvc.v*100, generalEvc.c*100], [lessMotivatedStudent.e*100, lessMotivatedStudent.v*100, lessMotivatedStudent.c*100], [0x627ccd, 0x2c375b], generalEvc.label, lessMotivatedStudent.label, false);
-        generateRadarChart("moreMotivatedCoursetDiv", [generalEvc.e*100, generalEvc.v*100, generalEvc.c*100], [moreMotivatedCourse.e*100, moreMotivatedCourse.v*100, moreMotivatedCourse.c*100], [0x778899, 0xb2cbe5], generalEvc.label, "Ciência da Computação", false);
-        generateRadarChart("lessMotivatedCoursetDiv", [generalEvc.e*100, generalEvc.v*100, generalEvc.c*100], [lessMotivatedCourse.e*100, lessMotivatedCourse.v*100, lessMotivatedCourse.c*100], [0x6f2da8, 0xaf69ee], generalEvc.label, "Física", false);
+        generateRadarChart("moreMotivatedStudentDiv", [generalEvc.e*100, generalEvc.v*100, generalEvc.c*100], [moreMotivatedStudent.e*100, moreMotivatedStudent.v*100, moreMotivatedStudent.c*100], [0x000000, 0x767676], generalEvc.label,  moreMotivatedStudent.label, false);
+        generateRadarChart("lessMotivatedStudentDiv", [generalEvc.e*100, generalEvc.v*100, generalEvc.c*100], [lessMotivatedStudent.e*100, lessMotivatedStudent.v*100, lessMotivatedStudent.c*100], [0x000000, 0x767676], generalEvc.label, lessMotivatedStudent.label, false);
+        generateRadarChart("moreMotivatedCoursetDiv", [generalEvc.e*100, generalEvc.v*100, generalEvc.c*100], [moreMotivatedCourse.e*100, moreMotivatedCourse.v*100, moreMotivatedCourse.c*100], [0x000000, 0x767676], generalEvc.label, moreMotivatedCourse.label, false);
+        generateRadarChart("lessMotivatedCoursetDiv", [generalEvc.e*100, generalEvc.v*100, generalEvc.c*100], [lessMotivatedCourse.e*100, lessMotivatedCourse.v*100, lessMotivatedCourse.c*100], [0x000000, 0x767676], generalEvc.label, lessMotivatedCourse.label, false);
 
-        generateGaugeChart("moreMotivatedStudentDiv2", generalEvc.evc*100, moreMotivatedStudent.evc*100, [0x0f52ba, 0x008ecc], generalEvc.label,  moreMotivatedStudent.label, false);
-        generateGaugeChart("lessMotivatedStudentDiv2", generalEvc.evc*100, lessMotivatedStudent.evc*100, [0x627ccd, 0x2c375b], generalEvc.label, lessMotivatedStudent.label, false);
-        generateGaugeChart("moreMotivatedCoursetDiv2", generalEvc.evc*100, moreMotivatedCourse.evc*100, [0x778899, 0xb2cbe5], generalEvc.label, moreMotivatedCourse.label, false);
-        generateGaugeChart("lessMotivatedCoursetDiv2", generalEvc.evc*100, lessMotivatedCourse.evc*100, [0x6f2da8, 0xaf69ee], generalEvc.label, lessMotivatedCourse.label, false);
+        generateGaugeChart("moreMotivatedStudentDiv2", generalEvc.evc*100, moreMotivatedStudent.evc*100, [0x000000, 0x767676], generalEvc.label,  moreMotivatedStudent.label, false);
+        generateGaugeChart("lessMotivatedStudentDiv2", generalEvc.evc*100, lessMotivatedStudent.evc*100, [0x000000, 0x767676], generalEvc.label, lessMotivatedStudent.label, false);
+        generateGaugeChart("moreMotivatedCoursetDiv2", generalEvc.evc*100, moreMotivatedCourse.evc*100, [0x000000, 0x767676], generalEvc.label, moreMotivatedCourse.label, false);
+        generateGaugeChart("lessMotivatedCoursetDiv2", generalEvc.evc*100, lessMotivatedCourse.evc*100, [0x000000, 0x767676], generalEvc.label, lessMotivatedCourse.label, false);
+
+        generateRadarChart("customRadarChartDiv", [generalEvc.e*100, generalEvc.v*100, generalEvc.c*100], [generalEvc.e*100, generalEvc.v*100, generalEvc.c*100], [0x000000, 0x767676], generalEvc.label, generalEvc.label, false);
+        generateGaugeChart("customGaugeChartDiv", generalEvc.evc*100, generalEvc.evc*100, [0x000000, 0x767676], generalEvc.label,  generalEvc.label, false);
 
     })
 
     return({configData: configData, nodes: linksNodes.nodes, links: linksNodes.links});
 
+}
+
+async function populateCustomChartsSelect(generalEvc, usersOtionsSelect, coursesOptionsSelect) {
+
+    var queryOrderedOptions = `[*^(label)]`;
+
+    usersOtionsSelect = await jsonata(queryOrderedOptions).evaluate(usersOtionsSelect);
+    coursesOptionsSelect = await jsonata(queryOrderedOptions).evaluate(coursesOptionsSelect);
+
+    addOptionToSelectCustomChart("selectChart1Content", generalEvc.id, generalEvc.label, "general");
+    addOptionToSelectCustomChart("selectChart2Content", generalEvc.id, generalEvc.label, "general");
+
+    addOptionToSelectCustomChart("selectChart1Content", -1, "", "none");
+    addOptionToSelectCustomChart("selectChart2Content", -1, "", "none");
+
+    for(var item of usersOtionsSelect) {
+        addOptionToSelectCustomChart("selectChart1Content", item.id, item.label, "user");
+        addOptionToSelectCustomChart("selectChart2Content", item.id, item.label, "user");
+    }
+
+    addOptionToSelectCustomChart("selectChart1Content", -1, "", "none");
+    addOptionToSelectCustomChart("selectChart2Content", -1, "", "none");
+
+    for(var item of coursesOptionsSelect) {
+        addOptionToSelectCustomChart("selectChart1Content", item.id, item.label, "course");
+        addOptionToSelectCustomChart("selectChart2Content", item.id, item.label, "course");
+    }
+
+}
+
+function addOptionToSelectCustomChart(idChart, value, text, group) {
+    $('#'+idChart).append(`<option group="${group}" value="${value}">${text}&nbsp;&nbsp;&nbsp;</option>`);
 }
 
 async function getSankeyChartDataFromConfig(steps) {
@@ -379,6 +424,60 @@ function generateProjectSankeyChart(nodes, links) {
     series.appear(1000, 500);
 
 }
+
+$(".temp-class").click(function(){
+    $('#divChartsComparison').modalJ({
+        fadeDuration: 100
+    });
+});
+
+$("#btShowCustomChart").click(function(){
+
+    var id1 = $('#selectChart1Content').val();
+    var group1 = $('#selectChart1Content option:selected').attr("group");
+
+    var id2 = $('#selectChart2Content').val();
+    var group2 = $('#selectChart2Content option:selected').attr("group");
+
+    var data1;
+    var data2;
+
+    switch(group1) {
+
+        case "user":
+            data1 = _.find(pageAllUsersEvc, (o)=>id1 == o.id);
+            break;
+
+        case "course":
+            data1 = _.find(pageAllCoursesEvc, (o)=>id1 == o.id);
+            break;
+
+        default:
+            data1 = pageGeneralEvc;
+            break;
+
+    }
+
+    switch(group2) {
+
+        case "user":
+            data2 = _.find(pageAllUsersEvc, (o)=>id2 == o.id);
+            break;
+
+        case "course":
+            data2 = _.find(pageAllCoursesEvc, (o)=>id2 == o.id);
+            break;
+
+        default:
+            data2 = pageGeneralEvc;
+            break;
+
+    }
+
+    generateRadarChart("customRadarChartDiv", [data1.e*100, data1.v*100, data1.c*100], [data2.e*100, data2.v*100, data2.c*100], [0x000000, 0x767676], data1.label, data2.label, false);
+    generateGaugeChart("customGaugeChartDiv", data1.evc*100, data2.evc*100, [0x000000, 0x767676], data1.label,  data2.label, false);
+
+});
 
 configEditor.zoom_out_by_value(0.3);
 

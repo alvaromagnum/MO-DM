@@ -3,8 +3,17 @@
     height: 300px!important;
 }
 
+.modal-chart {
+    width: 750px!important;
+    height: 600px!important;
+}
+
 .custom-border-white {
     border-color: #fff !important;
+}
+
+.margin-left-50 {
+    margin-left: 15px;
 }
 
 .custom-border-white:hover {
@@ -27,6 +36,15 @@
     border-bottom-right-radius: 10px;
 }
 
+.radar-chart-custom {
+    width: 100%;
+    height: 350px;
+    background: white;
+    margin-top: -1px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
 .white-border {
     border: 1px solid slategrey!important;
 }
@@ -43,13 +61,13 @@
 
 .li-ranking {
     --stop: calc(100% / var(--length) * var(--i));
-    --l: 62%;
-    --l2: 88%;
-    --h: calc((var(--i) - 1) * (180 / var(--length)));
-    --c1: #1a2035;
-    --c2: #ececec;
-    /*--c1: hsl(var(--h), 71%, var(--l));*/
-    /*--c2: hsl(var(--h), 71%, var(--l2));*/
+    --l: 60%;
+    --l2: 90%;
+    --h: calc((var(--i) - 1) * (2000 / var(--length)));
+    /*--c1: #1a2035;*/
+    /*--c2: #ececec;*/
+    --c1: hsl(var(--h), 70%, var(--l));
+    --c2: hsl(var(--h), 70%, var(--l2));
 
     height: 100px;
     position: relative;
@@ -241,6 +259,14 @@
     border: 1px solid;
     border-radius: 10px;
     padding: 5px;
+}
+
+.select-chart {
+    width: 100%;
+    border: 2px solid #ececec;
+    padding: 5px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .select-decision {
