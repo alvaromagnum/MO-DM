@@ -202,8 +202,11 @@ async function generateRankings(data) {
                         <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
                           <i class="material-icons opacity-10">workspace_premium</i>
                         </div>
-                        <div class="padding-left-80 pt-1 text-2xl">
-                          ${decision.question}&nbsp;[<span id="span${decision.id}">---</span>]
+                        <div class="padding-left-80 pt-1 text-2xl text-uppercase">
+                          ${decision.question}&nbsp;<b>[<span id="span${decision.id}">---</span>]</b><br/>
+                        </div>
+                        <div class="padding-left-80 pt-1 text-2xl text-uppercase text-gray">
+                          DECISÃO ATUAL:&nbsp;<b>[<span id="span2${decision.id}">---</span>]</b><br/>
                         </div>
                       </div>
                       <div class="card-body">
@@ -297,6 +300,7 @@ async function generateRankings(data) {
             Sortable.create(document.getElementById("evcRanking" + decision.id), {animation: 350, filter: '.filtered', preventOnFilter: true, draggable: ".draggable",});
 
             checkConvergence(decision.id);
+            processCurrentDecision(decision.id);
 
             var popup = $("<div></div>").html(`
                 <div class="card modal modal-decision" id="decisionModal${decision.id}">
@@ -365,6 +369,10 @@ function acceptConvergence(idDecision) {
 
     makeDecisionFor(idDecision);
 
+}
+
+function processCurrentDecision(idDecision) {
+    $("#span2"+idDecision).text("---");
 }
 
 function checkConvergence(idDecision) {
