@@ -13,6 +13,7 @@
 . Ver para adicionar gráficos de acompanhamento
 
     . Acompanhamento individual: https://www.amcharts.com/demos/line-with-custom-bullets/
+    . Acompanhameto geral: https://www.amcharts.com/demos/force-directed-adding-links/
 
 . Remover multiplas chamadas de pegar todos os dados do projeto ao gerar o sankey chart. Ver TO-DO no código.
 
