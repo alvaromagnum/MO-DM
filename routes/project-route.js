@@ -306,6 +306,8 @@ async function makeDecision(req, res) {
 
     var decision = await databaseConfig.Decision.findOne({where: {idProject: idProject, idDecision: idDecision}});
 
+    var snapshot = req.body.snapshot;
+
     if(decision !== null) {
         decision.EvaluationOptionId = idOption;
         await decision.save();
@@ -321,6 +323,13 @@ async function makeDecision(req, res) {
         });
 
     }
+
+    await databaseConfig.ProjectSnapshot.create({
+
+        ProjectId: idProject,
+        jsonSnapshot: snapshot
+
+    });
 
     res.send(messages.genericTaskSuccess);
 

@@ -158,6 +158,22 @@ const Project = sequelize.define('Project', {
 
 });
 
+const ProjectSnapshot = sequelize.define('ProjectSnapshot', {
+
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+
+    jsonSnapshot: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    }
+
+});
+
 const ProjectUser = sequelize.define('ProjectUser', {});
 
 Project.belongsToMany(User, { through: ProjectUser });
@@ -165,6 +181,9 @@ User.belongsToMany(Project, { through: ProjectUser });
 
 Course.hasMany(User);
 User.belongsTo(Course);
+
+Project.hasMany(ProjectSnapshot);
+ProjectSnapshot.belongsTo(Project);
 
 Course.hasMany(Evaluation);
 Evaluation.belongsTo(Course);
@@ -197,6 +216,7 @@ function databaseConnected() {
     Decision.sync({ force: true }).then(() => {console.log(messages.decisionsTableCreated)});
     EvaluationOption.sync({ force: true }).then(() => {console.log(messages.evaluationsTableCreated)});
     ProjectUser.sync({ force: true }).then(() => {console.log(messages.projectUsersTableCreated)});
+    ProjectSnapshot.sync({ force: true }).then(() => {console.log(messages.projectSnapshotsTableCreated)});
     User.sync({ force: true }).then(() => {console.log(messages.usersTableCreated)});
     Project.sync({ force: true }).then(() => {console.log(messages.projectsTableCreated)});
 
@@ -281,6 +301,7 @@ sequelize.authenticate().then(databaseConnected).catch(err => console.log('Erro:
 module.exports = {
     User: User,
     Project: Project,
+    ProjectSnapshot: ProjectSnapshot,
     ProjectUser: ProjectUser,
     Course: Course,
     EvaluationOption: EvaluationOption,

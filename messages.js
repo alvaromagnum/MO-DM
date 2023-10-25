@@ -17,6 +17,7 @@ module.exports = {
     decisionsTableCreated: 'Tabela DECISÕES criada!',
     coursesTableCreated: 'Tabela CURSOS criada!',
     projectUsersTableCreated: 'Tabela de USUÁRIOS-PROJETOS criada!',
+    projectSnapshotsTableCreated: 'Tabela de SNAPSHOTS criada!',
     loginError: 'Erro ao efetuar o login! Tente novamente!',
     databaseConnected: 'Conectado ao banco de dados!',
     cantLogin: 'Não foi possível efetuar o login! Tente novamente!',

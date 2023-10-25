@@ -1,4 +1,5 @@
 var evaluationData;
+var jsonConfig;
 
 function importDefaultData() {
 
@@ -19,7 +20,8 @@ function importDefaultData() {
         if(dataToImport) {
 
             var projectName = dataToImport.projectName;
-            var jsonConfig = dataToImport.jsonConfig;
+
+            jsonConfig = dataToImport.jsonConfig;
 
             $("#labelProjectName").text(projectName);
 
@@ -202,8 +204,8 @@ async function generateRankings(data) {
             var oldWeightRankingIndex = _.indexOf(weightRankingItems, currentDecicionOnWeightRanking);
             var oldEvcRankingIndex = _.indexOf(evcRankingItems, currentDecicionOnEvcRanking);
 
-            _.move(weightRankingItems, oldWeightRankingIndex, 0);
-            _.move(evcRankingItems, oldEvcRankingIndex, 0);
+            if(oldWeightRankingIndex !== -1) _.move(weightRankingItems, oldWeightRankingIndex, 0);
+            if(oldEvcRankingIndex !== -1) _.move(evcRankingItems, oldEvcRankingIndex, 0);
 
             var dashboard = $("<div></div>").html(`
             
@@ -437,26 +439,28 @@ function makeDecisionFor(decisionId) {
         cancelButtonText: "NÃO",
         confirmButtonText: 'SIM'
 
-    }).then((result) => {
+    }).then(async (result) => {
 
         if (result.isConfirmed) {
 
             $.LoadingOverlay("show");
 
+            var snapshot = await getEvcRankings(jsonConfig);
+
             $.ajax({
 
                 method: "POST",
                 url: "/project/makeDecision",
-                data: { idDecision: decisionId, idOption: optionId }
+                data: {idDecision: decisionId, idOption: optionId, snapshot: JSON.stringify(snapshot)}
 
-            }).fail(function(jqXHR, textStatus, errorThrown) {
+            }).fail(function (jqXHR, textStatus, errorThrown) {
 
                 $.LoadingOverlay("hide");
                 Swal.fire('Erro!', jqXHR.responseText, 'error');
 
             }).done(function (msg) {
 
-                $("#span2"+decisionId).text(option);
+                $("#span2" + decisionId).text(option);
 
                 $.modalJ.close();
                 $.LoadingOverlay("hide");
