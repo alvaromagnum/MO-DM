@@ -7,6 +7,18 @@
     color: #778899!important;
 }
 
+.color-green{
+    color: #90EE90!important;
+}
+
+.color-orange{
+    color: #FFA500!important;
+}
+
+.color-grey{
+    color: #CCCCCC!important;
+}
+
 .modal-chart {
     width: 750px!important;
     height: 600px!important;

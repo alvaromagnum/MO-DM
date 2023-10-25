@@ -28,7 +28,7 @@ async function getConfigData(json) {
 
 async function getEvcRankings(editorJson) {
 
-    var fullData = await getFullProjectData(editorJson);
+    var fullData = await getFullProjectData(editorJson, true);
 
     var queryAllUsers = `[$distinct(decisions.stakeholders)]`;
     var allUsers = await jsonata(queryAllUsers).evaluate(fullData);
@@ -73,9 +73,9 @@ async function getEvcRankings(editorJson) {
 
 }
 
-async function getFullProjectData(projectJson) {
+async function getFullProjectData(projectJson, showLoading) {
 
-    $.LoadingOverlay("show");
+    if(showLoading) $.LoadingOverlay("show");
 
     var steps = await getConfigData(projectJson);
 
@@ -95,7 +95,7 @@ async function getFullProjectData(projectJson) {
         result = await joinDataAddScores(steps, optionsWithEvaluations);
     }
 
-    $.LoadingOverlay("hide");
+    if(showLoading) $.LoadingOverlay("hide");
 
     return result;
 

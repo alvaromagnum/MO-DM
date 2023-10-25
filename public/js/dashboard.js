@@ -71,6 +71,8 @@ function processProjectConfigDelayed() {
 
 async function processProjectConfig() {
 
+    allProjectData = await getFullProjectData(configEditor.getJson(), false); // TODO - HI COST - REMOVE - MULTIPLE CALLS ON EDITOR CHANGE - MAGNUM
+
     var editorJson = configEditor.getJson();
     var configData = await getConfigData(editorJson);
     var linksNodes = await getSankeyChartDataFromConfig(configData);

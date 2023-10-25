@@ -28,7 +28,7 @@ function importDefaultData() {
                 return;
             }
 
-            getFullProjectData(jsonConfig).then((result)=>{
+            getFullProjectData(jsonConfig, true).then((result)=>{
                 generateRankings(result);
             });
 
