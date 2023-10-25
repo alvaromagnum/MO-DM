@@ -64,10 +64,10 @@
     --l: 60%;
     --l2: 90%;
     --h: calc((var(--i) - 1) * (2000 / var(--length)));
-    /*--c1: #1a2035;*/
-    /*--c2: #ececec;*/
-    --c1: hsl(var(--h), 70%, var(--l));
-    --c2: hsl(var(--h), 70%, var(--l2));
+    --c1: #1a2035;
+    --c2: #ececec;
+    /*--c1: hsl(var(--h), 70%, var(--l));*/
+    /*--c2: hsl(var(--h), 70%, var(--l2));*/
 
     height: 100px;
     position: relative;

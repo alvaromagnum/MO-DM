@@ -245,7 +245,7 @@ async function generateRankings(data) {
                         <br/>
                         <div class="d-flex">
                           <i class="material-icons text-sm my-auto me-1">info</i>
-                          <p class="mb-0 text-sm"> Em caso de empate no topo dos rankings, é possível segurar e arrastar as opções para reordená-las. </p>
+                          <p class="mb-0 text-sm"> Em caso de empate no topo dos rankings, é possível segurar e arrastar as opções para reordená-las e alcançar a convergência. </p>
                         </div>
                         <div class="d-flex">
                           <i class="material-icons text-sm my-auto me-1">info</i>
@@ -257,11 +257,11 @@ async function generateRankings(data) {
                         </div>
                         <div class="d-flex">
                           <i class="material-icons text-sm my-auto me-1">info</i>
-                          <p class="mb-0 text-sm"> Em caso de divergências, pode-se evetuar uma nova rodada de avaliação pelos usuários, ou pode-se tomar uma decisão divergente. </p>
+                          <p class="mb-0 text-sm"> Em caso de divergências, pode-se evetuar uma nova rodada de avaliações pelos usuários, ou pode-se fazer uma escolha divergente. </p>
                         </div>
                         <div class="d-flex">
                           <i class="material-icons text-sm my-auto me-1">info</i>
-                          <p class="mb-0 text-sm"> A ausência de opções no ranking possui duas justificativas: (1) ela ainda não foi avaliada por todos os stakeholder, ou (2) existe alguma avaliação inválida (com zero estrela). </p>
+                          <p class="mb-0 text-sm"> A ausência de opções no ranking possui duas justificativas: (1) ela ainda não foi avaliada por todos os stakeholder, ou (2) existe alguma avaliação inválida/incompleta (com zero estrela). </p>
                         </div>
                       </div>
                     </div>
@@ -349,7 +349,7 @@ function acceptConvergence(idDecision) {
         Swal.fire({
 
             title: 'Atenção!',
-            html: `Só é possível fazer a aceitação em caso de convergência!`,
+            html: `Só é possível fazer a aceitação em caso de CONVERGÊNCIA!`,
             icon: 'info',
             showCancelButton: false,
             cancelButtonText: "NÃO",
@@ -369,10 +369,15 @@ function acceptConvergence(idDecision) {
 
 function checkConvergence(idDecision) {
 
-    var uuid1 = $("#weightRanking"+idDecision+" li:first-child").attr("uuid");
-    var uuid2 = $("#evcRanking"+idDecision+" li:first-child").attr("uuid");
+    var optionRanking1 = $("#weightRanking"+idDecision+" li:first-child");
+    var optionRanking2 = $("#evcRanking"+idDecision+" li:first-child");
+
+    var uuid1 = optionRanking1.attr("uuid");
+    var uuid2 = optionRanking2.attr("uuid");
 
     var percentual = Number($("#agreementRanking"+idDecision+" li[uuid='"+uuid1+"']").attr("percentual"));
+
+    var option = optionRanking1.attr("option");
 
     var labelConvergence = $("#span"+idDecision);
 
@@ -382,7 +387,7 @@ function checkConvergence(idDecision) {
 
     if(result) {
         labelConvergence.addClass("text-success");
-        labelConvergence.text("CONVERGENTE");
+        labelConvergence.text(`CONVERGENTE - ${option}`);
     }
     else {
         labelConvergence.addClass("text-danger");
