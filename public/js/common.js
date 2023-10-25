@@ -159,6 +159,10 @@ async function joinDataAddScores(steps, optionsWithEvaluations) {
                 option.meanEvc = _.find(evcMeans, (o)=>o.id === option.id).meanEvc.toFixed(2);
                 option.agreement = _.find(allEvc, (o)=>o.id === option.id).agreement.toFixed(2);
 
+                if(option.Decision) {
+                    option.Decision.option = option.option;
+                }
+
             }
 
             decision.options = options;

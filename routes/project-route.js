@@ -182,7 +182,7 @@ async function getResults(req, res) {
 
     var evaluationOptions = await databaseConfig.EvaluationOption.findAll({
         where: { ProjectId: global.project.id },
-        include: databaseConfig.Evaluation
+        include: [{model: databaseConfig.Evaluation}, {model: databaseConfig.Decision}]
     });
 
     res.send(evaluationOptions);

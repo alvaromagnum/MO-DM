@@ -193,6 +193,18 @@ async function generateRankings(data) {
             var queryAgreementRanking = `[decisions.options[idDecision=${idDecision} and isComplete=true]^(>agreement).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
             var agreementRankingItems = await jsonata(queryAgreementRanking).evaluate(data);
 
+            var queryCurrentDecisionId = `$filter(decisions.options.Decision[%.%.id=${idDecision}], function($v, $i, $a) {$v != null}).EvaluationOptionId`;
+            var currentDecisionId = await jsonata(queryCurrentDecisionId).evaluate(evaluationData);
+
+            var currentDecicionOnWeightRanking = _.find(weightRankingItems, (o)=>o.id === currentDecisionId);
+            var currentDecicionOnEvcRanking = _.find(evcRankingItems, (o)=>o.id === currentDecisionId);
+
+            var oldWeightRankingIndex = _.indexOf(weightRankingItems, currentDecicionOnWeightRanking);
+            var oldEvcRankingIndex = _.indexOf(evcRankingItems, currentDecicionOnEvcRanking);
+
+            _.move(weightRankingItems, oldWeightRankingIndex, 0);
+            _.move(evcRankingItems, oldEvcRankingIndex, 0);
+
             var dashboard = $("<div></div>").html(`
             
                 <div class="row">
@@ -371,8 +383,13 @@ function acceptConvergence(idDecision) {
 
 }
 
-function processCurrentDecision(idDecision) {
-    $("#span2"+idDecision).text("---");
+async function processCurrentDecision(idDecision) {
+
+    var queryCurrentDecision = `$filter(decisions.options.Decision[%.%.id=${idDecision}], function($v, $i, $a) {$v != null}).option`;
+    var currentDecision = await jsonata(queryCurrentDecision).evaluate(evaluationData);
+
+    $("#span2"+idDecision).text(currentDecision);
+
 }
 
 function checkConvergence(idDecision) {
@@ -427,16 +444,24 @@ function makeDecisionFor(decisionId) {
             $.LoadingOverlay("show");
 
             $.ajax({
+
                 method: "POST",
                 url: "/project/makeDecision",
                 data: { idDecision: decisionId, idOption: optionId }
+
             }).fail(function(jqXHR, textStatus, errorThrown) {
+
                 $.LoadingOverlay("hide");
                 Swal.fire('Erro!', jqXHR.responseText, 'error');
+
             }).done(function (msg) {
+
+                $("#span2"+decisionId).text(option);
+
                 $.modalJ.close();
                 $.LoadingOverlay("hide");
                 $.notify(msg, "success");
+
             });
 
         }
@@ -446,8 +471,6 @@ function makeDecisionFor(decisionId) {
 }
 
 function showDecisionModal(id) {
-
-    console.log(id);
 
     $('#decisionModal'+id).modalJ({
         fadeDuration: 100
