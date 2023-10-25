@@ -202,8 +202,8 @@ async function generateRankings(data) {
                         <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
                           <i class="material-icons opacity-10">workspace_premium</i>
                         </div>
-                        <div class="padding-left-80 pt-1 text-yellow">
-                          ${decision.question}
+                        <div class="padding-left-80 pt-1 text-2xl">
+                          ${decision.question}&nbsp;[<span id="span${decision.id}">---</span>]
                         </div>
                       </div>
                       <div class="card-body">
@@ -225,13 +225,13 @@ async function generateRankings(data) {
                               </div>
                               <div class="row row-results">
                                 <div class="col-sm">
-                                  <ol id="weightRanking${decision.id}" class="ol-ranking" style="--length: 1" role="list"></ol>
+                                  <ol id="weightRanking${decision.id}" idDecision="${decision.id}" class="ol-ranking" style="--length: 1" role="list"></ol>
                                 </div>
                                 <div class="col-sm">
-                                  <ol id="evcRanking${decision.id}" class="ol-ranking" style="--length: 1" role="list"></ol>
+                                  <ol id="evcRanking${decision.id}" idDecision="${decision.id}" class="ol-ranking" style="--length: 1" role="list"></ol>
                                 </div>
                                 <div class="col-sm">
-                                  <ol id="agreementRanking${decision.id}" class="ol-ranking" style="--length: 1" role="list"></ol>
+                                  <ol id="agreementRanking${decision.id}" idDecision="${decision.id}" class="ol-ranking" style="--length: 1" role="list"></ol>
                                 </div>
                               </div>
                             </div>
@@ -239,7 +239,7 @@ async function generateRankings(data) {
                         </div>
                         <br/>
                         <div class="text-center">
-                          <button id="btAcceptConvergence${decision.id}" onclick="showDecisionModal(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para aceitar a convergência"><i class="material-icons icon-button">adjust</i></button>
+                          <button id="btAcceptConvergence${decision.id}" onclick="acceptConvergence(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para aceitar a convergência"><i class="material-icons icon-button">adjust</i></button>
                           <button id="btDecide${decision.id}" onclick="showDecisionModal(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para escolher"><i class="material-icons icon-button">ads_click</i></button>
                         </div>
                         <br/>
@@ -296,6 +296,8 @@ async function generateRankings(data) {
             Sortable.create(document.getElementById("weightRanking" + decision.id), {animation: 350, filter: '.filtered', preventOnFilter: true, draggable: ".draggable",});
             Sortable.create(document.getElementById("evcRanking" + decision.id), {animation: 350, filter: '.filtered', preventOnFilter: true, draggable: ".draggable",});
 
+            checkConvergence(decision.id);
+
             var popup = $("<div></div>").html(`
                 <div class="card modal modal-decision" id="decisionModal${decision.id}">
                     <br/>
@@ -333,9 +335,61 @@ async function generateRankings(data) {
     });
 
     document.addEventListener("update", (e) => {
-        console.log("EFETUOU TROCA!");
-        console.log(e);
+        checkConvergence(Number($("#"+e.from.id).attr("idDecision")));
     });
+
+}
+
+function acceptConvergence(idDecision) {
+
+    var idOption = checkConvergence(idDecision);
+
+    if(!idOption) {
+
+        Swal.fire({
+
+            title: 'Atenção!',
+            html: `Só é possível fazer a aceitação em caso de convergência!`,
+            icon: 'info',
+            showCancelButton: false,
+            cancelButtonText: "NÃO",
+            confirmButtonText: 'OK'
+
+        });
+
+        return;
+
+    }
+
+    $('#selectChosenOption'+idDecision).val(idOption);
+
+    makeDecisionFor(idDecision);
+
+}
+
+function checkConvergence(idDecision) {
+
+    var uuid1 = $("#weightRanking"+idDecision+" li:first-child").attr("uuid");
+    var uuid2 = $("#evcRanking"+idDecision+" li:first-child").attr("uuid");
+
+    var percentual = Number($("#agreementRanking"+idDecision+" li[uuid='"+uuid1+"']").attr("percentual"));
+
+    var labelConvergence = $("#span"+idDecision);
+
+    labelConvergence.removeClass();
+
+    var result = (uuid1 === uuid2) && percentual >= 65;
+
+    if(result) {
+        labelConvergence.addClass("text-success");
+        labelConvergence.text("CONVERGENTE");
+    }
+    else {
+        labelConvergence.addClass("text-danger");
+        labelConvergence.text("DIVERGENTE");
+    }
+
+    return result ? uuid1 : undefined;
 
 }
 
@@ -401,7 +455,7 @@ function generateRankingItem(id, label, value, draggable) {
     var percentual = (value * 100).toFixed(2);
 
     return `
-        <li id="li_${id}" uuid="${uuid}" option="${label}" class="li-ranking cursor-pointer ${itemClass}" style="--i: ${value}">
+        <li id="li_${id}" uuid="${uuid}" option="${label}" percentual="${percentual}" class="li-ranking cursor-pointer ${itemClass}" style="--i: ${value}">
           <div class="h3-ranking">${label} &nbsp;<b>${percentual}%</b></div>
         </li>
     `;
