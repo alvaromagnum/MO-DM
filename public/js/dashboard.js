@@ -5,6 +5,7 @@ var sankeyChartRoot = am5.Root.new("sankeyChartDiv");
 var pageAllUsersEvc;
 var pageAllCoursesEvc;
 var pageGeneralEvc;
+var allProjectData;
 
 darkMode(true);
 
@@ -153,7 +154,12 @@ async function getSankeyChartDataFromConfig(steps) {
             if(isDecisionFinished) nodeColor = 0x90EE90;
             else if(hasEvaluations) nodeColor = 0xFFA500;
 
-            nodes.push({ id: decision.id, type: "DECISAO", name: decision.question, info : `Stakeholders: ${decision.stakeholders.length}`, fill: am5.color(nodeColor) });
+            var queryCurrentDecision = `$filter(decisions.options.Decision[%.%.id=${decision.id}], function($v, $i, $a) {$v != null}).option`;
+            var currentDecision = await jsonata(queryCurrentDecision).evaluate(allProjectData);
+
+            var info = currentDecision ? `ESCOLHA: ${currentDecision}` : "ESCOLHA: ---";
+
+            nodes.push({ id: decision.id, type: "DECISAO", name: decision.question, info : `Stakeholders: ${decision.stakeholders.length}\n\n${info}`, fill: am5.color(nodeColor) });
             links.push({ from: step.id, to: decision.id, value: Math.max(1, decision.stakeholders.length) });
 
             if(decision.stakeholders.length === 0) {
