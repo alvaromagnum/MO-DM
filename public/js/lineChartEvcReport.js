@@ -1,4 +1,4 @@
-async function generateLineChart(divId, snapshots) {
+async function generateLineChart(divId, snapshots, evcRankings) {
 
     am5.array.each(am5.registry.rootElements,
         function(root) {
@@ -11,7 +11,9 @@ async function generateLineChart(divId, snapshots) {
         }
     );
 
-    var userSeries = await processSnapshots(snapshots);
+    var userSeries = await processSnapshots(snapshots, evcRankings);
+
+    console.log(JSON.stringify(userSeries, null, "\t"));
 
     var root = am5.Root.new(divId);
 
@@ -138,7 +140,7 @@ async function generateLineChart(divId, snapshots) {
 
 }
 
-async function processSnapshots(snapshots) {
+async function processSnapshots(snapshots, evcRankings) {
 
     var userData = [];
     var point = 0;
@@ -155,6 +157,18 @@ async function processSnapshots(snapshots) {
         }
 
         point++;
+
+    }
+
+    var currentEvcs = evcRankings.allUsersEvc;
+
+    if(currentEvcs) {
+
+        var date = moment().format("DD-MM-YYYY HH:mm:ss");
+
+        for(var user of currentEvcs) {
+            userData.push({point: point, id: user.id, label: user.label, date: date, value: Number((user.evc*100).toFixed(2))});
+        }
 
     }
 

@@ -197,7 +197,8 @@ async function loadProjectSnapshots(req, res) {
     }
 
     var data = await databaseConfig.ProjectSnapshot.findAll({
-        where: { ProjectId: global.project.id }
+        where: { ProjectId: global.project.id },
+        order: ["createdAt"]
     });
 
     res.send(data);

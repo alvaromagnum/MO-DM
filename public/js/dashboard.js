@@ -283,16 +283,16 @@ function importDefaultDataDashboard() {
         $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
 
-    }).done(function (dataToImport) {
+    }).done(async function (dataToImport) {
 
-        if(dataToImport) {
+        if (dataToImport) {
 
             var projectName = dataToImport.projectName;
             var jsonConfig = dataToImport.jsonConfig;
 
             $("#labelProjectName").text(projectName);
 
-            if(!jsonConfig) {
+            if (!jsonConfig) {
                 $.LoadingOverlay("hide");
                 return;
             }
@@ -300,34 +300,39 @@ function importDefaultDataDashboard() {
             configEditor.import(JSON.parse(jsonConfig));
 
             processProjectConfig();
+
             generateEvcCharts(jsonConfig);
 
-        }
+            var evcRankings = await getEvcRankings(jsonConfig);
 
-        $.LoadingOverlay("hide");
+            $.LoadingOverlay("show");
 
-    });
+            $.ajax({
 
-    $.LoadingOverlay("show");
+                method: "GET",
+                url: "/project/motivation/history",
 
-    $.ajax({
+            }).fail(function(jqXHR, textStatus, errorThrown) {
 
-        method: "GET",
-        url: "/project/motivation/history",
+                $.LoadingOverlay("hide");
+                Swal.fire('Erro!', jqXHR.responseText, 'error');
 
-    }).fail(function(jqXHR, textStatus, errorThrown) {
+            }).done(function (snapshots) {
 
-        $.LoadingOverlay("hide");
-        Swal.fire('Erro!', jqXHR.responseText, 'error');
+                if(snapshots) {
 
-    }).done(function (snapshots) {
+                    snapshots = snapshotsToJson(snapshots);
 
-        if(snapshots) {
+                    generateLineChart("allStudentsMotivationDiv", snapshots, evcRankings);
+                    //generateLineChart("generalMotivationDiv", snapshots, evcRankings);
 
-            snapshots = snapshotsToJson(snapshots);
+                }
 
-            generateLineChart("allStudentsMotivationDiv", snapshots);
-            //generateLineChart("generalMotivationDiv", snapshots);
+                $.LoadingOverlay("hide");
+
+            });
+
+
 
         }
 
