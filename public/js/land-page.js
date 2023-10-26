@@ -1,5 +1,22 @@
 darkMode(true);
 
+var sankeyChartRoot = null;
+
+var pageAllUsersEvc = null;
+var pageAllCoursesEvc = null;
+var pageGeneralEvc = null;
+var allProjectData = null;
+
+var configCanvas = null;
+var configEditor = null;
+
+var projectId = null;
+var userId = null;
+var starRatingControl = null;
+
+var evaluationData = null;
+var jsonConfig = null;
+
 $('#loginButton').click(function () {
 
     var login = $('#inputLogin').val();

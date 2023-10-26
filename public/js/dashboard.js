@@ -1,5 +1,8 @@
 import Drawflow from '../js/drawflow.js';
 
+darkMode(true);
+activateTooltips();
+
 var sankeyChartRoot = am5.Root.new("sankeyChartDiv");
 
 var pageAllUsersEvc;
@@ -7,14 +10,8 @@ var pageAllCoursesEvc;
 var pageGeneralEvc;
 var allProjectData;
 
-darkMode(true);
-
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-});
-
 var configCanvas = document.getElementById("projectConfigCanvas");
-const configEditor = new Drawflow(configCanvas);
+var configEditor = new Drawflow(configCanvas);
 
 configEditor.start();
 
@@ -23,10 +20,6 @@ configEditor.on("connectionCreated", processProjectConfigDelayed);
 configEditor.on("nodeRemoved", processProjectConfigDelayed);
 configEditor.on("connectionRemoved", processProjectConfigDelayed);
 configEditor.on("nodeDataChanged", processProjectConfigDelayed);
-
-$('#btTest').click(function(){
-    processProjectConfig().then((data)=>{$.notify('Teste realizado!', "success");});
-});
 
 $('#btSave').click(function(){
 
@@ -55,7 +48,7 @@ $('#btSave').click(function(){
 });
 
 $('#btImport').click(function(){
-    importDefaultData();
+    importDefaultDataDashboard();
 });
 
 // Give time to remove all the connections. Avoid exhibition of old data.
@@ -76,11 +69,6 @@ async function processProjectConfig() {
     var editorJson = configEditor.getJson();
     var configData = await getConfigData(editorJson);
     var linksNodes = await getSankeyChartDataFromConfig(configData);
-
-    // console.log(JSON.stringify(JSON.parse(editorJson),null,'\t'));
-    // console.log(JSON.stringify(configData,null,'\t'));
-    // console.log(JSON.stringify(linksNodes.nodes,null,'\t'));
-    // console.log(JSON.stringify(linksNodes.links,null,'\t'));
 
     generateProjectSankeyChart(linksNodes.nodes, linksNodes.links);
 
@@ -265,7 +253,7 @@ function addUserNode(userName, userId, courseName, courseId) {
     $('#selectNodeType').append(`<option value="${userId}" courseId="${courseId}" courseName="${courseName}" userName="${userName}">${userName} - ${courseName}&nbsp;&nbsp;&nbsp;</option>`);
 }
 
-function importDefaultData() {
+function importDefaultDataDashboard() {
 
     $.LoadingOverlay("show");
 
@@ -497,4 +485,4 @@ $("#btShowCustomChart").click(function(){
 configEditor.zoom_out_by_value(0.3);
 
 importUsersNodes();
-importDefaultData();
+importDefaultDataDashboard();

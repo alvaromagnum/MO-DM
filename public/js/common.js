@@ -174,3 +174,13 @@ async function joinDataAddScores(steps, optionsWithEvaluations) {
     return steps;
 
 }
+
+function activateTooltips() {
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+}
+
+function activateEditables() {
+    $('.input').jinplace({"inputClass": "editable-input"});
+}

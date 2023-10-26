@@ -13,8 +13,9 @@
 . Ver para adicionar gráficos de acompanhamento
 
     . Acompanhamento individual: https://www.amcharts.com/demos/line-with-custom-bullets/
-    . Acompanhameto geral: https://www.amcharts.com/demos/force-directed-adding-links/
 
 . Remover multiplas chamadas de pegar todos os dados do projeto ao gerar o sankey chart. Ver TO-DO no código.
 
-. De vez em quando diz, incorreamente, que não existem decisões cadastradas para o usuário.
+. O toFixed aparentemente só está gerando números inteiros. Não estão aparecendo frações no EVC.
+
+. De vez em quando fala, incorretamente, que não existem decisões cadastradas para o usuário.

@@ -1,5 +1,8 @@
 function generateGaugeChart(divId, evc1, evc2, colors, caption1, caption2, hideData1) {
 
+    evc1 = evc1.toFixed(2);
+    evc2 = evc2.toFixed(2);
+
     am5.array.each(am5.registry.rootElements,
         function(root) {
             try{
@@ -166,6 +169,7 @@ function generateGaugeChart(divId, evc1, evc2, colors, caption1, caption2, hideD
         duration: 1000,
         easing: am5.ease.out(am5.ease.cubic)
     });
+
     var value2 = evc2;
     axisDataItem2.animate({
         key: "value",

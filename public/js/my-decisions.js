@@ -1,19 +1,9 @@
 darkMode(true);
 
-function activateTooltips() {
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-}
-
-function activateEditables() {
-    $('.input').jinplace({"inputClass": "editable-input"});
-}
-
 var projectId;
 var userId;
-
 var starRatingControl;
+
 function activateStarRating() {
     starRatingControl.rebuild();
 }
@@ -44,14 +34,17 @@ async function processDecisions(jsonConfig) {
 
     var queryStepIds = '[stepId]';
     var stepIds = await jsonata(queryStepIds).evaluate(allData);
+
     stepIds = _.uniq(stepIds);
 
     var queryDecisionIds = '[decisions.decisionId]';
     var decisionIds = await jsonata(queryDecisionIds).evaluate(allData);
+
     decisionIds = _.uniq(decisionIds);
 
-    if(allData.length === 0 ) {
+    if(decisionIds.length == 0 ) {
         processNoDecision();
+        return;
     }
 
     $.LoadingOverlay("show");
@@ -132,55 +125,69 @@ async function processDecisions(jsonConfig) {
 
 }
 
-function importDefaultData() {
+function importDefaultDataMyDecisions() {
 
     $.LoadingOverlay("show");
 
     $.ajax({
+
         method: "GET",
         url: "/users/get/loggedUserData",
+
     }).fail(function(jqXHR, textStatus, errorThrown) {
+
         $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
+
     }).done(function (dataToImport) {
+
         if(dataToImport) {
+
             var userName = dataToImport.userName;
+
             userId = dataToImport.userId;
+
             $("#labelUserName").text(userName);
-        }
-        $.LoadingOverlay("hide");
-    });
 
-    $.LoadingOverlay("show");
+            $.LoadingOverlay("show");
 
-    $.ajax({
+            $.ajax({
 
-        method: "GET",
-        url: "/project/loadConfig",
+                method: "GET",
+                url: "/project/loadConfig",
 
-    }).fail(function(jqXHR, textStatus, errorThrown) {
+            }).fail(function(jqXHR, textStatus, errorThrown) {
 
-        $.LoadingOverlay("hide");
-        Swal.fire('Erro!', jqXHR.responseText, 'error');
-
-    }).done(function (dataToImport) {
-
-        if(dataToImport) {
-
-            projectId = dataToImport.projectId;
-
-            var projectName = dataToImport.projectName;
-            var jsonConfig = dataToImport.jsonConfig;
-
-            $("#labelProjectName").text(projectName);
-
-            if(!jsonConfig) {
-                processNoDecision();
                 $.LoadingOverlay("hide");
-                return;
-            }
+                Swal.fire('Erro!', jqXHR.responseText, 'error');
 
-            processDecisions(jsonConfig).then(()=>{activateTooltips();});
+            }).done(function (dataToImport) {
+
+                if(dataToImport) {
+
+                    projectId = dataToImport.projectId;
+
+                    var projectName = dataToImport.projectName;
+                    var jsonConfig = dataToImport.jsonConfig;
+
+                    $("#labelProjectName").text(projectName);
+
+                    if(!jsonConfig) {
+
+                        processNoDecision();
+                        $.LoadingOverlay("hide");
+
+                        return;
+
+                    }
+
+                    processDecisions(jsonConfig).then(()=>{activateTooltips();});
+
+                }
+
+                $.LoadingOverlay("hide");
+
+            });
 
         }
 
@@ -336,4 +343,4 @@ starRatingControl = new StarRating('.star-rating',{
     clearable: true,
 });
 
-importDefaultData();
+importDefaultDataMyDecisions();

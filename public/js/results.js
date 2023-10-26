@@ -1,7 +1,7 @@
 var evaluationData;
 var jsonConfig;
 
-function importDefaultData() {
+function importDefaultDataResults() {
 
     $.LoadingOverlay("show");
 
@@ -508,5 +508,5 @@ function activateTooltips() {
     });
 }
 
-importDefaultData();
+importDefaultDataResults();
 activateTooltips();
