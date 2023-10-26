@@ -323,10 +323,12 @@ function importDefaultDataDashboard() {
     }).done(function (snapshots) {
 
         if(snapshots) {
+
             snapshots = snapshotsToJson(snapshots);
-            console.log(JSON.stringify(snapshots, null, "\t"));
-            generateLineChart("allStudentsMotivationDiv");
-            generateLineChart("generalMotivationDiv");
+
+            generateLineChart("allStudentsMotivationDiv", snapshots);
+            //generateLineChart("generalMotivationDiv", snapshots);
+
         }
 
         $.LoadingOverlay("hide");
