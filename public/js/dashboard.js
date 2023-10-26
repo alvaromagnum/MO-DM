@@ -308,6 +308,41 @@ function importDefaultDataDashboard() {
 
     });
 
+    $.LoadingOverlay("show");
+
+    $.ajax({
+
+        method: "GET",
+        url: "/project/motivation/history",
+
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+
+        $.LoadingOverlay("hide");
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+
+    }).done(function (snapshots) {
+
+        if(snapshots) {
+            snapshots = snapshotsToJson(snapshots);
+            console.log(JSON.stringify(snapshots, null, "\t"));
+            generateLineChart("allStudentsMotivationDiv");
+            generateLineChart("generalMotivationDiv");
+        }
+
+        $.LoadingOverlay("hide");
+
+    });
+
+}
+
+function snapshotsToJson(snapshots) {
+
+    for(var snapshot of snapshots) {
+        snapshot.jsonSnapshot = JSON.parse(snapshot.jsonSnapshot)
+    }
+
+    return snapshots;
+
 }
 
 function generateEvcCharts(editorJson) {
@@ -424,7 +459,7 @@ function generateProjectSankeyChart(nodes, links) {
 
     series.data.setAll(links);
 
-    series.appear(1000, 500);
+    series.appear(1000, 100);
 
 }
 

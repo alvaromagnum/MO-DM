@@ -189,6 +189,21 @@ async function getResults(req, res) {
 
 }
 
+async function loadProjectSnapshots(req, res) {
+
+    if(!global.user || !global.project) {
+        res.redirect('/');
+        return;
+    }
+
+    var data = await databaseConfig.ProjectSnapshot.findAll({
+        where: { ProjectId: global.project.id }
+    });
+
+    res.send(data);
+
+}
+
 async function hasAnyEvaluation(req, res) {
 
     if(!global.user || !global.project) {
@@ -364,6 +379,8 @@ projectRoute.post('/saveEvaluations', saveEvaluations);
 projectRoute.post('/getEvaluations', getEvaluations);
 
 projectRoute.get('/loadConfig', loadProjectConfig);
+
+projectRoute.get('/motivation/history', loadProjectSnapshots);
 
 projectRoute.post('/isDecisionFinished', isDecisionFinished);
 

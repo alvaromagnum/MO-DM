@@ -80,6 +80,6 @@ function generateBubbleChart(divId, allEvc) {
 
     series.data.setAll([data]);
 
-    series.appear(1000, 500);
+    series.appear(1000, 100);
 
 }
