@@ -61,6 +61,14 @@
     border-bottom-right-radius: 10px;
 }
 
+.bubble-chart-custom {
+    width: 100%;
+    height: 250px;
+    background: lightslategrey;
+    margin-top: -1px;
+    border-radius: 10px;
+}
+
 .white-border {
     border: 1px solid slategrey!important;
 }

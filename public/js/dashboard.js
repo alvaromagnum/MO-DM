@@ -341,6 +341,8 @@ function generateEvcCharts(editorJson) {
         pageAllCoursesEvc = allData.allCoursesEvc;
         pageGeneralEvc = generalEvc;
 
+        generateGaugeChart("allStudentsBubbleMotivationDiv", pageAllUsersEvc);
+
         populateCustomChartsSelect(generalEvc, pageAllUsersEvc, pageAllCoursesEvc);
 
         $('#labelMoreMotivatedStudent').text(moreMotivatedStudent.label);

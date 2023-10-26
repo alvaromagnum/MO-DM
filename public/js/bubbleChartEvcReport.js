@@ -1,25 +1,36 @@
-am5.ready(function() {
+function generateGaugeChart(divId, allEvc) {
 
-// Create root element
-// https://www.amcharts.com/docs/v5/getting-started/#Root_element
-    var root = am5.Root.new("chartdiv");
+    am5.array.each(am5.registry.rootElements,
+        function(root) {
+            try{
+                if (root.dom.id == divId) {
+                    root.dispose();
+                }
+            }
+            catch(err){}
+        }
+    );
 
-// Set themes
-// https://www.amcharts.com/docs/v5/concepts/themes/
+    var root = am5.Root.new(divId);
+
     root.setThemes([
         am5themes_Animated.new(root)
     ]);
 
     var data = {
-        value: 0,
+        value: -1,
         children: []
     }
 
-    for (var i = 0; i < 15; i++) {
-        data.children.push({ name: "node " + i, value: Math.floor(Math.random() * 101) })
+    allEvc = Array.from(allEvc);
+
+    console.log(JSON.stringify(allEvc, null, "\t"));
+
+    for(var evcData of allEvc) {
+        console.log("entrou");
+        data.children.push({ name: evcData.label, value: evcData.evc * 100 });
     }
 
-// Create wrapper container
     var container = root.container.children.push(
         am5.Container.new(root, {
             width: am5.percent(100),
@@ -28,12 +39,10 @@ am5.ready(function() {
         })
     );
 
-// Create series
-// https://www.amcharts.com/docs/v5/charts/hierarchy/#Adding
     var series = container.children.push(
         am5hierarchy.ForceDirected.new(root, {
             singleBranchOnly: false,
-            downDepth: 2,
+            downDepth: 1,
             topDepth: 1,
             initialDepth: 1,
             maxRadius: 60,
@@ -46,21 +55,19 @@ am5.ready(function() {
         })
     );
 
-// Hide circles
     series.circles.template.set("forceHidden", true);
     series.outerCircles.template.set("forceHidden", true);
 
-// Add an icon to node
     series.nodes.template.setup = function(target) {
         target.events.on("dataitemchanged", function(ev) {
-            console.log(ev.target.dataItem.dataContext);
             var icon = target.children.push(am5.Picture.new(root, {
                 width: ev.target.dataItem.dataContext.value,
                 height: ev.target.dataItem.dataContext.value,
                 centerX: am5.percent(50),
                 centerY: am5.percent(50),
-                //src: ev.target.dataItem.dataContext.image
-                src: "https://assets.codepen.io/t-160/star.svg"
+                //src: ev.target.dataItem.dataContext.image,
+                // src: "https://assets.codepen.io/t-160/star.svg",
+                src: "/img/student-avatar-bubble.png",
             }));
         });
     }
@@ -72,7 +79,6 @@ am5.ready(function() {
 
     series.data.setAll([data]);
 
-// Make stuff animate on load
-    series.appear(1000, 100);
+    series.appear(1000, 500);
 
-}); // end am5.ready()
+}
