@@ -1,4 +1,4 @@
-function generateGaugeChart(divId, allEvc) {
+function generateBubbleChart(divId, allEvc) {
 
     am5.array.each(am5.registry.rootElements,
         function(root) {
@@ -24,10 +24,7 @@ function generateGaugeChart(divId, allEvc) {
 
     allEvc = Array.from(allEvc);
 
-    console.log(JSON.stringify(allEvc, null, "\t"));
-
     for(var evcData of allEvc) {
-        console.log("entrou");
         data.children.push({ name: evcData.label, value: evcData.evc * 100 });
     }
 
