@@ -55,9 +55,6 @@ function generateGaugeChart(divId, allEvc) {
         })
     );
 
-    series.circles.template.set("forceHidden", true);
-    series.outerCircles.template.set("forceHidden", true);
-
     series.nodes.template.setup = function(target) {
         target.events.on("dataitemchanged", function(ev) {
             var icon = target.children.push(am5.Picture.new(root, {
@@ -66,15 +63,22 @@ function generateGaugeChart(divId, allEvc) {
                 centerX: am5.percent(50),
                 centerY: am5.percent(50),
                 //src: ev.target.dataItem.dataContext.image,
-                // src: "https://assets.codepen.io/t-160/star.svg",
+                //src: "https://assets.codepen.io/t-160/star.svg",
                 src: "/img/student-avatar-bubble.png",
             }));
         });
     }
 
+    series.nodes.template.setAll({
+        cursorOverStyle: "pointer"
+    });
+
     series.labels.template.setAll({
         fill: am5.color(0x000000),
-        y: 45,
+        minScale: 0.5,
+        textAlign: "center",
+        isMeasured: true,
+        y: 70,
     });
 
     series.data.setAll([data]);
