@@ -156,7 +156,8 @@ function generateLineChart(divId) {
                 centerY: am5.p50,
                 width: 23,
                 height: 23,
-                src: "https://amcharts.com/wp-content/uploads/assets/timeline/timeline" + 1 + ".svg"
+                // src: "https://amcharts.com/wp-content/uploads/assets/timeline/timeline" + 1 + ".svg"
+                src: "/img/student-avatar-bubble.png"
             })
         );
 
