@@ -9,6 +9,9 @@ var allProjectData = null;
 
 var configCanvas = null;
 var configEditor = null;
+var projectZoom = null;
+var projectPositionX = null;
+var projectPositionY = null;
 
 var projectId = null;
 var userId = null;
