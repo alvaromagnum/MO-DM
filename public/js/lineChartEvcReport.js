@@ -75,7 +75,7 @@ async function generateLineChartStudents(divId, snapshots, evcRankings) {
 
         var data = userSerie;
 
-        var color = am5.color("#"+Math.floor(Math.random()*16777215).toString(16));
+        var color = am5.color('#'+(Math.random()*(1<<24)|0).toString(16));
 
         colors.push(color);
 
