@@ -237,6 +237,10 @@
     color: black!important;
 }
 
+.text-dark-yellow {
+    color: #ffb900!important;
+}
+
 .sankeyChartDiv {
     width: 100%;
     height: 550px;
@@ -244,7 +248,7 @@
     border: 1px solid black;
     border-radius:10px;
     z-index: 999;
-    background: lightslategray;
+    background: slategrey;
 }
 
 .margin-top-10 {

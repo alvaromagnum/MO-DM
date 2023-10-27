@@ -75,7 +75,7 @@ async function processDecisions(jsonConfig) {
                               <table class="table align-items-center mb-0">
                                 <thead>
                                 <tr>
-                                  <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 header-decisions"><i class="material-icons opacity-10">not_listed_location</i>&nbsp;${decision.question.toUpperCase()}</th>
+                                  <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 header-decisions"><i class="material-icons opacity-10 text-dark-yellow">not_listed_location</i>&nbsp;<span class="text-dark-yellow">${decision.question.toUpperCase()}</span></th>
                                   <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7">Expectativa<sup><i data-toggle="tooltip" title="O quanto você acredita que essa opção é exequível" class="material-icons text-sm my-auto me-1">info</i></sup></th>
                                   <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7">Valor<sup><i data-toggle="tooltip" title="O quanto você deseja essa opção" class="material-icons text-sm my-auto me-1">info</i></sup></th>
                                   <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7">Custo<sup><i data-toggle="tooltip" title="O quão custosa você acha que é essa opção" class="material-icons text-sm my-auto me-1">info</i></sup></th>

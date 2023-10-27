@@ -40,6 +40,8 @@ export default class Drawflow {
         this.module = 'Home';
         this.editor_mode = 'edit';
         this.zoom = 1;
+        this.x = 0;
+        this.y = 0;
         this.zoom_max = 1.6;
         this.zoom_min = 0.05;
         this.zoom_value = 0.01;
@@ -667,6 +669,20 @@ export default class Drawflow {
             this.zoom = 1;
             this.zoom_refresh();
         }
+    }
+
+    zoom_load(value) {
+        this.zoom = value;
+        this.zoom_refresh();
+    }
+
+    position_load(x, y) {
+        this.drawflow.x = x;
+        this.drawflow.y = y;
+        this.canvas_x = x;
+        this.canvas_y = y;
+        this.precanvas.style.transform = "translate(" + x + "px, " + y + "px) scale(" + this.zoom + ")";
+        this.zoom_refresh();
     }
 
     createCurvature(start_pos_x, start_pos_y, end_pos_x, end_pos_y, curvature_value, type) {
@@ -2147,6 +2163,10 @@ export default class Drawflow {
         this.clear();
         this.drawflow = JSON.parse(JSON.stringify(data));
         this.zoom = this.drawflow.zoom;
+        this.x = this.drawflow.x;
+        this.y = this.drawflow.y;
+        this.canvas_x = this.x;
+        this.canvas_y = this.y;
         this.zoom_refresh();
         this.precanvas.style.transform = "translate(" + this.drawflow.x + "px, " + this.drawflow.y + "px) scale(" + this.zoom + ")";
         this.load();

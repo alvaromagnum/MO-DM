@@ -9,6 +9,9 @@ var pageAllUsersEvc;
 var pageAllCoursesEvc;
 var pageGeneralEvc;
 var allProjectData;
+var projectZoom;
+var projectPositionX;
+var projectPositionY;
 
 var configCanvas = document.getElementById("projectConfigCanvas");
 var configEditor = new Drawflow(configCanvas);
@@ -299,6 +302,10 @@ function importDefaultDataDashboard() {
 
             configEditor.import(JSON.parse(jsonConfig));
 
+            projectZoom = configEditor.zoom;
+            projectPositionX = configEditor.x;
+            projectPositionY = configEditor.y;
+
             processProjectConfig();
 
             generateEvcCharts(jsonConfig);
@@ -407,6 +414,11 @@ $('#btZoomOut').click(function(){
 });
 
 $('#btZoomReset').click(function(){
+    configEditor.zoom_load(projectZoom);
+    configEditor.position_load(projectPositionX, projectPositionY);
+});
+
+$('#btZoomDefault').click(function(){
     configEditor.zoom_reset();
 });
 
