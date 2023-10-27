@@ -23,6 +23,7 @@ const User = sequelize.define('User', {
 
     login: {
         type: DataTypes.STRING,
+        unique: true,
         allowNull: false
     },
 
@@ -33,6 +34,11 @@ const User = sequelize.define('User', {
 
     gender: {
         type: DataTypes.CHAR,
+        allowNull: true
+    },
+
+    birthdayDate: {
+        type: DataTypes.DATE,
         allowNull: true
     }
 

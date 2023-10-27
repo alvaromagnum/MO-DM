@@ -2,6 +2,7 @@ const express = require('express');
 const _ = require('underscore');
 const messages = require('../messages');
 const databaseConfig = require('../database-config');
+const path = require("path");
 
 var usersRoute = express.Router();
 
@@ -38,12 +39,24 @@ function getLoggedUserData(req, res) {
         return;
     }
 
-    res.send({userName: global.user.name, userId: global.user.id});
+    res.send({userName: global.user.name, login: global.user.login, gender: global.user.gender, birthdayDate: global.user.birthdayDate, userId: global.user.id, courseId: global.user.Course.id});
+
+}
+
+function getProfile(req, res) {
+
+    if(!global.user || !global.project) {
+        res.redirect('/');
+        return;
+    }
+
+    res.sendFile(path.resolve(__dirname, '..') + '/html/profile.html');
 
 }
 
 usersRoute.get('/get/projectUsers', getProjectUsers);
 usersRoute.get('/get/courses', getCourses);
 usersRoute.get('/get/loggedUserData', getLoggedUserData);
+usersRoute.get('/profile', getProfile);
 
 module.exports = usersRoute;

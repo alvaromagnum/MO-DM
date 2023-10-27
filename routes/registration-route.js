@@ -34,8 +34,8 @@ function saveUser(req, res) {
         return;
     }
 
-    if(login === "" || password1 === "" || password2 === "") {
-        res.status(500).send(messages.loginAndPasswordRequired);
+    if(name.trim() === "" || login.trim() === "" || password1.trim() === "" || password2.trim() === "") {
+        res.status(500).send(messages.nameLoginAndPasswordRequired);
         return;
     }
 
@@ -58,6 +58,56 @@ function saveUser(req, res) {
             password: SHA256(password1).toString(),
         }).then(() => {
             res.send(messages.userCreatedSuccess);
+        });
+
+    });
+
+}
+
+function updateUser(req, res) {
+
+    var name = req.body.name;
+    var login = req.body.login;
+    var password1 = req.body.password1;
+    var password2 = req.body.password2;
+    var idCourse = req.body.idCourse;
+    var gender = req.body.gender;
+    var birthdayDate = req.body.birthdayDate;
+
+    var regex = /[^\w]/gi;
+
+    if(regex.test(login) === true) {
+        res.status(500).send(messages.invalidLogin);
+        return;
+    }
+
+    if(name.trim() === "" || login.trim() === "") {
+        res.status(500).send(messages.nameAndLoginRequired);
+        return;
+    }
+
+    if(password1.trim() !== password2.trim()) {
+        res.status(500).send(messages.differentPasswords);
+        return;
+    }
+
+    databaseConfig.User.findOne({ where: { login: login } }).then((user)=>{
+
+        if(user !== null && login !== global.user.login) {
+            res.status(500).send(messages.loginAlreadyExists);
+            return;
+        }
+
+        global.user.CourseId = idCourse;
+        global.user.name = name;
+        global.user.login = login;
+        global.user.gender = gender;
+        global.user.birthdayDate = birthdayDate;
+
+        if(password1.trim() !== "") global.user.password = SHA256(password1).toString();
+
+        global.user.save().then(()=>{
+            res.send(messages.profileUpdateSuccess);
         });
 
     });
@@ -109,5 +159,7 @@ registrationRoute.post('/user', saveUser);
 
 registrationRoute.get('/project', registerProject);
 registrationRoute.post('/project', saveProject);
+
+registrationRoute.post('/updateUser', updateUser);
 
 module.exports = registrationRoute;

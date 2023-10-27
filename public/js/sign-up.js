@@ -9,8 +9,6 @@ $('#signUpButton').click(function () {
     var passwordInput1 = $('#inputTextPassword1').val();
     var passwordInput2 = $('#inputTextPassword2').val();
 
-    $('#selectCourse').val(0);
-
     checkSelectedCourse();
 
     $.LoadingOverlay("show");
@@ -60,6 +58,8 @@ $("#formSignup").keypress(function(e){
 
 function getCourses() {
 
+    $.LoadingOverlay("show");
+
     $.ajax({
         method: "GET",
         url: "/users/get/courses",
@@ -69,6 +69,7 @@ function getCourses() {
         for(var courses of courses) {
             addCourse(courses.name, courses.id);
         }
+        $.LoadingOverlay("hide");
     });
 
 }

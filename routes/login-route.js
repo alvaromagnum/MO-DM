@@ -20,7 +20,7 @@ async function doLogin(req, res) {
         return;
     }
 
-    var user = await databaseConfig.User.findOne({where: {login: login, password: password}});
+    var user = await databaseConfig.User.findOne({where: {login: login, password: password}, include: databaseConfig.Course});
 
     if (user === null) {
         res.status(500).send(messages.cantLogin);

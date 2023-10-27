@@ -38,9 +38,10 @@
   <!-- CSS Files -->
   <link id="pagestyle" href="/css/material-dashboard.css" rel="stylesheet" />
   <link href="/css/drawflow.css" rel="stylesheet" />
-  <link href="/css/custom.css" rel="stylesheet" />
   <link href="/css/star-rating.css" rel="stylesheet" />
   <link href="/css/jquery.modal.min.css" rel="stylesheet" />
+  <link href="/css/zebra_datepicker.css" rel="stylesheet" />
+  <link href="/css/custom.css" rel="stylesheet" />
 </head>
 
 <body class="g-sidenav-show dark-version">
@@ -72,7 +73,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white active bg-gradient-dark" href="/project/results">
+        <a class="nav-link text-white" href="/project/results">
           <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
             <i class="material-icons opacity-10">military_tech</i>
           </div>
@@ -93,9 +94,9 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
           <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Páginas</a></li>
-          <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Resultados</li>
+          <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Perfil</li>
         </ol>
-        <h6 class="font-weight-bolder mb-0">RESULTADOS <label id="labelProjectName" class="project-name">---</label></h6>
+        <h6 class="font-weight-bolder mb-0">PERFIL <label id="labelProjectName" class="project-name">---</label></h6>
       </nav>
       <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
         <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -119,7 +120,62 @@
   </nav>
   <!-- End Navbar -->
   <div class="container-fluid py-4">
-    <div class="container-fluid" id="divResults"></div>
+    <div style="width: 50%; margin: auto">
+      <form role="form" id="formSignup">
+        <b>Nome:</b>
+        <div class="input-group input-group-outline mb-3">
+          <input onClick="this.select();" id="inputTextName" type="text" class="form-control"/>
+        </div>
+        <b>Login:</b>
+        <div class="input-group input-group-outline mb-3">
+          <input onClick="this.select();" id="inputTextLogin" type="text" class="form-control"/>
+        </div>
+        <b>Curso</b>
+        <div class="input-group input-group-outline mb-3">
+          <select id="selectCourse" class="form-select select-course">
+          </select>
+        </div>
+        <b>Sexo</b>
+        <div class="input-group input-group-outline mb-3">
+          <select id="selectGender" class="form-select select-course">
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+            <option value="O">Outro</option>
+          </select>
+        </div>
+        <b>Data de Nascimento:</b>
+        <div class="input-group input-group-outline mb-3">
+          <input onClick="this.select();" id="inputBirthdayDate" type="text" class="form-control"/>
+        </div>
+        <b>Foto do Perfil:</b>
+        <div class="input-group input-group-outline mb-3">
+          <input class="form-control form-control" id="photoFile" type="file"/>
+        </div>
+        <br/><br/>
+        <div class="input-group input-group-outline mb-3">
+          <label for="inputTextPassword1" class="form-label">Senha</label>
+          <input onClick="this.select();" id="inputTextPassword1" type="password" class="form-control"/>
+        </div>
+        <div class="input-group input-group-outline mb-3">
+          <label for="inputTextPassword2" class="form-label">Repetir Senha</label>
+          <input onClick="this.select();" id="inputTextPassword2" type="password" class="form-control"/>
+        </div>
+        <br/>
+        <div class="text-center">
+          <button type="button" id="updateProfileButton" class="btn btn-lg bg-gradient-dark btn-lg w-100 mt-4 mb-0 white-border">ATUALIZAR</button>
+        </div>
+      </form>
+      <br/><br/>
+      <div class="d-flex">
+        <i class="material-icons text-sm my-auto me-1">info</i>
+        <p class="mb-0 text-sm"> Caso não deseje atualizar a senha, é só deixar os campos SENHA e REPETIR SENHA em branco. </p>
+      </div>
+      <div class="d-flex">
+        <i class="material-icons text-sm my-auto me-1">info</i>
+        <p class="mb-0 text-sm"> Não utilize caracteres especiais, nem espaços, para o login! </p>
+      </div>
+    </div>
+    <br/><br/>
     <footer class="footer py-4  ">
       <div class="container-fluid">
         <div class="row align-items-center justify-content-lg-between">
@@ -141,49 +197,6 @@
         </div>
       </div>
     </footer>
-    <div id="divPopups">
-      <!-- POPUP IMPACTS - START -->
-      <div class="card modal modal-results" id="resultsPerUserModal">
-        <div class="card-header pb-0">
-          <div class="row">
-            <div class="col-lg-12 col-7 text-yellow">
-              <h6 class="text-xl">IMPACTO INDIVIDUAL DA OPÇÃO "<u><span id="labelImpactOption">---</span></u>"</h6>
-              <p>* Do mais impactado negativamente para o menos impactado</p>
-            </div>
-          </div>
-        </div>
-        <div class="card-body px-0 pb-2">
-          <div class="table-responsive">
-            <table class="table align-items-center mb-0">
-              <thead>
-              <tr>
-                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">USUÁRIO</th>
-                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">E</th>
-                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">V</th>
-                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">C</th>
-                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">EVC</th>
-              </tr>
-              </thead>
-              <tbody id="tableImpacted"></tbody>
-            </table>
-            <br/>
-            <div class="d-flex">
-              <i class="material-icons text-sm my-auto me-1">info</i>
-              <p class="mb-0 text-sm"> <span class="text-red">VERMELHO</span> - Impacto <b>negativo</b>. </p>
-            </div>
-            <div class="d-flex">
-              <i class="material-icons text-sm my-auto me-1">info</i>
-              <p class="mb-0 text-sm"> <span class="text-yellow">AMARELO</span> - Impacto <b>neutro</b>. </p>
-            </div>
-            <div class="d-flex">
-              <i class="material-icons text-sm my-auto me-1">info</i>
-              <p class="mb-0 text-sm"> <span class="text-green">VERDE</span> - Impacto <b>positivo</b>. </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- POPUP IMPACTS - END -->
-    </div>
   </div>
 </main>
 <!--   Core JS Files   -->
@@ -207,12 +220,14 @@
 <script src="/js/core/bootstrap.bundle.min.js"></script>
 <script src="/js/star-rating.js"></script>
 <script src="/js/Sortable.js"></script>
+<script src="/js/moment-with-locales.js"></script>
 <script src="/js/math.js"></script>
 <script src="/js/jquery.modal.min.js"></script>
 <script src="/js/jinplace.js"></script>
 <script src="/js/loadingoverlay.min.js"></script>
+<script src="/js/zebra_datepicker.src.js"></script>
 <script src="/js/common.js"></script>
-<script src="/js/results.js"></script>
+<script src="/js/profile.js"></script>
 </body>
 
 </html>

@@ -8,7 +8,8 @@ module.exports = {
     invalidProjectName: 'Nome de projeto inválido!',
     createProjectError: 'Erro ao tentar criar projeto! Tente novamente!',
     projectWithSameNameError: 'Já existe um projeto com esse nome! Tente novamente!',
-    loginAndPasswordRequired: 'É preciso preencher o login e a senha!',
+    nameLoginAndPasswordRequired: 'É preciso preencher o nome, o login e a senha!',
+    nameAndLoginRequired: 'É preciso preencher o nome e o login!',
     differentPasswords: 'As senhas estão diferentes!',
     usersTableCreated: 'Tabela USUÁRIOS criada!',
     projectsTableCreated: 'Tabela PROJETOS criada!',
@@ -26,4 +27,5 @@ module.exports = {
     decisionsSavedSuccess: `Decisões salvas com sucesso!`,
     genericTaskError: `Operação não realizada! Tente novamente!`,
     genericTaskSuccess: `Operação realizada com sucesso!`,
+    profileUpdateSuccess: `Perfil atualizado com sucesso!`,
 }
