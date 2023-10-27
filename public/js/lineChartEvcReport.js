@@ -48,7 +48,7 @@ async function generateLineChartStudents(divId, snapshots, evcRankings) {
 
     var xAxis = chart.xAxes.push(
         am5xy.DateAxis.new(root, {
-            baseInterval: {timeUnit: "minute", count: 1},
+            baseInterval: {timeUnit: "hour", count: 1},
             renderer: xRenderer,
             tooltip: am5.Tooltip.new(root, {})
         })
@@ -242,7 +242,7 @@ async function generateLineChartGeneral(divId, snapshots, evcRankings) {
 
     var xAxis = chart.xAxes.push(
         am5xy.DateAxis.new(root, {
-            baseInterval: {timeUnit: "minute", count: 1},
+            baseInterval: {timeUnit: "hour", count: 1},
             renderer: xRenderer,
             tooltip: am5.Tooltip.new(root, {})
         })
@@ -314,6 +314,8 @@ async function generateLineChartGeneral(divId, snapshots, evcRankings) {
 async function processSnapshotsGeneral(snapshots, evcRankings) {
 
     var generalSerie = [];
+
+    console.log(JSON.stringify(snapshots, null, "\t"));
 
     for(var snapshot of snapshots) {
 
