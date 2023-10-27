@@ -315,8 +315,6 @@ async function processSnapshotsGeneral(snapshots, evcRankings) {
 
     var generalSerie = [];
 
-    console.log(JSON.stringify(snapshots, null, "\t"));
-
     for(var snapshot of snapshots) {
 
         var date = date = moment(snapshot.createdAt).format("DD-MM-YYYY HH:mm:ss");
