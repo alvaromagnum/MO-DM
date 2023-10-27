@@ -184,3 +184,24 @@ function activateTooltips() {
 function activateEditables() {
     $('.input').jinplace({"inputClass": "editable-input"});
 }
+
+$("#btLogout").click(function() {
+
+    Swal.fire({
+
+        title: 'Atenção!',
+        html: "Tem certeza de que deseja sair ?",
+        icon: 'info',
+        showCancelButton: true,
+        cancelButtonText: "NÃO",
+        confirmButtonText: 'SIM'
+
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+            window.location.href = "/login/out";
+        }
+
+    });
+
+});

@@ -540,24 +540,3 @@ configEditor.zoom_out_by_value(0.3);
 
 importUsersNodes();
 importDefaultDataDashboard();
-
-$("#btLogout").click(function() {
-
-    Swal.fire({
-
-        title: 'Atenção!',
-        html: "Tem certeza de que deseja sair ?",
-        icon: 'info',
-        showCancelButton: true,
-        cancelButtonText: "NÃO",
-        confirmButtonText: 'SIM'
-
-    }).then((result) => {
-
-        if (result.isConfirmed) {
-            window.location.href = "/login/out";
-        }
-
-    });
-
-});
