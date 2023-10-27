@@ -67,11 +67,17 @@ async function generateLineChartStudents(divId, snapshots, evcRankings) {
         })
     );
 
+    var colors = [];
+
+    var circleColors = [];
+
     for(var userSerie of userSeries) {
 
         var data = userSerie;
 
         var color = am5.color("#"+Math.floor(Math.random()*16777215).toString(16));
+
+        colors.push(color);
 
         var series = chart.series.push(
             am5xy.LineSeries.new(root, {
@@ -98,6 +104,8 @@ async function generateLineChartStudents(divId, snapshots, evcRankings) {
 
         series.strokes.template.setAll({strokeDasharray: [3, 3], strokeWidth: 2});
 
+        series.data.setAll(data);
+
         var i = -1;
 
         series.bullets.push(function () {
@@ -109,9 +117,7 @@ async function generateLineChartStudents(divId, snapshots, evcRankings) {
                 centerY: am5.p50
             });
 
-            container.children.push(
-                am5.Circle.new(root, {radius: 20, fill: series.get("fill")})
-            );
+            container.children.push(am5.Circle.new(root, {radius: 15, fill: circleColors[i]}));
 
             container.children.push(
                 am5.Picture.new(root, {
@@ -125,13 +131,13 @@ async function generateLineChartStudents(divId, snapshots, evcRankings) {
                 })
             );
 
-            return am5.Bullet.new(root, {
-                sprite: container
-            });
+            return am5.Bullet.new(root, { sprite: container });
 
         });
 
-        series.data.setAll(data);
+        if(userSeries.length === colors.length) {
+            fillCircleColors(circleColors, colors, userSeries);
+        }
 
         series.appear(1000);
 
@@ -142,6 +148,28 @@ async function generateLineChartStudents(divId, snapshots, evcRankings) {
     var legend = chart.children.push(am5.Legend.new(root, {}));
 
     legend.data.setAll(chart.series.values);
+
+}
+
+function fillCircleColors(circleColors, colors, userSeries) {
+
+    var legendsNumber = userSeries.length;
+
+    for(var i = 0; i < legendsNumber; i++) {
+        circleColors.push(colors[i]);
+    }
+
+    var j = 0;
+
+    for(var userSerie of userSeries) {
+
+        for(var k = 0; k < userSerie.length; k++) {
+            circleColors.push(colors[j]);
+        }
+
+        j++;
+
+    }
 
 }
 
