@@ -30,8 +30,6 @@ async function getEvcRankings(editorJson) {
 
     var fullData = await getFullProjectData(editorJson, true);
 
-    console.log(JSON.stringify(fullData, null, "\t"));
-
     var queryAllUsers = `[$distinct(decisions.stakeholders.$.{"idUser": idUser, "stakeholderName": stakeholderName, "courseName": courseName, "idCourse": idCourse})]`;
     var allUsers = await jsonata(queryAllUsers).evaluate(fullData);
 
