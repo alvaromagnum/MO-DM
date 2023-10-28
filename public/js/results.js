@@ -280,6 +280,10 @@ async function generateRankings(data) {
                           <i class="material-icons text-sm my-auto me-1">info</i>
                           <p class="mb-0 text-sm"> A ausência de opções no ranking possui duas justificativas: (1) ela ainda não foi avaliada por todos os stakeholder, ou (2) existe alguma avaliação inválida/incompleta (com zero estrela). </p>
                         </div>
+                        <div class="d-flex">
+                          <i class="material-icons text-sm my-auto me-1">info</i>
+                          <p class="mb-0 text-sm"> Antes de tomar a decisão, certifique-se de checar o impacto da mesma em cada participante. Basta clicar na opção desejada. </p>
+                        </div>
                       </div>
                     </div>
                   </div>
