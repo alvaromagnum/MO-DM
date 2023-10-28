@@ -160,7 +160,7 @@ async function getSankeyChartDataFromConfig(steps) {
             }
 
             for(const stakeholder of allStakeholders) {
-                nodes.push({ id: stakeholder.id, type: "STAKEHOLDER", name: stakeholder.stakeholderName, info : "", fill: am5.color(0x1a2035) });
+                nodes.push({ id: stakeholder.id, idUser: stakeholder.idUser, type: "STAKEHOLDER", name: stakeholder.stakeholderName, info : "", fill: am5.color(0x1a2035) });
                 if(_.contains(decision.stakeholders.map((o)=>{return o.idUser}), stakeholder.idUser)) links.push({ from: decision.id, to: stakeholder.id, value: 1 }); //baba
             }
 
@@ -181,7 +181,10 @@ async function getSankeyChartDataFromConfig(steps) {
         var stakeholderDecisionsCountQuery = `$count(*[to=${stakeholder.id}])`;
         var count = await jsonata(stakeholderDecisionsCountQuery).evaluate(links);
 
-        stakeholder.info = `Decisões: ${count}`;
+        var queryStakeholderCourse = `*[idUser=${stakeholder.idUser}].courseName`;
+        var stakeholderCourse = await jsonata(queryStakeholderCourse).evaluate(allStakeholders);
+
+        stakeholder.info = `\n\Curso: ${stakeholderCourse}\n\nDecisões: ${count}`;
 
     }
 
