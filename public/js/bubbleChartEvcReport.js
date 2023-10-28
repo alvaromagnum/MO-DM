@@ -75,6 +75,7 @@ function generateBubbleChart(divId, allEvc) {
         minScale: 0.5,
         textAlign: "center",
         isMeasured: true,
+        oversizedBehavior: "wrap-no-break"
         // y: 70,
     });
 
