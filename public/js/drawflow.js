@@ -1201,10 +1201,8 @@ export default class Drawflow {
                 var courseId = $('#selectNodeType option:selected').attr('courseId');
                 var userId = $('#selectNodeType option:selected').val();
 
-                var avatarId = `avatar${userId}`;
-
                 var stakeholderNode = `
-                    <div id="stakholderContainer" class="container stakeholder-node-fixed-size avatar-container">
+                    <div userId="${userId}" id="avatarContainer${userId}" class="container stakeholder-node-fixed-size avatar-container">
                         <div class="col rounded stakeholder-node-header">
                             <i class="bi-person"></i> Stakeholder
                         </div>
@@ -1214,7 +1212,7 @@ export default class Drawflow {
                             <input type="hidden" df-course_id>
                             <input type="hidden" df-user_name>
                             <input type="hidden" df-course_name>
-                            <img id="${avatarId}" src="/avatars/${userId}.jpg" alt="kal" class="avatar avatar-xl rounded-circle-black"/>
+                            <img id="userAvatar${userId}" src="/avatars/${userId}.jpg" alt="kal" class="avatar avatar-xl rounded-circle-black"/>
                             <br/><br/>
                             <div class="node-user-name"><b>${userName} - ${courseName}</b></div>
                         </div>
@@ -1223,7 +1221,7 @@ export default class Drawflow {
 
                 this.addNode('stakeholder', 1, 0, pos_x, pos_y, 'stakeholder-node', {"user_id": nodeValue, "user_name": userName, "course_name": courseName, "course_id": courseId}, stakeholderNode);
 
-                checkAvatarImage(avatarId);
+                checkAvatarImages();
 
                 break;
 
@@ -2175,6 +2173,7 @@ export default class Drawflow {
         this.zoom_refresh();
         this.precanvas.style.transform = "translate(" + this.drawflow.x + "px, " + this.drawflow.y + "px) scale(" + this.zoom + ")";
         this.load();
+        checkAvatarImages();
         if (notifi) {
             this.dispatch('import', 'import');
         }
@@ -2239,8 +2238,11 @@ export default class Drawflow {
     }
 }
 
-function checkAvatarImage(avatarId) {
-    $('.avatar-container').imagesLoaded().fail( function() {
-        $("#"+avatarId).attr("src", "/avatars/0.jpg");
+function checkAvatarImages() {
+    $('.avatar-container').each(function() {
+        var avatarImage = $(this).find("img");
+        $(this).imagesLoaded().fail( function() {
+            avatarImage.attr("src", "/avatars/0.jpg");
+        });
     });
 }

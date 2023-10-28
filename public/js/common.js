@@ -43,6 +43,8 @@ async function getEvcRankings(editorJson) {
         var queryUserEvc = "${\"evc\": $average(decisions.options.Evaluations.evc[%.UserId="+user.idUser+"]), \"e\": $average($map(decisions.options.Evaluations.e[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options.Evaluations.v[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options.Evaluations.c[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5}))}";
         var userEvc = await jsonata(queryUserEvc).evaluate(fullData);
 
+        if(!userEvc.evc) userEvc = {evc: 0, e: 0, v: 0, c: 0};
+
         allUsersEvc.push({id: user.idUser, label: user.stakeholderName, evc: userEvc.evc.toFixed(2), e: userEvc.e.toFixed(2), v: userEvc.v.toFixed(2), c: userEvc.c.toFixed(2)})
 
     }
@@ -53,6 +55,8 @@ async function getEvcRankings(editorJson) {
 
         var queryCourseEvc = "${\"evc\": $average(decisions.options.Evaluations.evc[%.CourseId="+course.idCourse+"]), \"e\": $average($map(decisions.options.Evaluations.e[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options.Evaluations.v[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options.Evaluations.c[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5}))}";
         var courseEvc = await jsonata(queryCourseEvc).evaluate(fullData);
+
+        if(!courseEvc.evc) courseEvc = {evc: 0, e: 0, v: 0, c: 0};
 
         allCoursesEvc.push({id: course.idCourse, label: course.courseName, evc: courseEvc.evc.toFixed(2), e: courseEvc.e.toFixed(2), v: courseEvc.v.toFixed(2), c: courseEvc.c.toFixed(2)})
 
@@ -66,6 +70,8 @@ async function getEvcRankings(editorJson) {
 
     var queryGeneralEvc = "${\"evc\": $average(decisions.options.Evaluations.evc), \"e\": $average($map(decisions.options.Evaluations.e, function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options.Evaluations.v, function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options.Evaluations.c, function($v, $k) {($v-1)/5}))}";
     var generalEvc = await jsonata(queryGeneralEvc).evaluate(fullData);
+
+    if(!generalEvc.evc) generalEvc = {evc: 0, e: 0, v: 0, c: 0};
 
     generalEvc = {id: 0, label: "Geral", evc: generalEvc.evc.toFixed(2), e: generalEvc.e.toFixed(2), v: generalEvc.v.toFixed(2), c: generalEvc.c.toFixed(2)};
 
