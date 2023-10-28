@@ -102,6 +102,8 @@ $('#updateProfileButton').click(function () {
 
     }).done(function (msg) {
 
+        $("#labelUserName").text($("#inputTextName").val());
+
         Swal.fire({
 
             title: 'Sucesso!',
