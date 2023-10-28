@@ -125,7 +125,6 @@ async function generateLineChartStudents(divId, snapshots, evcRankings) {
                     centerY: am5.p50,
                     width: 23,
                     height: 23,
-                    label: "vaca",
                     // src: "https://amcharts.com/wp-content/uploads/assets/timeline/timeline" + 1 + ".svg"
                     src: "/img/student-avatar-bubble.png"
                 })
@@ -178,8 +177,15 @@ async function processSnapshotsStudents(snapshots, evcRankings) {
     var userData = [];
     var point = 0;
 
-    var queryAllUsers = `[$distinct(jsonSnapshot.allUsersEvc.id)]`;
-    var allUsersIds = await jsonata(queryAllUsers).evaluate(snapshots);
+    console.log(JSON.stringify(evcRankings, null, "\t"));
+
+    var queryAllUsers1 = `[$distinct(jsonSnapshot.allUsersEvc.id)]`;
+    var allUsersIds1 = await jsonata(queryAllUsers1).evaluate(snapshots);
+
+    var queryAllUsers2 = `[$distinct(allUsersEvc.id)]`;
+    var allUsersIds2 = await jsonata(queryAllUsers2).evaluate(evcRankings);
+
+    var allUsersIds = _.uniq(allUsersIds1.concat(allUsersIds2));
 
     for(var snapshot of snapshots) {
 
