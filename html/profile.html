@@ -96,7 +96,7 @@
           <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Páginas</a></li>
           <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Perfil</li>
         </ol>
-        <h6 class="font-weight-bolder mb-0">PERFIL <label id="labelProjectName" class="project-name">---</label></h6>
+        <h6 class="font-weight-bolder mb-0">PERFIL</h6>
       </nav>
       <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
         <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -121,6 +121,11 @@
   <!-- End Navbar -->
   <div class="container-fluid py-4">
     <div style="width: 50%; margin: auto">
+      <div id="avatarContainer" class="container-fluid text-center">
+        <a href="#" class="avatar avatar-xl rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Foto do Perfil" data-bs-original-title="Foto do Perfil">
+          <img id="userAvatar" src="/avatars/0.jpg" alt="Foto do Perfil">
+        </a>
+      </div>
       <form role="form" id="formProfile" enctype="multipart/form-data">
         <b>Nome:</b>
         <div class="input-group input-group-outline mb-3">
@@ -168,7 +173,15 @@
       <br/><br/>
       <div class="d-flex">
         <i class="material-icons text-sm my-auto me-1">info</i>
-        <p class="mb-0 text-sm"> Caso não deseje atualizar a senha, é só deixar os campos SENHA e REPETIR SENHA em branco. </p>
+        <p class="mb-0 text-sm"> Caso não deseje atualizar a senha, basta deixar os campos SENHA e REPETIR SENHA em branco. </p>
+      </div>
+      <div class="d-flex">
+        <i class="material-icons text-sm my-auto me-1">info</i>
+        <p class="mb-0 text-sm"> Caso não deseje atualizar a foto do perfil, basta NÃO ANEXAR a imagem. </p>
+      </div>
+      <div class="d-flex">
+        <i class="material-icons text-sm my-auto me-1">info</i>
+        <p class="mb-0 text-sm"> Só serão aceitas imagens com no máximo 2MB e no formato .JPG para a foto do perfil. </p>
       </div>
       <div class="d-flex">
         <i class="material-icons text-sm my-auto me-1">info</i>
@@ -226,6 +239,7 @@
 <script src="/js/jinplace.js"></script>
 <script src="/js/loadingoverlay.min.js"></script>
 <script src="/js/zebra_datepicker.src.js"></script>
+<script src="/js/imagesloaded.pkgd.min.js"></script>
 <script src="/js/common.js"></script>
 <script src="/js/profile.js"></script>
 </body>

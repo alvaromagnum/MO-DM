@@ -37,6 +37,8 @@ function importDefaultDataProfile() {
 
                 var userName = dataToImport.userName;
 
+                $("#userAvatar").attr("src", `/avatars/${dataToImport.userId}.jpg`);
+
                 $("#labelUserName").text(userName);
 
                 $("#inputTextName").val(userName);
@@ -46,29 +48,9 @@ function importDefaultDataProfile() {
 
                 $('#inputBirthdayDate').val(moment(dataToImport.birthdayDate).format("DD/MM/YYYY"));
 
-                $.LoadingOverlay("show");
-
-                $.ajax({
-
-                    method: "GET",
-                    url: "/project/loadConfig",
-
-                }).fail(function(jqXHR, textStatus, errorThrown) {
-
-                    $.LoadingOverlay("hide");
-                    Swal.fire('Erro!', jqXHR.responseText, 'error');
-
-                }).done(function (dataToImport) {
-
-                    if(dataToImport) {
-                        $("#labelProjectName").text(dataToImport.projectName);
-                    }
-
-                    $.LoadingOverlay("hide");
-
-                });
-
             }
+
+            checkAvatarImage();
 
             $.LoadingOverlay("hide");
 
@@ -102,8 +84,6 @@ $('#updateProfileButton').click(function () {
 
     }).done(function (msg) {
 
-        $("#labelUserName").text($("#inputTextName").val());
-
         Swal.fire({
 
             title: 'Sucesso!',
@@ -111,6 +91,12 @@ $('#updateProfileButton').click(function () {
             icon: 'success',
             showCancelButton: false,
             confirmButtonText: 'OK!'
+
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                window.location.href = '/users/profile';
+            }
 
         });
 
@@ -130,6 +116,12 @@ $("#formSignup").keypress(function(e){
 
 function addCourse(optionText, optionValue) {
     $('#selectCourse').append(`<option value="${optionValue}">${optionText} </option>`);
+}
+
+function checkAvatarImage() {
+    $('#avatarContainer').imagesLoaded().fail( function() {
+        $("#userAvatar").attr("src", "/avatars/0.jpg");
+    });
 }
 
 $('#inputBirthdayDate').Zebra_DatePicker();
