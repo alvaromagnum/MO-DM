@@ -48,7 +48,7 @@ async function generateLineChartStudents(divId, snapshots, evcRankings) {
 
     var xAxis = chart.xAxes.push(
         am5xy.DateAxis.new(root, {
-            baseInterval: {timeUnit: "hour", count: 1},
+            baseInterval: {timeUnit: "minute", count: 1},
             renderer: xRenderer,
             tooltip: am5.Tooltip.new(root, {})
         })
@@ -92,7 +92,8 @@ async function generateLineChartStudents(divId, snapshots, evcRankings) {
                 tooltip: am5.Tooltip.new(root, {
                     pointerOrientation: "vertical",
                     dy: -20,
-                    labelText: "{label} - {valueY}"
+                    labelText: "{label} - {valueY}",
+                    keepTargetHover: true
                 })
             })
         );
@@ -117,18 +118,19 @@ async function generateLineChartStudents(divId, snapshots, evcRankings) {
                 centerY: am5.p50
             });
 
-            container.children.push(am5.Circle.new(root, {radius: 15, fill: circleColors[i]}));
+            container.children.push(am5.Circle.new(root, {radius: 10, fill: circleColors[i]}));
+            // container.children.push(am5.Circle.new(root, {radius: 10, fill: series.get("fill")}));
 
-            container.children.push(
-                am5.Picture.new(root, {
-                    centerX: am5.p50,
-                    centerY: am5.p50,
-                    width: 23,
-                    height: 23,
-                    // src: "https://amcharts.com/wp-content/uploads/assets/timeline/timeline" + 1 + ".svg"
-                    src: "/img/student-avatar-bubble.png"
-                })
-            );
+            // container.children.push(
+            //     am5.Picture.new(root, {
+            //         centerX: am5.p50,
+            //         centerY: am5.p50,
+            //         width: 23,
+            //         height: 23,
+            //         // src: "https://amcharts.com/wp-content/uploads/assets/timeline/timeline" + 1 + ".svg"
+            //         src: "/img/student-avatar-bubble.png"
+            //     })
+            // );
 
             return am5.Bullet.new(root, { sprite: container });
 
@@ -176,8 +178,6 @@ async function processSnapshotsStudents(snapshots, evcRankings) {
 
     var userData = [];
     var point = 0;
-
-    console.log(JSON.stringify(evcRankings, null, "\t"));
 
     var queryAllUsers1 = `[$distinct(jsonSnapshot.allUsersEvc.id)]`;
     var allUsersIds1 = await jsonata(queryAllUsers1).evaluate(snapshots);
@@ -276,7 +276,7 @@ async function generateLineChartGeneral(divId, snapshots, evcRankings) {
 
     var xAxis = chart.xAxes.push(
         am5xy.DateAxis.new(root, {
-            baseInterval: {timeUnit: "hour", count: 1},
+            baseInterval: {timeUnit: "minute", count: 1},
             renderer: xRenderer,
             tooltip: am5.Tooltip.new(root, {})
         })
@@ -328,7 +328,7 @@ async function generateLineChartGeneral(divId, snapshots, evcRankings) {
         });
 
         container.children.push(
-            am5.Circle.new(root, {radius: 5, fill: series.get("fill")})
+            am5.Circle.new(root, {radius: 10, fill: series.get("fill")})
         );
 
         return am5.Bullet.new(root, {
