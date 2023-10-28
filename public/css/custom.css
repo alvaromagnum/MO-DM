@@ -527,7 +527,12 @@
     background-color: steelblue;
     padding: 5px;
     color: white;
-    width: 250px;
+    width: 100%;
+}
+
+.rounded-circle-black {
+    border-radius: 50%!important;
+    border: 4px solid black;
 }
 
 .decision-node {

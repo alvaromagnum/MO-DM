@@ -1199,9 +1199,12 @@ export default class Drawflow {
                 var userName = $('#selectNodeType option:selected').attr('userName');
                 var courseName = $('#selectNodeType option:selected').attr('courseName');
                 var courseId = $('#selectNodeType option:selected').attr('courseId');
+                var userId = $('#selectNodeType option:selected').val();
+
+                var avatarId = `avatar${userId}`;
 
                 var stakeholderNode = `
-                    <div class="container stakeholder-node-fixed-size">
+                    <div id="stakholderContainer" class="container stakeholder-node-fixed-size avatar-container">
                         <div class="col rounded stakeholder-node-header">
                             <i class="bi-person"></i> Stakeholder
                         </div>
@@ -1211,7 +1214,7 @@ export default class Drawflow {
                             <input type="hidden" df-course_id>
                             <input type="hidden" df-user_name>
                             <input type="hidden" df-course_name>
-                            <img src="/img/student-avatar.jpg" alt="kal" class="border-radius-lg avatar-xl"/>
+                            <img id="${avatarId}" src="/avatars/${userId}.jpg" alt="kal" class="avatar avatar-xl rounded-circle-black"/>
                             <br/><br/>
                             <div class="node-user-name"><b>${userName} - ${courseName}</b></div>
                         </div>
@@ -1219,6 +1222,8 @@ export default class Drawflow {
                 `;
 
                 this.addNode('stakeholder', 1, 0, pos_x, pos_y, 'stakeholder-node', {"user_id": nodeValue, "user_name": userName, "course_name": courseName, "course_id": courseId}, stakeholderNode);
+
+                checkAvatarImage(avatarId);
 
                 break;
 
@@ -2232,4 +2237,10 @@ export default class Drawflow {
         var uuid = s.join("");
         return uuid;
     }
+}
+
+function checkAvatarImage(avatarId) {
+    $('.avatar-container').imagesLoaded().fail( function() {
+        $("#"+avatarId).attr("src", "/avatars/0.jpg");
+    });
 }
