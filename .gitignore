@@ -1,3 +1,4 @@
 /node_modules/
 /.idea/vcs.xml
 /~$calcs.xlsx
+/public/avatars/*
