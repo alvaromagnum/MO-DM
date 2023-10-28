@@ -145,6 +145,14 @@ async function saveEvaluations(req, res) {
 
             var course = await global.user.getCourse();
 
+            var e = Number(evaluation.e);
+            var v = Number(evaluation.v);
+            var c = Number(evaluation.c);
+
+            var evc = ((((0.3 * e + 0.3 * v) - 0.4 * c) + 1.8) / 5).toFixed(2);
+
+            if(e === 0 || v === 0 || c === 0) evc = 0;
+
             await databaseConfig.Evaluation.create({
 
                 EvaluationOptionId: evaluationOption.id,
@@ -153,11 +161,20 @@ async function saveEvaluations(req, res) {
                 e: evaluation.e,
                 v: evaluation.v,
                 c: evaluation.c,
-                evc: ((((0.3 * evaluation.e + 0.3 * evaluation.v) - 0.4 * evaluation.c) + 1.8) / 5).toFixed(2)
+                evc: evc
 
             });
 
         }
+
+        var snapshot = req.body.snapshot;
+
+        await databaseConfig.ProjectSnapshot.create({
+
+            ProjectId: global.project.id,
+            jsonSnapshot: snapshot
+
+        });
 
         await transaction.commit();
 

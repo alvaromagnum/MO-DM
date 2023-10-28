@@ -3,6 +3,7 @@ darkMode(true);
 var projectId;
 var userId;
 var starRatingControl;
+var pageJsonConfig;
 
 function activateStarRating() {
     starRatingControl.rebuild();
@@ -168,11 +169,11 @@ function importDefaultDataMyDecisions() {
                     projectId = dataToImport.projectId;
 
                     var projectName = dataToImport.projectName;
-                    var jsonConfig = dataToImport.jsonConfig;
+                    pageJsonConfig = dataToImport.jsonConfig;
 
                     $("#labelProjectName").text(projectName);
 
-                    if(!jsonConfig) {
+                    if(!pageJsonConfig) {
 
                         processNoDecision();
                         $.LoadingOverlay("hide");
@@ -181,7 +182,7 @@ function importDefaultDataMyDecisions() {
 
                     }
 
-                    processDecisions(jsonConfig).then(()=>{activateTooltips();});
+                    processDecisions(pageJsonConfig).then(()=>{activateTooltips();});
 
                 }
 
@@ -299,36 +300,48 @@ function addNewDecisionOption(table, decisionId, stepId, elementId, title) {
 
 }
 
-$("#btSave").click(function() {
+$("#btSave").click(async function () {
 
     $.LoadingOverlay("show");
 
     var evaluations = [];
 
-    $( "select[id^='selectExpectancy_']" ).each(function(index, el){
+    $("select[id^='selectExpectancy_']").each(function (index, el) {
 
         var id = $(el).attr("uuid");
         var decisionId = $(el).attr("decisionId");
         var stepId = $(el).attr("stepId");
-        var option = $("#"+id).text();
+        var option = $("#" + id).text();
 
         var e = $(el).val();
-        var v = $( "#selectValue_" + decisionId + "_" + id).val();
-        var c = $( "#selectCost_" + decisionId + "_" + id).val();
+        var v = $("#selectValue_" + decisionId + "_" + id).val();
+        var c = $("#selectCost_" + decisionId + "_" + id).val();
 
         e = e ? e : 0;
         v = v ? v : 0;
         c = c ? c : 0;
 
-        evaluations.push({projectId: projectId, decisionId: decisionId, stepId: stepId, userId: userId, option: option, optionId: id, e: e, v: v, c: c});
+        evaluations.push({
+            projectId: projectId,
+            decisionId: decisionId,
+            stepId: stepId,
+            userId: userId,
+            option: option,
+            optionId: id,
+            e: Number(e),
+            v: Number(v),
+            c: Number(c)
+        });
 
     });
+
+    var snapshot = await getEvcRankings(pageJsonConfig);
 
     $.ajax({
         method: "POST",
         url: "/project/saveEvaluations",
-        data: { evaluations: evaluations }
-    }).fail(function(jqXHR, textStatus, errorThrown) {
+        data: {evaluations: evaluations, snapshot: JSON.stringify(snapshot)}
+    }).fail(function (jqXHR, textStatus, errorThrown) {
         $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
     }).done(function (msg) {

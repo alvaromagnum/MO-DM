@@ -6,19 +6,17 @@ var pageAllUsersEvc = null;
 var pageAllCoursesEvc = null;
 var pageGeneralEvc = null;
 var allProjectData = null;
-
 var configCanvas = null;
 var configEditor = null;
 var projectZoom = null;
 var projectPositionX = null;
 var projectPositionY = null;
-
 var projectId = null;
 var userId = null;
 var starRatingControl = null;
-
 var evaluationData = null;
 var jsonConfig = null;
+var pageJsonConfig = null;
 
 $('#loginButton').click(function () {
 

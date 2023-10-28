@@ -1,6 +1,8 @@
 const express = require('express');
 const messages = require('./messages');
 const databaseConfig = require('./database-config');
+const fs = require('fs/promises');
+const path = require('path');
 const registrationRoute = require('./routes/registration-route');
 const loginRoute = require('./routes/login-route');
 const dashboardRoute = require('./routes/dashboard-route');
@@ -31,7 +33,31 @@ app.use('/users', usersRoute);
 //     });
 // });
 
-global.resetDatabase = false;
+var flagResetAll = false;
+
+global.resetDatabase = flagResetAll;
+
+var deleteAvatars = flagResetAll;
+
+if(deleteAvatars) {
+    deleteAllFilesInDir('./public/avatars').then(() => {
+        console.log(messages.avatarsRemoved);
+    });
+}
+
+async function deleteAllFilesInDir(dirPath) {
+    try {
+        const files = await fs.readdir(dirPath);
+
+        const deleteFilePromises = files.map(file =>
+            fs.unlink(path.join(dirPath, file)),
+        );
+
+        await Promise.all(deleteFilePromises);
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 function getRoot(req, res) {
 

@@ -46,7 +46,9 @@ function importDefaultDataProfile() {
                 $('#selectCourse').val(dataToImport.courseId);
                 $('#selectGender').val(dataToImport.gender);
 
-                $('#inputBirthdayDate').val(moment(dataToImport.birthdayDate).format("DD/MM/YYYY"));
+                var birthdayDate = moment(dataToImport.birthdayDate).format("DD/MM/YYYY");
+
+                $('#inputBirthdayDate').val(birthdayDate !== "Invalid date" ? birthdayDate : "");
 
             }
 
@@ -120,7 +122,7 @@ function addCourse(optionText, optionValue) {
 
 function checkAvatarImage() {
     $('#avatarContainer').imagesLoaded().fail( function() {
-        $("#userAvatar").attr("src", "/avatars/0.jpg");
+        $("#userAvatar").attr("src", "/img/0.jpg");
     });
 }
 

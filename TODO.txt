@@ -1,13 +1,9 @@
 . Remover avaliações quando um nodo ou uma conexão for removida da configuração do projeto.
 
-. Upload de fotos.
-
-. Adicionar sexo e data de nascimento (para idade) no perfil
-
 . Separar html / js / css
 
 . Criar página do ADMIN
 
-. Remover multiplas chamadas de pegar todos os dados do projeto ao gerar o sankey chart. Ver TO-DO no código.
+. Usar biblioteca para melhorar cores dos gráficos (harmonizar)
 
-. O toFixed aparentemente só está gerando números inteiros. Não estão aparecendo frações no EVC.
+. Remover multiplas chamadas de pegar todos os dados do projeto ao gerar o sankey chart. Ver TO-DO no código.
