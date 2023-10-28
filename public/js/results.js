@@ -186,13 +186,13 @@ async function generateRankings(data) {
 
             var idDecision = decision.id;
 
-            var queryWeightRanking = `[decisions.options[idDecision=${idDecision} and isComplete=true]^(>weight).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
+            var queryWeightRanking = `[decisions.options[idDecision=${idDecision} and isComplete=true]^(>weight, option).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
             var weightRankingItems = await jsonata(queryWeightRanking).evaluate(data);
 
-            var queryEvcRanking = `[decisions.options[idDecision=${idDecision} and isComplete=true]^(>meanEvc).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
+            var queryEvcRanking = `[decisions.options[idDecision=${idDecision} and isComplete=true]^(>meanEvc, option).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
             var evcRankingItems = await jsonata(queryEvcRanking).evaluate(data);
 
-            var queryAgreementRanking = `[decisions.options[idDecision=${idDecision} and isComplete=true]^(>agreement).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
+            var queryAgreementRanking = `[decisions.options[idDecision=${idDecision} and isComplete=true]^(>agreement, option).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
             var agreementRankingItems = await jsonata(queryAgreementRanking).evaluate(data);
 
             var queryCurrentDecisionId = `$filter(decisions.options.Decision[%.%.id=${idDecision}], function($v, $i, $a) {$v != null}).EvaluationOptionId`;
@@ -496,7 +496,7 @@ function generateRankingItem(id, label, value, draggable) {
 
     return `
         <li id="li_${id}" uuid="${uuid}" option="${label}" percentual="${percentual}" class="li-ranking cursor-pointer ${itemClass}" style="--i: ${value}">
-          <div class="h3-ranking">${label} &nbsp;<b>${percentual}%</b></div>
+          <div class="h3-ranking">${label}&nbsp;<b style="margin-left: 10px">${percentual}%</b></div>
         </li>
     `;
 

@@ -93,7 +93,7 @@
     /*--c1: hsl(var(--h), 70%, var(--l));*/
     /*--c2: hsl(var(--h), 70%, var(--l2));*/
 
-    height: 100px;
+    height: 150px;
     position: relative;
     counter-increment: list;
     max-width: 45rem;

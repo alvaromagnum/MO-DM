@@ -62,10 +62,10 @@ async function getEvcRankings(editorJson) {
 
     }
 
-    var queryAllUsersOrderedByEvc = `[*^(>evc)]`;
+    var queryAllUsersOrderedByEvc = `[*^(>evc, label)]`;
     allUsersEvc = await jsonata(queryAllUsersOrderedByEvc).evaluate(allUsersEvc);
 
-    var queryAllCoursesOrderedByEvc = `[*^(>evc)]`;
+    var queryAllCoursesOrderedByEvc = `[*^(>evc, label)]`;
     allCoursesEvc = await jsonata(queryAllCoursesOrderedByEvc).evaluate(allCoursesEvc);
 
     var queryGeneralEvc = "${\"evc\": $average(decisions.options.Evaluations.evc), \"e\": $average($map(decisions.options.Evaluations.e, function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options.Evaluations.v, function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options.Evaluations.c, function($v, $k) {($v-1)/5}))}";
