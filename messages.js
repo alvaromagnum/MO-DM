@@ -27,5 +27,7 @@ module.exports = {
     decisionsSavedSuccess: `Decisões salvas com sucesso!`,
     genericTaskError: `Operação não realizada! Tente novamente!`,
     genericTaskSuccess: `Operação realizada com sucesso!`,
+    incorrectImageTypeError: `Imagem no formato incorreto! Apenas imagens .JPG são aceitas.`,
     profileUpdateSuccess: `Perfil atualizado com sucesso!`,
+    avatarUploadError: `Erro ao enviar a foto do perfil! Cheque o limite de tamanho (2MB) e o formato aceito (.JPG).`,
 }

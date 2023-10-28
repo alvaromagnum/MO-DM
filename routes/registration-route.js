@@ -3,8 +3,35 @@ const SHA256 = require("crypto-js/sha256");
 const messages = require('../messages');
 const databaseConfig = require('../database-config');
 const path = require("path");
+const moment = require('moment');
+const multer  = require('multer')
 
 const registrationRoute = express.Router();
+
+const storage = multer.diskStorage(
+    {
+
+        destination: 'public/avatars/',
+
+        filename: function ( req, file, cb ) {
+            cb( null, global.user.id + ".jpg" );
+        },
+
+    }
+
+);
+
+const upload = multer( {
+    storage: storage,
+    limits: { fileSize: 2000000 },
+    fileFilter: function (req, file, cb) {
+
+        var fileExt = file.originalname.split('.').pop();
+        if(fileExt !== "jpg") cb(new Error(messages.incorrectImageTypeError));
+        else cb(null, true);
+
+    }
+} );
 
 function registerUser(req, res) {
     res.sendFile(path.resolve(__dirname, '..') + '/html/sign-up.html');
@@ -66,13 +93,32 @@ function saveUser(req, res) {
 
 function updateUser(req, res) {
 
+    if(!global.user || !global.project) {
+        res.redirect('/');
+        return;
+    }
+
+    // upload(req, res, function (err) {
+    //
+    //     var hasErrors = false;
+    //
+    //     if (err instanceof multer.MulterError) {
+    //         hasErrors = true
+    //     } else if (err) {
+    //         hasErrors = true;
+    //     }
+    //
+    //     if(hasErrors) res.status(500).send(messages.avatarUploadError);
+    //
+    // });
+
     var name = req.body.name;
     var login = req.body.login;
     var password1 = req.body.password1;
     var password2 = req.body.password2;
-    var idCourse = req.body.idCourse;
+    var idCourse = Number(req.body.idCourse);
     var gender = req.body.gender;
-    var birthdayDate = req.body.birthdayDate;
+    var birthdayDate = moment(req.body.birthdayDate, "DD/MM/YYYY").toDate();
 
     var regex = /[^\w]/gi;
 
@@ -160,6 +206,6 @@ registrationRoute.post('/user', saveUser);
 registrationRoute.get('/project', registerProject);
 registrationRoute.post('/project', saveProject);
 
-registrationRoute.post('/updateUser', updateUser);
+registrationRoute.post('/updateUser', upload.single('avatarPhoto'), updateUser);
 
 module.exports = registrationRoute;

@@ -80,26 +80,24 @@ function importDefaultDataProfile() {
 
 $('#updateProfileButton').click(function () {
 
-    var loginInput = $('#inputTextLogin').val();
-    var nameInput = $('#inputTextName').val();
-    var genderInput = $('#selectGender').val();
-    var courseInput = Number($('#selectCourse').val());
-    var birthdayDateInput = moment($('#inputBirthdayDate').val(), "DD/MM/YYYY").toDate();
-
-    var passwordInput1 = $('#inputTextPassword1').val();
-    var passwordInput2 = $('#inputTextPassword2').val();
-
     $.LoadingOverlay("show");
 
     $.ajax({
 
         method: "POST",
         url: "/register/updateUser",
-        data: { name: nameInput, login: loginInput, password1: passwordInput1, password2: passwordInput2, idCourse: courseInput, gender: genderInput, birthdayDate: birthdayDateInput }
+        data: new FormData($("#formProfile").get(0)),
+        contentType : false,
+        processData : false
 
     }).fail(function(jqXHR, textStatus, errorThrown) {
 
-        Swal.fire('Erro!', jqXHR.responseText, 'error');
+        var responseText = jqXHR.responseText;
+
+        if(responseText.includes("Imagem no formato incorreto") || responseText.includes("File too large")) responseText = "Erro ao enviar a foto do perfil! Cheque o limite de tamanho (2MB) e o formato aceito (.JPG).";
+
+        Swal.fire('Erro!', responseText, 'error');
+
         $.LoadingOverlay("hide");
 
     }).done(function (msg) {
