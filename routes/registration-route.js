@@ -167,10 +167,10 @@ async function saveProject(req, res) {
 
     var regex = /[^\w\s]/gi;
 
-    if(regex.test(projectName) === true) {
-        res.status(500).send(messages.invalidProjectName);
-        return;
-    }
+    // if(regex.test(projectName) === true) {
+    //     res.status(500).send(messages.invalidProjectName);
+    //     return;
+    // }
 
     if(projectName.trim() === '') {
         res.status(500).send(messages.invalidProjectName);
