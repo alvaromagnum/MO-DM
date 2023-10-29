@@ -28,9 +28,9 @@ async function getProjectUsers(req, res) {
     }
 
     var sortedUsers = _(users).chain().sortBy(function(user) {
-        return user.name;
-    }).sortBy(function(user) {
         return user.courseName;
+    }).sortBy(function(user) {
+        return user.name;
     }).value();
 
     res.send(sortedUsers);

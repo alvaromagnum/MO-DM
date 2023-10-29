@@ -22,7 +22,6 @@ async function saveProjectConfig(req, res) {
         where: {id: req.session.project.id}
     });
 
-    req.session.project.jsonConfig = jsonConfig;
     project.jsonConfig = jsonConfig;
 
     await project.save();
@@ -31,14 +30,22 @@ async function saveProjectConfig(req, res) {
 
 }
 
-function loadProjectConfig(req, res) {
+async function loadProjectConfig(req, res) {
 
-    if(!req.session.user || !req.session.project) {
+    if (!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
 
-    res.send({jsonConfig: req.session.project.jsonConfig, projectName: `[${req.session.project.name} ➤ ${req.session.project.key}]`, projectId: req.session.project.id});
+    var project = await databaseConfig.Project.findOne({
+        where: {id: req.session.project.id}
+    });
+
+    res.send({
+        jsonConfig: project.jsonConfig,
+        projectName: `[${req.session.project.name} ➤ ${req.session.project.key}]`,
+        projectId: req.session.project.id
+    });
 
 }
 
