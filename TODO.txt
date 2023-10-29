@@ -9,7 +9,3 @@
 . Remover multiplas chamadas de pegar todos os dados do projeto ao gerar o sankey chart. Ver TO-DO no código.
 
 . Criar filtros na página de resultados.
-
-. O editor fica bugado quando recupera o zoom sem ter salvado.
-
-. Quando remove uma opção de decisão sem salvar, dá erro.
