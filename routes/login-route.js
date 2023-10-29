@@ -6,12 +6,11 @@ const messages = require("../messages");
 
 async function doLogin(req, res) {
 
+    //req.session.destroy();
+
     var login = req.body.login;
     var password = SHA256(req.body.password).toString();
     var key = req.body.key;
-
-    global.user = null;
-    global.project = null;
 
     var regex = /[^\w]/gi;
 
@@ -36,20 +35,16 @@ async function doLogin(req, res) {
 
     project.addUser(user);
 
-    global.user = user;
-    global.project = project;
+    req.session.user = user;
+    req.session.project = project;
 
     res.redirect('/dashboard');
 
 }
 
 function doLogout(req, res) {
-
-    global.user = null;
-    global.project = null;
-
+    req.session.destroy();
     res.redirect('/');
-
 }
 
 loginRoute.post('/', doLogin);

@@ -417,8 +417,8 @@ $('#btZoomOut').click(function(){
 });
 
 $('#btZoomReset').click(function(){
-    configEditor.zoom_load(projectZoom);
-    configEditor.position_load(projectPositionX, projectPositionY);
+    configEditor.zoom_load(projectZoom ? projectZoom : 0.7);
+    configEditor.position_load(projectPositionX ? projectPositionX : 0, projectPositionY ? projectPositionY : 0);
 });
 
 $('#btZoomDefault').click(function(){

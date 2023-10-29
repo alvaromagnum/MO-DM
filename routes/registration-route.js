@@ -14,7 +14,7 @@ const storage = multer.diskStorage(
         destination: 'public/avatars/',
 
         filename: function ( req, file, cb ) {
-            cb( null, global.user.id + ".jpg" );
+            cb( null, req.session.user.id + ".jpg" );
         },
 
     }
@@ -93,7 +93,7 @@ function saveUser(req, res) {
 
 function updateUser(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
@@ -139,20 +139,20 @@ function updateUser(req, res) {
 
     databaseConfig.User.findOne({ where: { login: login } }).then((user)=>{
 
-        if(user !== null && login !== global.user.login) {
+        if(user !== null && login !== req.session.user.login) {
             res.status(500).send(messages.loginAlreadyExists);
             return;
         }
 
-        global.user.CourseId = idCourse;
-        global.user.name = name;
-        global.user.login = login;
-        global.user.gender = gender;
-        global.user.birthdayDate = birthdayDate;
+        req.session.user.CourseId = idCourse;
+        req.session.user.name = name;
+        req.session.user.login = login;
+        req.session.user.gender = gender;
+        req.session.user.birthdayDate = birthdayDate;
 
-        if(password1.trim() !== "") global.user.password = SHA256(password1).toString();
+        if(password1.trim() !== "") req.session.user.password = SHA256(password1).toString();
 
-        global.user.save().then(()=>{
+        req.session.user.save().then(()=>{
             res.send(messages.profileUpdateSuccess);
         });
 

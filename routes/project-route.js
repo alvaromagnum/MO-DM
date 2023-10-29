@@ -9,54 +9,59 @@ const jsonata = require('jsonata');
 
 var projectRoute = express.Router();
 
-function saveProjectConfig(req, res) {
+async function saveProjectConfig(req, res) {
 
-    if(!global.user || !global.project) {
+    if (!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
 
-    global.project.jsonConfig = req.body.jsonConfig;
+    var jsonConfig = req.body.jsonConfig;
 
-    global.project.save().then(()=> {
-        res.send(messages.projectConfigSaveSuccess);
+    var project = await databaseConfig.Project.findOne({
+        where: {id: req.session.project.id}
     });
+
+    req.session.project.jsonConfig = jsonConfig;
+    project.jsonConfig = jsonConfig;
+
+    await project.save();
+
+    res.send(messages.projectConfigSaveSuccess);
 
 }
 
 function loadProjectConfig(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
 
-    res.send({jsonConfig: global.project.jsonConfig, projectName: `[${global.project.name} ➤ ${global.project.key}]`, projectId: global.project.id});
+    res.send({jsonConfig: req.session.project.jsonConfig, projectName: `[${req.session.project.name} ➤ ${req.session.project.key}]`, projectId: req.session.project.id});
 
 }
 
 async function removeEvaluationOption(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
 
     var idToRemove = req.body.idToRemove;
 
-    var evaluationOption = await global.project.getEvaluationOptions({ where: { id: idToRemove } });
+    var project = await databaseConfig.Project.findOne({
+        where: { id: req.session.project.id },
+        include: [{model: databaseConfig.EvaluationOption}],
+    });
 
-    if(evaluationOption.length < 1) {
-        res.status(500).send(messages.genericTaskError);
-        return;
-    }
+    var evaluationOptions = project.EvaluationOptions;
 
-    try {
-        await evaluationOption[0].destroy();
-    }
-    catch(error) {
-        res.status(500).send(error.message);
-        return;
+    var evaluationOption = _.find(evaluationOptions, (o)=> o.id === idToRemove);
+
+    if(evaluationOption) {
+        await evaluationOption.destroy();
     }
 
     res.send(messages.genericTaskSuccess);
@@ -65,7 +70,7 @@ async function removeEvaluationOption(req, res) {
 
 async function getImpacts(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
@@ -84,7 +89,7 @@ async function getImpacts(req, res) {
 
 async function saveEvaluations(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
@@ -97,7 +102,7 @@ async function saveEvaluations(req, res) {
         var evaluationsToDelete = [];
 
         var existingDecisionOptions = await databaseConfig.EvaluationOption.findAll({
-            where: { ProjectId: global.project.id },
+            where: { ProjectId: req.session.project.id },
             include: databaseConfig.Evaluation
         });
 
@@ -105,7 +110,7 @@ async function saveEvaluations(req, res) {
 
             var existingEvaluations = existingDecisionOption.Evaluations;
 
-            existingEvaluations = _.filter(existingEvaluations, (o)=> o.UserId === global.user.id);
+            existingEvaluations = _.filter(existingEvaluations, (o)=> o.UserId === req.session.user.id);
 
             evaluationsToDelete = _.union(evaluationsToDelete, existingEvaluations);
 
@@ -143,7 +148,12 @@ async function saveEvaluations(req, res) {
 
             }
 
-            var course = await global.user.getCourse();
+            var user = await databaseConfig.User.findOne({
+                where: { id: req.session.user.id },
+                include: [{model: databaseConfig.Course}]
+            });
+
+            var course = user.Course;
 
             var e = Number(evaluation.e);
             var v = Number(evaluation.v);
@@ -171,7 +181,7 @@ async function saveEvaluations(req, res) {
 
         await databaseConfig.ProjectSnapshot.create({
 
-            ProjectId: global.project.id,
+            ProjectId: req.session.project.id,
             jsonSnapshot: snapshot
 
         });
@@ -192,13 +202,13 @@ async function saveEvaluations(req, res) {
 
 async function getResults(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
 
     var evaluationOptions = await databaseConfig.EvaluationOption.findAll({
-        where: { ProjectId: global.project.id },
+        where: { ProjectId: req.session.project.id },
         include: [{model: databaseConfig.Evaluation}, {model: databaseConfig.Decision}]
     });
 
@@ -208,13 +218,13 @@ async function getResults(req, res) {
 
 async function loadProjectSnapshots(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
 
     var data = await databaseConfig.ProjectSnapshot.findAll({
-        where: { ProjectId: global.project.id },
+        where: { ProjectId: req.session.project.id },
         order: ["createdAt"]
     });
 
@@ -224,7 +234,7 @@ async function loadProjectSnapshots(req, res) {
 
 async function hasAnyEvaluation(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
@@ -232,7 +242,7 @@ async function hasAnyEvaluation(req, res) {
     var idDecision = req.body.idDecision;
 
     var evaluationOptions = await databaseConfig.EvaluationOption.findAll({
-        where: { ProjectId: global.project.id },
+        where: { ProjectId: req.session.project.id },
         include: databaseConfig.Evaluation
     });
 
@@ -245,7 +255,7 @@ async function hasAnyEvaluation(req, res) {
 
 async function getEvaluations(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
@@ -260,7 +270,7 @@ async function getEvaluations(req, res) {
 
         where: {
 
-            ProjectId: global.project.id,
+            ProjectId: req.session.project.id,
 
             idStep: {
                 [Op.in]: stepIds,
@@ -270,7 +280,9 @@ async function getEvaluations(req, res) {
                 [Op.in]: decisionIds,
             },
 
-        }
+        },
+
+        include: [{model: databaseConfig.Evaluation}]
 
     });
 
@@ -278,8 +290,8 @@ async function getEvaluations(req, res) {
 
     for(var evaluationOption of evaluationOptions) {
 
-        var allEvaluations = await evaluationOption.getEvaluations();
-        var userEvaluations = _.filter(allEvaluations, function(o){ return o.UserId === global.user.id; });
+        var allEvaluations = await evaluationOption.Evaluations;
+        var userEvaluations = _.filter(allEvaluations, function(o){ return o.UserId === req.session.user.id; });
 
         if(userEvaluations.length === 0) {
             evaluations.push({id: evaluationOption.id, idDecision: evaluationOption.idDecision, idStep: evaluationOption.idStep, option: evaluationOption.option, e: 0, v: 0, c: 0});
@@ -302,7 +314,7 @@ async function getEvaluations(req, res) {
 
 function loadMyDecisions(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
@@ -313,7 +325,7 @@ function loadMyDecisions(req, res) {
 
 function showResults(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
@@ -328,12 +340,12 @@ function processDecisionsData(req, res) {
 
 async function makeDecision(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
 
-    var idProject = global.project.id;
+    var idProject = req.session.project.id;
     var idDecision = req.body.idDecision;
     var idOption = req.body.idOption;
 
@@ -370,12 +382,12 @@ async function makeDecision(req, res) {
 
 async function isDecisionFinished(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
 
-    var idProject = global.project.id;
+    var idProject = req.session.project.id;
     var idDecision = req.body.idDecision;
 
     var decision = await databaseConfig.Decision.findOne({where: {idProject: idProject, idDecision: idDecision}});

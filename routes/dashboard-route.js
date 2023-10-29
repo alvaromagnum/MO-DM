@@ -7,7 +7,7 @@ var dashboardRoute = express.Router();
 
 function showDashboard(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }

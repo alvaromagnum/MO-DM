@@ -3,6 +3,9 @@ const messages = require('./messages');
 const databaseConfig = require('./database-config');
 const fs = require('fs/promises');
 const path = require('path');
+const crypto = require('crypto');
+const cookieParser = require("cookie-parser");
+const sessions = require('express-session');
 const registrationRoute = require('./routes/registration-route');
 const loginRoute = require('./routes/login-route');
 const dashboardRoute = require('./routes/dashboard-route');
@@ -12,6 +15,17 @@ const usersRoute = require('./routes/users-route');
 const app = express();
 
 app.set('view engine', 'ejs');
+
+const oneDay = 1000 * 60 * 60 * 24;
+
+app.use(sessions({
+    secret: crypto.randomUUID(),
+    saveUninitialized:true,
+    cookie: { maxAge: oneDay },
+    resave: false
+}));
+
+app.use(cookieParser());
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -46,7 +60,9 @@ if(deleteAvatars) {
 }
 
 async function deleteAllFilesInDir(dirPath) {
+
     try {
+
         const files = await fs.readdir(dirPath);
 
         const deleteFilePromises = files.map(file =>
@@ -54,18 +70,20 @@ async function deleteAllFilesInDir(dirPath) {
         );
 
         await Promise.all(deleteFilePromises);
+
     } catch (err) {
+
         console.log(err);
+
     }
+
 }
 
+var session;
+
 function getRoot(req, res) {
-
-    global.user = null;
-    global.project = null;
-
+    req.session.destroy();
     res.sendFile(__dirname + '/html/land-page.html');
-
 }
 
 app.get('/', getRoot);

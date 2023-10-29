@@ -8,13 +8,17 @@ var usersRoute = express.Router();
 
 async function getProjectUsers(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
 
-    var usersFromDb = await global.project.getUsers();
-    usersFromDb = _.sortBy(usersFromDb, function(o) { return o.name; })
+    var project = await databaseConfig.Project.findOne({
+        where: { id: req.session.project.id },
+        include: [{model: databaseConfig.User}]
+    });
+
+    var usersFromDb = project.Users;
 
     var users = [];
 
@@ -23,29 +27,35 @@ async function getProjectUsers(req, res) {
         users.push({id: userFromDb.id, name: userFromDb.name, courseName: course.name, courseId: course.id});
     }
 
-    res.send(users);
+    var sortedUsers = _(users).chain().sortBy(function(user) {
+        return user.name;
+    }).sortBy(function(user) {
+        return user.courseName;
+    }).value();
+
+    res.send(sortedUsers);
 
 }
 
 async function getCourses(req, res) {
     var courses = await databaseConfig.Course.findAll();
-    res.send(courses);
+    res.send(_.sortBy(courses, (o)=> o.name));
 }
 
 function getLoggedUserData(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
 
-    res.send({userName: global.user.name, login: global.user.login, gender: global.user.gender, birthdayDate: global.user.birthdayDate, userId: global.user.id, courseId: global.user.Course.id});
+    res.send({userName: req.session.user.name, login: req.session.user.login, gender: req.session.user.gender, birthdayDate: req.session.user.birthdayDate, userId: req.session.user.id, courseId: req.session.user.Course.id});
 
 }
 
 function getProfile(req, res) {
 
-    if(!global.user || !global.project) {
+    if(!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
