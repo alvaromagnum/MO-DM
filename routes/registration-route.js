@@ -98,20 +98,6 @@ function updateUser(req, res) {
         return;
     }
 
-    // upload(req, res, function (err) {
-    //
-    //     var hasErrors = false;
-    //
-    //     if (err instanceof multer.MulterError) {
-    //         hasErrors = true
-    //     } else if (err) {
-    //         hasErrors = true;
-    //     }
-    //
-    //     if(hasErrors) res.status(500).send(messages.avatarUploadError);
-    //
-    // });
-
     var name = req.body.name;
     var login = req.body.login;
     var password1 = req.body.password1;
@@ -137,24 +123,26 @@ function updateUser(req, res) {
         return;
     }
 
-    databaseConfig.User.findOne({ where: { login: login } }).then((user)=>{
+    databaseConfig.User.findOne({ where: { login: login } }).then(async (user) => {
 
-        if(user !== null && login !== req.session.user.login) {
+        if (user !== null && login !== req.session.user.login) {
             res.status(500).send(messages.loginAlreadyExists);
             return;
         }
 
-        req.session.user.CourseId = idCourse;
-        req.session.user.name = name;
-        req.session.user.login = login;
-        req.session.user.gender = gender;
-        req.session.user.birthdayDate = birthdayDate;
+        user.CourseId = idCourse;
+        user.name = name;
+        user.login = login;
+        user.gender = gender;
+        user.birthdayDate = birthdayDate;
 
-        if(password1.trim() !== "") req.session.user.password = SHA256(password1).toString();
+        if (password1.trim() !== "") user.password = SHA256(password1).toString();
 
-        req.session.user.save().then(()=>{
-            res.send(messages.profileUpdateSuccess);
-        });
+        await user.save();
+
+        req.session.user = user;
+
+        res.send(messages.profileUpdateSuccess);
 
     });
 

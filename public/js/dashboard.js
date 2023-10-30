@@ -269,12 +269,11 @@ function importDefaultDataDashboard() {
     }).fail(function(jqXHR, textStatus, errorThrown) {
         $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
-    }).done(function (dataToImport) {
-        $.LoadingOverlay("hide");
-        if(dataToImport) {
-            var userName = dataToImport.userName;
-            $("#labelUserName").text(userName);
+    }).done(function (user) {
+        if(user) {
+            $("#labelUserName").text(user.userName);
         }
+        $.LoadingOverlay("hide");
     });
 
     $.LoadingOverlay("show");
@@ -309,7 +308,7 @@ function importDefaultDataDashboard() {
             projectPositionX = configEditor.x;
             projectPositionY = configEditor.y;
 
-            processProjectConfig();
+            await processProjectConfig();
 
             generateEvcCharts(jsonConfig);
 
@@ -341,8 +340,6 @@ function importDefaultDataDashboard() {
                 $.LoadingOverlay("hide");
 
             });
-
-
 
         }
 

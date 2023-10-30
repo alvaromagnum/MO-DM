@@ -42,14 +42,27 @@ async function getCourses(req, res) {
     res.send(_.sortBy(courses, (o)=> o.name));
 }
 
-function getLoggedUserData(req, res) {
+async function getLoggedUserData(req, res) {
 
-    if(!req.session.user || !req.session.project) {
+    if (!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
 
-    res.send({userName: req.session.user.name, login: req.session.user.login, gender: req.session.user.gender, birthdayDate: req.session.user.birthdayDate, userId: req.session.user.id, courseId: req.session.user.Course.id});
+    var user = await databaseConfig.User.findOne({
+        where: {id: req.session.user.id},
+        include: [{model: databaseConfig.Course}]
+    });
+
+    res.send({
+        userName: user.name,
+        login: user.login,
+        gender: user.gender,
+        birthdayDate: user.birthdayDate,
+        userId: user.id,
+        courseId: user.Course.id,
+        courseName: user.Course.name
+    });
 
 }
 

@@ -1209,12 +1209,12 @@ export default class Drawflow {
                         <div><br/></div>
                         <div class="text-center">
                             <input type="hidden" df-user_id>
-                            <input type="hidden" df-course_id>
-                            <input type="hidden" df-user_name>
-                            <input type="hidden" df-course_name>
+                            <input type="hidden" class="df-course-id-input-${userId}" df-course_id>
+                            <input type="hidden" class="df-user-name-input-${userId}" df-user_name>
+                            <input type="hidden"  class="df-course-name-input-${userId}" df-course_name>
                             <img id="userAvatar${userId}" src="/avatars/${userId}.jpg" alt="kal" class="avatar avatar-xl rounded-circle-black"/>
                             <br/><br/>
-                            <div class="node-user-name"><b>${userName} - ${courseName}</b></div>
+                            <div class="df-user-course-name-div-${userId} node-user-name"><b>${userName} - ${courseName}</b></div>
                         </div>
                     </div>
                 `;
