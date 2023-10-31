@@ -91,9 +91,9 @@ function saveUser(req, res) {
 
 }
 
-function updateUser(req, res) {
+async function updateUser(req, res) {
 
-    if(!req.session.user || !req.session.project) {
+    if (!req.session.user || !req.session.project) {
         res.redirect('/');
         return;
     }
@@ -108,43 +108,78 @@ function updateUser(req, res) {
 
     var regex = /[^\w]/gi;
 
-    if(regex.test(login) === true) {
+    if (regex.test(login) === true) {
         res.status(500).send(messages.invalidLogin);
         return;
     }
 
-    if(name.trim() === "" || login.trim() === "") {
+    if (name.trim() === "" || login.trim() === "") {
         res.status(500).send(messages.nameAndLoginRequired);
         return;
     }
 
-    if(password1.trim() !== password2.trim()) {
+    if (password1.trim() !== password2.trim()) {
         res.status(500).send(messages.differentPasswords);
         return;
     }
 
-    databaseConfig.User.findOne({ where: { login: login } }).then(async (user) => {
+    var user = await databaseConfig.User.findOne({where: {login: login}});
 
-        if (user !== null && login !== req.session.user.login) {
-            res.status(500).send(messages.loginAlreadyExists);
-            return;
-        }
+    if (user !== null && login !== req.session.user.login) {
+        res.status(500).send(messages.loginAlreadyExists);
+        return;
+    }
 
-        user.CourseId = idCourse;
-        user.name = name;
-        user.login = login;
-        user.gender = gender;
-        user.birthdayDate = birthdayDate;
+    user.CourseId = idCourse;
+    user.name = name;
+    user.login = login;
+    user.gender = gender;
+    user.birthdayDate = birthdayDate;
 
-        if (password1.trim() !== "") user.password = SHA256(password1).toString();
+    if (password1.trim() !== "") user.password = SHA256(password1).toString();
 
-        await user.save();
+    await user.save();
 
-        req.session.user = user;
-
-        res.send(messages.profileUpdateSuccess);
-
+    user = await databaseConfig.User.findOne({
+        where: {login: login},
+        include: [{model: databaseConfig.Course}]
     });
+
+    req.session.user = user;
+
+    var project = await databaseConfig.Project.findOne({where: {id: req.session.project.id}});
+
+    var jsonConfig = project.jsonConfig;
+
+    var userId = user.id;
+    var userName = user.name;
+    var courseName = user.Course.name;
+    var courseId = user.Course.id;
+
+    var newData1 = {
+        "data": {
+            "user_id": "1",
+            "user_name": userName,
+            "course_name": courseName,
+            "course_id": courseId.toString()
+        }
+    }
+
+    var newData2 = `<div class=\\"df-user-course-name-div-1 node-user-name\\"><b>${userName} - ${courseName}</b></div>`;
+
+    var regex1 = new RegExp(`"data":{"user_id":"${userId}"[^]*?}`, "g");
+    var regex2 = new RegExp(`<div class=\\\\"df-user-course-name-div-${userId}[^]*?</div>`, "g");
+
+    jsonConfig = jsonConfig.replaceAll(regex1, JSON.stringify(newData1).slice(1, -1));
+    jsonConfig = jsonConfig.replaceAll(regex2, newData2);
+
+    project.jsonConfig = jsonConfig;
+
+    await project.save();
+
+    req.session.project = project;
+
+    res.send(messages.profileUpdateSuccess);
 
 }
 
