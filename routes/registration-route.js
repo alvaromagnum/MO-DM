@@ -102,7 +102,6 @@ async function updateUser(req, res) {
     var login = req.body.login;
     var password1 = req.body.password1;
     var password2 = req.body.password2;
-    var idCourse = Number(req.body.idCourse);
     var gender = req.body.gender;
     var birthdayDate = moment(req.body.birthdayDate, "DD/MM/YYYY").toDate();
 
@@ -130,7 +129,6 @@ async function updateUser(req, res) {
         return;
     }
 
-    user.CourseId = idCourse;
     user.name = name;
     user.login = login;
     user.gender = gender;
