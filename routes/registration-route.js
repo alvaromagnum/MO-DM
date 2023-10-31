@@ -102,6 +102,7 @@ async function updateUser(req, res) {
     var login = req.body.login;
     var password1 = req.body.password1;
     var password2 = req.body.password2;
+    var idCourse = Number(req.body.idCourse);
     var gender = req.body.gender;
     var birthdayDate = moment(req.body.birthdayDate, "DD/MM/YYYY").toDate();
 
@@ -122,13 +123,17 @@ async function updateUser(req, res) {
         return;
     }
 
-    var user = await databaseConfig.User.findOne({where: {login: login}});
+    user = await databaseConfig.User.findOne({
+        where: {login: login},
+        include: [{model: databaseConfig.Evaluation}]
+    });
 
     if (user !== null && login !== req.session.user.login) {
         res.status(500).send(messages.loginAlreadyExists);
         return;
     }
 
+    user.CourseId = idCourse;
     user.name = name;
     user.login = login;
     user.gender = gender;
@@ -137,6 +142,11 @@ async function updateUser(req, res) {
     if (password1.trim() !== "") user.password = SHA256(password1).toString();
 
     await user.save();
+
+    for(var evaluation of user.Evaluations) {
+        evaluation.CourseId = idCourse
+        await evaluation.save();
+    }
 
     user = await databaseConfig.User.findOne({
         where: {login: login},

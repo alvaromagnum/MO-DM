@@ -5,36 +5,58 @@ function importDefaultDataProfile() {
     $.ajax({
 
         method: "GET",
-        url: "/users/get/loggedUserData",
+        url: "/users/get/courses",
 
     }).fail(function(jqXHR, textStatus, errorThrown) {
 
-        $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
 
-    }).done(function (user) {
+    }).done(function (courses) {
 
-        if(user) {
-
-            var userName = user.userName;
-
-            $("#userAvatar").attr("src", `/avatars/${user.userId}.jpg`);
-
-            $("#labelUserName").text(userName);
-
-            $("#inputTextName").val(userName);
-            $("#inputTextLogin").val(user.login);
-            $('#selectGender').val(user.gender);
-
-            var birthdayDate = moment(user.birthdayDate).format("DD/MM/YYYY");
-
-            $('#inputBirthdayDate').val(birthdayDate !== "Invalid date" ? birthdayDate : "");
-
+        for(var courses of courses) {
+            addCourse(courses.name, courses.id);
         }
 
-        checkAvatarImage();
-
         $.LoadingOverlay("hide");
+
+        $.LoadingOverlay("show");
+
+        $.ajax({
+
+            method: "GET",
+            url: "/users/get/loggedUserData",
+
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+
+            $.LoadingOverlay("hide");
+            Swal.fire('Erro!', jqXHR.responseText, 'error');
+
+        }).done(function (dataToImport) {
+
+            if(dataToImport) {
+
+                var userName = dataToImport.userName;
+
+                $("#userAvatar").attr("src", `/avatars/${dataToImport.userId}.jpg`);
+
+                $("#labelUserName").text(userName);
+
+                $("#inputTextName").val(userName);
+                $("#inputTextLogin").val(dataToImport.login);
+                $('#selectCourse').val(dataToImport.courseId);
+                $('#selectGender').val(dataToImport.gender);
+
+                var birthdayDate = moment(dataToImport.birthdayDate).format("DD/MM/YYYY");
+
+                $('#inputBirthdayDate').val(birthdayDate !== "Invalid date" ? birthdayDate : "");
+
+            }
+
+            checkAvatarImage();
+
+            $.LoadingOverlay("hide");
+
+        });
 
     });
 
