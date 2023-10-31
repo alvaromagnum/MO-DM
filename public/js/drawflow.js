@@ -1214,7 +1214,7 @@ export default class Drawflow {
                             <input type="hidden"  class="df-course-name-input-${userId}" df-course_name>
                             <img id="userAvatar${userId}" src="/avatars/${userId}.jpg" alt="kal" class="avatar avatar-xl rounded-circle-black"/>
                             <br/><br/>
-                            <div class="df-user-course-name-div-${userId} node-user-name"><b>${userName} - ${courseName}</b></div>
+                            <div class="node-user-name df-user-course-name-div-${userId}"><b>${userName} - ${courseName}</b></div>
                         </div>
                     </div>
                 `;

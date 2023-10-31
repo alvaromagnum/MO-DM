@@ -158,17 +158,17 @@ async function updateUser(req, res) {
 
     var newData1 = {
         "data": {
-            "user_id": "1",
+            "user_id": user.id.toString(),
             "user_name": userName,
             "course_name": courseName,
             "course_id": courseId.toString()
         }
     }
 
-    var newData2 = `<div class=\\"df-user-course-name-div-1 node-user-name\\"><b>${userName} - ${courseName}</b></div>`;
+    var newData2 = `<div class=\\"node-user-name df-user-course-name-div-${userId}\\"><b>${userName} - ${courseName}</b></div>`;
 
     var regex1 = new RegExp(`"data":{"user_id":"${userId}"[^]*?}`, "g");
-    var regex2 = new RegExp(`<div class=\\\\"df-user-course-name-div-${userId}[^]*?</div>`, "g");
+    var regex2 = new RegExp(`<div class=\\\\"node-user-name df-user-course-name-div-${userId}\\\\"[^]*?</div>`, "g");
 
     jsonConfig = jsonConfig.replaceAll(regex1, JSON.stringify(newData1).slice(1, -1));
     jsonConfig = jsonConfig.replaceAll(regex2, newData2);
