@@ -29,6 +29,8 @@ $('#btSave').click(async function () {
 
     var newJson = configEditor.export();
 
+    if(!currentProjectJson) currentProjectJson = newJson;
+
     var fullOldData = await getFullProjectData(JSON.stringify(currentProjectJson), true);
     var fullNewData = await getFullProjectData(JSON.stringify(newJson), true);
 
