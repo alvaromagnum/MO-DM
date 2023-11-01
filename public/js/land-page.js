@@ -17,6 +17,7 @@ var starRatingControl = null;
 var evaluationData = null;
 var jsonConfig = null;
 var pageJsonConfig = null;
+var projectCurrentJson = null;
 
 $('#loginButton').click(function () {
 

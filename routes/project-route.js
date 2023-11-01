@@ -16,17 +16,79 @@ async function saveProjectConfig(req, res) {
         return;
     }
 
-    var jsonConfig = req.body.jsonConfig;
+    var transaction = await databaseConfig.sequelize.transaction();
 
-    var project = await databaseConfig.Project.findOne({
-        where: {id: req.session.project.id}
-    });
+    try {
 
-    project.jsonConfig = jsonConfig;
+        var jsonConfig = req.body.jsonConfig;
+        var oldData = req.body.oldData;
+        var newData = req.body.newData;
 
-    await project.save();
+        var oldIds = oldData.map((o)=>o.id);
+        var newIds = newData.map((o)=>o.id);
 
-    res.send(messages.projectConfigSaveSuccess);
+        var decisionsToRemoveFromProject = _.difference(oldIds, newIds);
+
+        for(var idDecision of decisionsToRemoveFromProject) {
+
+            await databaseConfig.EvaluationOption.destroy({
+                where: {idDecision: idDecision}
+            }, { transaction: transaction });
+
+        }
+
+        for(var newDecision of newData) {
+
+            var newStakeholders = newDecision.stakeholdersIds;
+            var oldDecision = _.find(oldData, function(o){ return o.id === newDecision.id });
+
+            if(oldDecision) {
+
+                var oldStakeholers = oldDecision.stakeholdersIds;
+                var stakeholdersToRemoveFromDecision = _.difference(oldStakeholers, newStakeholders).map((item)=>Number(item));
+
+                if(stakeholdersToRemoveFromDecision.length === 0) continue;
+
+                var evaluationOptions = await databaseConfig.EvaluationOption.findAll({
+                    where: {idDecision: newDecision.id},
+                    include: [{model: databaseConfig.Evaluation}]
+                });
+
+                for(var evaluationOption of evaluationOptions) {
+
+                    var evaluations = evaluationOption.Evaluations;
+
+                    for(var evaluation of evaluations) {
+                        if(_.contains(stakeholdersToRemoveFromDecision, evaluation.UserId)) {
+                            await evaluation.destroy({ transaction: transaction });
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+        var project = await databaseConfig.Project.findOne({
+            where: {id: req.session.project.id}
+        });
+
+        project.jsonConfig = jsonConfig;
+
+        await project.save({ transaction: transaction });
+
+        await transaction.commit();
+
+        res.send(messages.projectConfigSaveSuccess);
+
+    } catch (error) {
+
+        await transaction.rollback();
+
+        res.status(500).send(error.message);
+
+    }
 
 }
 
@@ -101,7 +163,7 @@ async function saveEvaluations(req, res) {
         return;
     }
 
-    const transaction = await databaseConfig.sequelize.transaction();
+    var transaction = await databaseConfig.sequelize.transaction();
 
     try {
 
@@ -123,7 +185,7 @@ async function saveEvaluations(req, res) {
 
         }
 
-        evaluationsToDelete.every(async evaluation => await evaluation.destroy());
+        evaluationsToDelete.every(async evaluation => await evaluation.destroy({ transaction: transaction }));
 
         for(var evaluation of evaluations) {
 
@@ -138,7 +200,7 @@ async function saveEvaluations(req, res) {
                 evaluationOption.option = evaluation.option;
                 evaluationOption.ProjectId = evaluation.projectId;
 
-                await evaluationOption.save();
+                await evaluationOption.save({ transaction: transaction });
 
             }
             else {
@@ -151,7 +213,7 @@ async function saveEvaluations(req, res) {
                     option: evaluation.option,
                     ProjectId: evaluation.projectId
 
-                });
+                }, { transaction: transaction });
 
             }
 
@@ -180,7 +242,7 @@ async function saveEvaluations(req, res) {
                 c: evaluation.c,
                 evc: evc
 
-            });
+            }, { transaction: transaction });
 
         }
 
@@ -191,7 +253,7 @@ async function saveEvaluations(req, res) {
             ProjectId: req.session.project.id,
             jsonSnapshot: snapshot
 
-        });
+        }, { transaction: transaction });
 
         await transaction.commit();
 

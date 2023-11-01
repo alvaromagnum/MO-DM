@@ -40,7 +40,7 @@ async function getEvcRankings(editorJson) {
 
     for(var user of allUsers) {
 
-        var queryUserEvc = "${\"evc\": $average(decisions.options.Evaluations.evc[%.UserId="+user.idUser+"]), \"e\": $average($map(decisions.options.Evaluations.e[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options.Evaluations.v[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options.Evaluations.c[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5}))}";
+        var queryUserEvc = "${\"evc\": $average(decisions.options[isComplete=true].Evaluations.evc[%.UserId="+user.idUser+"]), \"e\": $average($map(decisions.options[isComplete=true].Evaluations.e[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options[isComplete=true].Evaluations.v[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options[isComplete=true].Evaluations.c[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5}))}";
         var userEvc = await jsonata(queryUserEvc).evaluate(fullData);
 
         if(!userEvc.evc) userEvc = {evc: 0, e: 0, v: 0, c: 0};
@@ -53,7 +53,7 @@ async function getEvcRankings(editorJson) {
 
     for(var course of allCourses) {
 
-        var queryCourseEvc = "${\"evc\": $average(decisions.options.Evaluations.evc[%.CourseId="+course.idCourse+"]), \"e\": $average($map(decisions.options.Evaluations.e[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options.Evaluations.v[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options.Evaluations.c[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5}))}";
+        var queryCourseEvc = "${\"evc\": $average(decisions.options[isComplete=true].Evaluations.evc[%.CourseId="+course.idCourse+"]), \"e\": $average($map(decisions.options[isComplete=true].Evaluations.e[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options[isComplete=true].Evaluations.v[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options[isComplete=true].Evaluations.c[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5}))}";
         var courseEvc = await jsonata(queryCourseEvc).evaluate(fullData);
 
         if(!courseEvc.evc) courseEvc = {evc: 0, e: 0, v: 0, c: 0};
@@ -68,7 +68,7 @@ async function getEvcRankings(editorJson) {
     var queryAllCoursesOrderedByEvc = `[*^(>evc, label)]`;
     allCoursesEvc = await jsonata(queryAllCoursesOrderedByEvc).evaluate(allCoursesEvc);
 
-    var queryGeneralEvc = "${\"evc\": $average(decisions.options.Evaluations.evc), \"e\": $average($map(decisions.options.Evaluations.e, function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options.Evaluations.v, function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options.Evaluations.c, function($v, $k) {($v-1)/5}))}";
+    var queryGeneralEvc = "${\"evc\": $average(decisions.options[isComplete=true].Evaluations.evc), \"e\": $average($map(decisions.options[isComplete=true].Evaluations.e, function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options[isComplete=true].Evaluations.v, function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options[isComplete=true].Evaluations.c, function($v, $k) {($v-1)/5}))}";
     var generalEvc = await jsonata(queryGeneralEvc).evaluate(fullData);
 
     if(!generalEvc.evc) generalEvc = {evc: 0, e: 0, v: 0, c: 0};
@@ -128,7 +128,7 @@ async function joinDataAddScores(steps, optionsWithEvaluations) {
             });
 
             var weights = newVs.map((o)=>{
-                return {id: o.id, weight: math.mean(o.allV)};
+                return {id: o.id, weight: math.mean(o.allV.length > 0 ? o.allV : 0.00)};
             });
 
             var queryEvcMeans = "[*.[${\"id\": id, \"meanEvc\": $average(Evaluations.evc)}].*]";
@@ -139,17 +139,26 @@ async function joinDataAddScores(steps, optionsWithEvaluations) {
 
             for(var singleEvc of allEvc) {
 
-                var var_e = math.variance(singleEvc.allE, 'uncorrected');
-                var var_v = math.variance(singleEvc.allV, 'uncorrected');
-                var var_c = math.variance(singleEvc.allC, 'uncorrected');
+                if(singleEvc.allE.length === 0 || singleEvc.allV.length === 0 || singleEvc.allC.length === 0) {
 
-                var mvar = math.mean(var_e, var_v, var_c);
+                    singleEvc.agreement = 0.00;
 
-                var denominator = 6.25;
+                }
+                else {
 
-                var agreement = 1 - (mvar/denominator);
+                    var var_e = math.variance(singleEvc.allE, 'uncorrected');
+                    var var_v = math.variance(singleEvc.allV, 'uncorrected');
+                    var var_c = math.variance(singleEvc.allC, 'uncorrected');
 
-                singleEvc.agreement = agreement;
+                    var mvar = math.mean(var_e, var_v, var_c);
+
+                    var denominator = 6.25;
+
+                    var agreement = 1 - (mvar/denominator);
+
+                    singleEvc.agreement = agreement;
+
+                }
 
             }
 
@@ -161,9 +170,36 @@ async function joinDataAddScores(steps, optionsWithEvaluations) {
 
                 option.isComplete = !hasZero && hasEvaluations && hasAllStakeholders;
 
-                option.weight = _.find(weights, (o)=>o.id === option.id).weight.toFixed(2);
-                option.meanEvc = _.find(evcMeans, (o)=>o.id === option.id).meanEvc.toFixed(2);
-                option.agreement = _.find(allEvc, (o)=>o.id === option.id).agreement.toFixed(2);
+                if(!option.isComplete) {
+
+                    option.weight = 0.00;
+                    option.meanEvc = 0.00;
+                    option.agreement = 0.00;
+
+                    continue;
+
+                }
+
+                try{
+                    option.weight = Number(_.find(weights, (o)=>o.id === option.id).weight.toFixed(2));
+                }
+                catch(e) {
+                    option.weight = 0.00;
+                }
+
+                try {
+                    option.meanEvc = Number(_.find(evcMeans, (o)=>o.id === option.id).meanEvc.toFixed(2));
+                }
+                catch(e) {
+                    option.meanEvc = 0.00;
+                }
+
+                try {
+                    option.agreement = Number(_.find(allEvc, (o)=>o.id === option.id).agreement.toFixed(2));
+                }
+                catch(e) {
+                    option.agreement = 0.00;
+                }
 
                 if(option.Decision) {
                     option.Decision.option = option.option;

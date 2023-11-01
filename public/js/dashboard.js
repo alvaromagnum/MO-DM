@@ -12,6 +12,7 @@ var allProjectData;
 var projectZoom;
 var projectPositionX;
 var projectPositionY;
+var currentProjectJson;
 
 var configCanvas = document.getElementById("projectConfigCanvas");
 var configEditor = new Drawflow(configCanvas);
@@ -24,7 +25,17 @@ configEditor.on("nodeRemoved", processProjectConfigDelayed);
 configEditor.on("connectionRemoved", processProjectConfigDelayed);
 configEditor.on("nodeDataChanged", processProjectConfigDelayed);
 
-$('#btSave').click(function(){
+$('#btSave').click(async function () {
+
+    var newJson = configEditor.export();
+
+    var fullOldData = await getFullProjectData(JSON.stringify(currentProjectJson), true);
+    var fullNewData = await getFullProjectData(JSON.stringify(newJson), true);
+
+    var queryData = "[decisions.[${\"id\": id, \"stakeholdersIds\": [stakeholders.idUser]}].*]";
+
+    var oldDecisionStakeholders = await jsonata(queryData).evaluate(fullOldData);
+    var newDecisionStakeholders = await jsonata(queryData).evaluate(fullNewData);
 
     $.LoadingOverlay("show");
 
@@ -32,9 +43,9 @@ $('#btSave').click(function(){
 
         method: "POST",
         url: "/project/saveConfig",
-        data: { jsonConfig: JSON.stringify(configEditor.export()) }
+        data: {jsonConfig: JSON.stringify(newJson), oldData: oldDecisionStakeholders, newData: newDecisionStakeholders}
 
-    }).fail(function(jqXHR, textStatus, errorThrown) {
+    }).fail(function (jqXHR, textStatus, errorThrown) {
 
         $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
@@ -302,7 +313,9 @@ function importDefaultDataDashboard() {
                 return;
             }
 
-            configEditor.import(JSON.parse(jsonConfig));
+            currentProjectJson = JSON.parse(jsonConfig);
+
+            configEditor.import(currentProjectJson);
 
             projectZoom = configEditor.zoom;
             projectPositionX = configEditor.x;

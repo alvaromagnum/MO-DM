@@ -38,12 +38,12 @@ app.use('/dashboard', dashboardRoute);
 app.use('/project', projectRoute);
 app.use('/users', usersRoute);
 
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.send({
-        'message': err.message
-    });
-});
+// app.use(function(err, req, res, next) {
+//     res.status(err.status || 500);
+//     res.send({
+//         'message': err.message
+//     });
+// });
 
 var flagResetAll = false;
 
