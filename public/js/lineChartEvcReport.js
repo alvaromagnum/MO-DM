@@ -41,6 +41,14 @@ async function generateLineChartStudents(divId, snapshots, evcRankings) {
 
     cursor.lineY.set("visible", false);
 
+    chart.set("scrollbarX", am5.Scrollbar.new(root, {
+        orientation: "horizontal"
+    }));
+
+    chart.set("scrollbarY", am5.Scrollbar.new(root, {
+        orientation: "vertical"
+    }));
+
     var xRenderer = am5xy.AxisRendererX.new(root, {});
 
     xRenderer.grid.template.set("location", 0.5);
@@ -268,6 +276,14 @@ async function generateLineChartGeneral(divId, snapshots, evcRankings) {
     );
 
     cursor.lineY.set("visible", false);
+
+    chart.set("scrollbarX", am5.Scrollbar.new(root, {
+        orientation: "horizontal"
+    }));
+
+    chart.set("scrollbarY", am5.Scrollbar.new(root, {
+        orientation: "vertical"
+    }));
 
     var xRenderer = am5xy.AxisRendererX.new(root, {});
 

@@ -19,11 +19,11 @@ var configEditor = new Drawflow(configCanvas);
 
 configEditor.start();
 
-configEditor.on("nodeCreated", processProjectConfigDelayed);
-configEditor.on("connectionCreated", processProjectConfigDelayed);
-configEditor.on("nodeRemoved", processProjectConfigDelayed);
-configEditor.on("connectionRemoved", processProjectConfigDelayed);
-configEditor.on("nodeDataChanged", processProjectConfigDelayed);
+// configEditor.on("nodeCreated", processProjectConfigDelayed);
+// configEditor.on("connectionCreated", processProjectConfigDelayed);
+// configEditor.on("nodeRemoved", processProjectConfigDelayed);
+// configEditor.on("connectionRemoved", processProjectConfigDelayed);
+// configEditor.on("nodeDataChanged", processProjectConfigDelayed);
 
 $('#btSave').click(async function () {
 
@@ -57,7 +57,7 @@ $('#btSave').click(async function () {
         $.LoadingOverlay("hide");
         $.notify(msg, "success");
 
-        processProjectConfig();
+        importDefaultDataDashboard();
 
     });
 
