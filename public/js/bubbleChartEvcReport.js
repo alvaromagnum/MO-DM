@@ -52,20 +52,6 @@ function generateBubbleChart(divId, allEvc) {
         })
     );
 
-    // series.nodes.template.setup = function(target) {
-    //     target.events.on("dataitemchanged", function(ev) {
-    //         var icon = target.children.push(am5.Picture.new(root, {
-    //             width: ev.target.dataItem.dataContext.value,
-    //             height: ev.target.dataItem.dataContext.value,
-    //             centerX: am5.percent(50),
-    //             centerY: am5.percent(50),
-    //             //src: ev.target.dataItem.dataContext.image,
-    //             //src: "https://assets.codepen.io/t-160/star.svg",
-    //             src: `/avatars/${ev.target.dataItem.dataContext.id}.jpg`,
-    //         }));
-    //     });
-    // }
-
     series.nodes.template.setAll({
         cursorOverStyle: "pointer"
     });
@@ -76,7 +62,6 @@ function generateBubbleChart(divId, allEvc) {
         textAlign: "center",
         isMeasured: true,
         oversizedBehavior: "wrap-no-break"
-        // y: 70,
     });
 
     series.data.setAll([data]);

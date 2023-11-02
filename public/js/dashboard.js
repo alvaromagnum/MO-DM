@@ -19,12 +19,6 @@ var configEditor = new Drawflow(configCanvas);
 
 configEditor.start();
 
-// configEditor.on("nodeCreated", processProjectConfigDelayed);
-// configEditor.on("connectionCreated", processProjectConfigDelayed);
-// configEditor.on("nodeRemoved", processProjectConfigDelayed);
-// configEditor.on("connectionRemoved", processProjectConfigDelayed);
-// configEditor.on("nodeDataChanged", processProjectConfigDelayed);
-
 $('#btSave').click(async function () {
 
     var newJson = configEditor.export();
@@ -67,17 +61,6 @@ $('#btImport').click(function(){
     importDefaultDataDashboard();
 });
 
-// Give time to remove all the connections. Avoid exhibition of old data.
-// function processProjectConfigDelayed() {
-//
-//     var delayInMilliseconds = 500; //1 second
-//
-//     setTimeout(function() {
-//         processProjectConfig();
-//     }, delayInMilliseconds);
-//
-// }
-
 async function processProjectConfig() {
 
     allProjectData = await getFullProjectData(configEditor.getJson(), false);
@@ -87,7 +70,8 @@ async function processProjectConfig() {
     var linksNodes = await getSankeyChartDataFromConfig(configData);
 
     generateProjectSankeyChart(linksNodes.nodes, linksNodes.links);
-    generateProjectPendencies(allProjectData);
+
+    await generateProjectPendencies(allProjectData);
 
     return({configData: configData, nodes: linksNodes.nodes, links: linksNodes.links});
 
@@ -156,6 +140,8 @@ async function generateProjectPendencies(allProjectData) {
     }
 
     dictionary = _.sortBy(dictionary, (o)=>o.name);
+
+    $("#tablePendencies").html("");
 
     for(var user of dictionary) {
 
@@ -412,7 +398,7 @@ function importDefaultDataDashboard() {
 
             await processProjectConfig();
 
-            generateEvcCharts(jsonConfig);
+            await generateEvcCharts(jsonConfig);
 
             var evcRankings = await getEvcRankings(jsonConfig);
 
@@ -555,10 +541,7 @@ function generateProjectSankeyChart(nodes, links) {
     });
 
     series.nodes.labels.template.setAll({
-        //fontSize: 20,
-        //maxWidth: 150,
-        fill: am5.color(0xffffff),
-        //oversizedBehavior: "wrap"
+        fill: am5.color(0xffffff)
     });
 
     series.nodes.nodes.template.setAll({
