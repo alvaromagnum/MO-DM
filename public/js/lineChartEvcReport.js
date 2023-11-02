@@ -13,8 +13,6 @@ async function generateLineChartStudents(divId, snapshots, evcRankings) {
 
     var userSeries = await processSnapshotsStudents(snapshots, evcRankings);
 
-    console.log(JSON.stringify(userSeries, null, "\t"));
-
     var root = am5.Root.new(divId);
 
     root.locale = am5locales_pt_BR;
