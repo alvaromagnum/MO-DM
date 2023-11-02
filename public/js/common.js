@@ -249,3 +249,12 @@ $("#btLogout").click(function() {
     });
 
 });
+
+function checkAvatarImages() {
+    $('.avatar-container').each(function() {
+        var avatarImage = $(this).find("img");
+        $(this).imagesLoaded().fail( function() {
+            avatarImage.attr("src", "/img/0.jpg");
+        });
+    });
+}

@@ -82,15 +82,100 @@ async function processProjectConfig() {
 
     allProjectData = await getFullProjectData(configEditor.getJson(), false);
 
-    console.log(JSON.stringify(allProjectData, null, "\t"));
-
     var editorJson = configEditor.getJson();
     var configData = await getConfigData(editorJson);
     var linksNodes = await getSankeyChartDataFromConfig(configData);
 
     generateProjectSankeyChart(linksNodes.nodes, linksNodes.links);
+    generateProjectPendencies(allProjectData);
 
     return({configData: configData, nodes: linksNodes.nodes, links: linksNodes.links});
+
+}
+
+async function generateProjectPendencies(allProjectData) {
+
+    var queryDecisions = `[*.decisions]`;
+    var decisions = await jsonata(queryDecisions).evaluate(allProjectData);
+
+    var queryAllStakeholders = `[$distinct(*.decisions.stakeholders)]`;
+    var allStakeholders = await jsonata(queryAllStakeholders).evaluate(allProjectData);
+
+    var dictionary = [];
+
+    for(var stakeholder of allStakeholders) {
+        dictionary.push({id: stakeholder.idUser, name: stakeholder.stakeholderName, pendencies: []});
+    }
+
+    for(var decision of decisions) {
+
+        var id = decision.id;
+
+        var queryOptions = `[*.decisions.options[%.id=${id}]]`;
+        var options = await jsonata(queryOptions).evaluate(allProjectData);
+
+        var queryStakeholders = `[*.decisions.stakeholders[%.id=${id}]]`;
+        var stakeholders = await jsonata(queryStakeholders).evaluate(allProjectData);
+
+        var queryEvaluations = `[*.decisions.options.Evaluations[%.%.id=${id}]]`;
+        var evaluations = await jsonata(queryEvaluations).evaluate(allProjectData);
+
+        if(options.length === 0) {
+
+            for(var stakeholder of stakeholders) {
+
+                var stakeholderPendencies = _.findWhere(dictionary, {id: stakeholder.idUser}).pendencies;
+                stakeholderPendencies.push(`<b>🠞 DECISÃO "${decision.question}"</b>`);
+
+            }
+
+        }
+
+        for(var option of options) {
+
+            for(var stakeholder of stakeholders) {
+
+                var stakeholderEvaluations = _.where(evaluations, {UserId: stakeholder.idUser, EvaluationOptionId: option.id});
+
+                var missingEvaluation = stakeholderEvaluations.length === 0;
+                var incompleteEvaluation = _.findWhere(stakeholderEvaluations, {e: 0}) !== undefined || _.findWhere(stakeholderEvaluations, {v: 0}) !== undefined || _.findWhere(stakeholderEvaluations, {c: 0}) !== undefined;
+
+                if(missingEvaluation || incompleteEvaluation) {
+                    var stakeholderPendencies = _.findWhere(dictionary, {id: stakeholder.idUser}).pendencies;
+                    stakeholderPendencies.push(`<b>🠞 DECISÃO "${decision.question}" [<u>OPÇÃO "${option.option}"</u>]</b>`);
+                }
+
+            }
+
+        }
+
+    }
+
+    for(var user of dictionary) {
+        if(user.pendencies.length === 0) user.pendencies.push("-- SEM PENDÊNCIAS --");
+    }
+
+    dictionary = _.sortBy(dictionary, (o)=>o.name);
+
+    for(var user of dictionary) {
+
+        var row = $("<tr></tr>").html(`
+            <td class="align-middle text-sm width-30 avatar-container">
+              <img id="userAvatar${user.id}" src="/avatars/${user.id}.jpg" alt="userAvatar" class="avatar avatar-xs rounded-circle-black-mini"/>
+              &nbsp;${user.name}
+            </td>
+            <td class="align-middle text-sm">
+              <div class="pendencies-container">
+                ${user.pendencies.join("<br/><br/>")}
+              </div>
+            </td>
+        `);
+
+        $("#tablePendencies").append(row);
+
+    }
+
+    checkAvatarImages();
 
 }
 

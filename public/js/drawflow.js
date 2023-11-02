@@ -1212,7 +1212,7 @@ export default class Drawflow {
                             <input type="hidden" class="df-course-id-input-${userId}" df-course_id>
                             <input type="hidden" class="df-user-name-input-${userId}" df-user_name>
                             <input type="hidden"  class="df-course-name-input-${userId}" df-course_name>
-                            <img id="userAvatar${userId}" src="/avatars/${userId}.jpg" alt="kal" class="avatar avatar-xl rounded-circle-black"/>
+                            <img id="userAvatar${userId}" src="/avatars/${userId}.jpg" alt="userAvatar" class="avatar avatar-xl rounded-circle-black"/>
                             <br/><br/>
                             <div class="node-user-name df-user-course-name-div-${userId}"><b>${userName} - ${courseName}</b></div>
                         </div>
@@ -2236,13 +2236,4 @@ export default class Drawflow {
         var uuid = s.join("");
         return uuid;
     }
-}
-
-function checkAvatarImages() {
-    $('.avatar-container').each(function() {
-        var avatarImage = $(this).find("img");
-        $(this).imagesLoaded().fail( function() {
-            avatarImage.attr("src", "/img/0.jpg");
-        });
-    });
 }

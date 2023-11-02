@@ -44,11 +44,16 @@
     margin-top: -32px;
 }
 
+.width-30 {
+    width: 40%!important;
+}
+
 .pendencies {
     width: 100%;
     height: 350px;
     padding: 10px;
     background: lightslategrey;
+    overflow-y: auto;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
@@ -544,6 +549,15 @@
     border: 4px solid black;
 }
 
+.rounded-circle-black-mini {
+    border-radius: 50%!important;
+    border: 2px solid black;
+}
+
+.pendencies-container {
+    white-space: normal;
+}
+
 .decision-node {
     background: black!important;
 }
@@ -616,4 +630,25 @@
     background: var(--dfDeleteHoverBackgroundColor);
     border: var(--dfDeleteHoverBorderSize) solid var(--dfDeleteHoverBorderColor);
     border-radius: var(--dfDeleteHoverBorderRadius);
+}
+
+/* Firefox */
+*{
+    scrollbar-width: auto;
+    scrollbar-color: #202940 #ececec;
+}
+
+/* Other browsers */
+*::-webkit-scrollbar{
+    width: 16px;
+}
+
+*::-webkit-scrollbar-track{
+    background: #ececec;
+}
+
+*::-webkit-scrollbar-thumb{
+    background-color: #6c757d;
+    border-radius: 0px;
+    border: 3px solid #6c757d;
 }
