@@ -68,19 +68,21 @@ $('#btImport').click(function(){
 });
 
 // Give time to remove all the connections. Avoid exhibition of old data.
-function processProjectConfigDelayed() {
-
-    var delayInMilliseconds = 500; //1 second
-
-    setTimeout(function() {
-        processProjectConfig();
-    }, delayInMilliseconds);
-
-}
+// function processProjectConfigDelayed() {
+//
+//     var delayInMilliseconds = 500; //1 second
+//
+//     setTimeout(function() {
+//         processProjectConfig();
+//     }, delayInMilliseconds);
+//
+// }
 
 async function processProjectConfig() {
 
-    allProjectData = await getFullProjectData(configEditor.getJson(), false); // TODO - HI COST - REMOVE - MULTIPLE CALLS ON EDITOR CHANGE - MAGNUM
+    allProjectData = await getFullProjectData(configEditor.getJson(), false);
+
+    console.log(JSON.stringify(allProjectData, null, "\t"));
 
     var editorJson = configEditor.getJson();
     var configData = await getConfigData(editorJson);
