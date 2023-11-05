@@ -69,7 +69,7 @@ async function processDecisions(jsonConfig) {
 
                 for(var decision of step.decisions) {
 
-                    var card = $("<div></div>").html(`
+                    var card = $("<div class='padding-bottom-20'></div>").html(`
                         <div class="card card-white">
                           <div class="card-body px-0 pb-2">
                             <div class="table-responsive hide-scroll">
@@ -80,7 +80,10 @@ async function processDecisions(jsonConfig) {
                                   <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7">Expectativa<sup><i data-toggle="tooltip" title="O quanto você acredita que essa opção é exequível" class="material-icons text-sm my-auto me-1">info</i></sup></th>
                                   <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7">Valor<sup><i data-toggle="tooltip" title="O quanto você deseja essa opção" class="material-icons text-sm my-auto me-1">info</i></sup></th>
                                   <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7">Custo<sup><i data-toggle="tooltip" title="O quão custosa você acha que é essa opção" class="material-icons text-sm my-auto me-1">info</i></sup></th>
-                                  <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 text-center"><button onclick="addNewDecisionOption('${"#tableQuestions_"+decision.decisionId}', ${decision.decisionId}, ${step.stepId}, crypto.randomUUID(), 'Clique aqui para mudar o título da opção de decisão')" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Adicionar Opção"><i class="material-icons icon-button">add</i></button></th>
+                                  <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 text-center">
+                                    <button onclick="addNewDecisionOption('${"#tableQuestions_"+decision.decisionId}', ${decision.decisionId}, ${step.stepId}, crypto.randomUUID(), 'Clique aqui para mudar o título da opção de decisão')" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Adicionar Opção"><i class="material-icons icon-button">add</i></button>
+                                    <button onclick="hideItem(this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement)" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Esconder Decisão"><i class="material-icons icon-button">visibility_off</i></button>
+                                  </th>
                                 </tr>
                                 </thead>
                                 <tbody id="tableQuestions_${decision.decisionId}"></tbody>
@@ -88,9 +91,6 @@ async function processDecisions(jsonConfig) {
                             </div>
                           </div>
                         </div>
-                        <br/><br/>
-                        <hr class="horizontal light mt-0 mb-2">
-                        <br/><br/>
                     `);
 
                     $("#decisionCards").append(card);
@@ -289,6 +289,7 @@ function addNewDecisionOption(table, decisionId, stepId, elementId, title) {
         </td>
         <td class="text-center">
             <button onclick="removeDecisionOption(this.parentElement.parentElement)" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Remover Opção"><i class="material-icons icon-button">remove</i></button>
+            <button onclick="hideItem(this.parentElement.parentElement)" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Esconder Opção"><i class="material-icons icon-button">visibility_off</i></button>
         </td>
     `);
 
@@ -354,6 +355,14 @@ $("#btSave").click(async function () {
 starRatingControl = new StarRating('.star-rating',{
     tooltip: false,
     clearable: true,
+});
+
+function hideItem(item) {
+    $(item).addClass("none");
+}
+
+$("#btApplyFilter").click(function() {
+    $(".none").removeClass("none");
 });
 
 importDefaultDataMyDecisions();
