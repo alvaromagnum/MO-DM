@@ -362,7 +362,33 @@ function hideItem(item) {
 }
 
 $("#btApplyFilter").click(function() {
-    $(".none").removeClass("none");
+
+    var selectedOption = Number($("#selectDecisionsFilter").val());
+
+    switch(selectedOption) {
+
+        case 2:
+            hideNonEvaluated();
+            break;
+
+        default:
+            $(".none").removeClass("none");
+            break;
+
+    }
+
 });
+
+function hideNonEvaluated() {
+
+    $('select').each(function() {
+        if(this.id !== "selectDecisionsFilter") {
+            var row = this.parentElement.parentElement.parentElement.parentElement;
+            var value = Number($(this).val());
+            if(value < 1 && !$(row).hasClass("none")) $(row).addClass("none");
+        }
+    });
+
+}
 
 importDefaultDataMyDecisions();
