@@ -417,8 +417,6 @@ function hideEvaluated() {
         }
     });
 
-    console.log(nonEvaluated);
-
     selects.each(function() {
         if(this.id !== "selectDecisionsFilter") {
             var row = this.parentElement.parentElement.parentElement.parentElement;
