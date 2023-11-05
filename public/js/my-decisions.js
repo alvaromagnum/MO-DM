@@ -371,21 +371,58 @@ $("#btApplyFilter").click(function() {
             hideNonEvaluated();
             break;
 
+        case 3:
+            hideEvaluated();
+            break;
+
         default:
-            $(".none").removeClass("none");
+            showAll();
             break;
 
     }
 
 });
 
+function showAll() {
+    $(".none").removeClass("none");
+}
+
 function hideNonEvaluated() {
+
+    showAll();
 
     $('select').each(function() {
         if(this.id !== "selectDecisionsFilter") {
             var row = this.parentElement.parentElement.parentElement.parentElement;
             var value = Number($(this).val());
             if(value < 1 && !$(row).hasClass("none")) $(row).addClass("none");
+        }
+    });
+
+}
+
+function hideEvaluated() {
+
+    showAll();
+
+    var nonEvaluated = [];
+
+    var selects = $('select');
+
+    selects.each(function() {
+        if(this.id !== "selectDecisionsFilter") {
+            var row = this.parentElement.parentElement.parentElement.parentElement;
+            var value = Number($(this).val());
+            if(value < 1 && !$(row).hasClass("none")) nonEvaluated.push(row);
+        }
+    });
+
+    console.log(nonEvaluated);
+
+    selects.each(function() {
+        if(this.id !== "selectDecisionsFilter") {
+            var row = this.parentElement.parentElement.parentElement.parentElement;
+            if(!_.contains(nonEvaluated, row))$(row).addClass("none");
         }
     });
 
