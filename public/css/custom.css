@@ -40,6 +40,19 @@
     display: none;
 }
 
+.border-line {
+    border: 1px solid white;
+    border-radius: 10px!important;
+}
+
+tr.pendency-row:nth-child(even) {
+    background-color: #94aabf;
+}
+
+.light-silver {
+    background-color: #94aabf;
+}
+
 .padding-bottom-20 {
     padding-bottom: 20px!important;
 }

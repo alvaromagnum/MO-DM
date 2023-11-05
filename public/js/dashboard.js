@@ -145,9 +145,9 @@ async function generateProjectPendencies(allProjectData) {
 
     for(var user of dictionary) {
 
-        var row = $("<tr></tr>").html(`
+        var row = $("<tr class='pendency-row'></tr>").html(`
             <td class="align-middle text-sm width-30 avatar-container">
-              <img id="userAvatar${user.id}" src="/avatars/${user.id}.jpg" alt="userAvatar" class="avatar avatar-xs rounded-circle-black-mini"/>
+              <img id="userAvatar${user.id}" src="/avatars/${user.id}.jpg" alt="userAvatar" class="avatar avatar-sm rounded-circle-black-mini"/>
               &nbsp;${user.name}
             </td>
             <td class="align-middle text-sm">
