@@ -71,7 +71,7 @@ async function getEvcRankings(editorJson) {
     // var queryGeneralEvc = "${\"evc\": $average(decisions.options[isComplete=true].Evaluations.evc), \"e\": $average($map(decisions.options[isComplete=true].Evaluations.e, function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options[isComplete=true].Evaluations.v, function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options[isComplete=true].Evaluations.c, function($v, $k) {($v-1)/5}))}";
     // var generalEvc = await jsonata(queryGeneralEvc).evaluate(fullData);
 
-    var generalEvc = {evc: math.mean(allUsersEvc.map((o)=>o.evc)), e: math.mean(allUsersEvc.map((o)=>o.e)), v: math.mean(allUsersEvc.map((o)=>o.v)), c: math.mean(allUsersEvc.map((o)=>o.c))};
+    var generalEvc = allUsersEvc.length > 0 ? {evc: math.mean(allUsersEvc.map((o)=>o.evc)), e: math.mean(allUsersEvc.map((o)=>o.e)), v: math.mean(allUsersEvc.map((o)=>o.v)), c: math.mean(allUsersEvc.map((o)=>o.c))} : {evc: 0, e: 0, v: 0, c: 0};
 
     // if(!generalEvc.evc) generalEvc = {evc: 0, e: 0, v: 0, c: 0};
 

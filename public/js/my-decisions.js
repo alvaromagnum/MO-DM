@@ -338,6 +338,15 @@ $("#btSave").click(async function () {
 
     var snapshot = await getEvcRankings(pageJsonConfig);
 
+    if(evaluations.length === 0) {
+
+        $.notify("Nada para salvar!", "info");
+        $.LoadingOverlay("hide");
+
+        return;
+
+    }
+
     $.ajax({
         method: "POST",
         url: "/project/saveEvaluations",

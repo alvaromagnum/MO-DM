@@ -24,49 +24,60 @@ async function saveProjectConfig(req, res) {
         var oldData = req.body.oldData;
         var newData = req.body.newData;
 
-        var oldIds = oldData.map((o)=>o.id);
-        var newIds = newData.map((o)=>o.id);
+        if(oldData && newData) {
 
-        var decisionsToRemoveFromProject = _.difference(oldIds, newIds);
+            var oldIds = oldData.map((o)=>o.id);
+            var newIds = newData.map((o)=>o.id);
 
-        for(var idDecision of decisionsToRemoveFromProject) {
+            var decisionsToRemoveFromProject = _.difference(oldIds, newIds);
 
-            await databaseConfig.EvaluationOption.destroy({
-                where: {idDecision: idDecision}
-            }, { transaction: transaction });
+            for(var idDecision of decisionsToRemoveFromProject) {
 
-        }
+                await databaseConfig.EvaluationOption.destroy({
+                    where: {idDecision: idDecision, ProjectId: req.session.project.id}
+                }, { transaction: transaction });
 
-        for(var newDecision of newData) {
+            }
 
-            var newStakeholders = newDecision.stakeholdersIds;
-            var oldDecision = _.find(oldData, function(o){ return o.id === newDecision.id });
+            for(var newDecision of newData) {
 
-            if(oldDecision) {
+                var newStakeholders = newDecision.stakeholdersIds;
+                var oldDecision = _.find(oldData, function(o){ return o.id === newDecision.id });
 
-                var oldStakeholers = oldDecision.stakeholdersIds;
-                var stakeholdersToRemoveFromDecision = _.difference(oldStakeholers, newStakeholders).map((item)=>Number(item));
+                if(oldDecision) {
 
-                if(stakeholdersToRemoveFromDecision.length === 0) continue;
+                    var oldStakeholers = oldDecision.stakeholdersIds;
+                    var stakeholdersToRemoveFromDecision = _.difference(oldStakeholers, newStakeholders).map((item)=>Number(item));
 
-                var evaluationOptions = await databaseConfig.EvaluationOption.findAll({
-                    where: {idDecision: newDecision.id},
-                    include: [{model: databaseConfig.Evaluation}]
-                });
+                    if(stakeholdersToRemoveFromDecision.length === 0) continue;
 
-                for(var evaluationOption of evaluationOptions) {
+                    var evaluationOptions = await databaseConfig.EvaluationOption.findAll({
+                        where: {idDecision: newDecision.id},
+                        include: [{model: databaseConfig.Evaluation}]
+                    });
 
-                    var evaluations = evaluationOption.Evaluations;
+                    for(var evaluationOption of evaluationOptions) {
 
-                    for(var evaluation of evaluations) {
-                        if(_.contains(stakeholdersToRemoveFromDecision, evaluation.UserId)) {
-                            await evaluation.destroy({ transaction: transaction });
+                        var evaluations = evaluationOption.Evaluations;
+
+                        for(var evaluation of evaluations) {
+                            if(_.contains(stakeholdersToRemoveFromDecision, evaluation.UserId)) {
+                                await evaluation.destroy({ transaction: transaction });
+                            }
                         }
+
                     }
 
                 }
 
             }
+
+        }
+        else {
+
+            await databaseConfig.EvaluationOption.destroy({
+                where: {ProjectId: req.session.project.id}
+            }, { transaction: transaction });
 
         }
 

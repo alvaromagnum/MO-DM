@@ -28,6 +28,10 @@
     border-color: #fff !important;
 }
 
+.padding-20 {
+    padding: 20px;
+}
+
 .margin-left-50 {
     margin-left: 15px;
 }
@@ -114,12 +118,27 @@ tr.pendency-row:nth-child(even) {
     box-shadow: 0.1rem 0.1rem 1.5rem #ececec;
 }
 
+.li-ranking-default {
+    --c1: #1a2035;
+}
+
+.li-ranking-green {
+    --c1: #3fac6c;
+}
+
+.li-ranking-yellow {
+    --c1: #f5ef3d;
+}
+
+.li-ranking-red {
+    --c1: #f14c51;
+}
+
 .li-ranking {
     --stop: calc(100% / var(--length) * var(--i));
     --l: 60%;
     --l2: 90%;
     --h: calc((var(--i) - 1) * (2000 / var(--length)));
-    --c1: #1a2035;
     --c2: #ececec;
     /*--c1: hsl(var(--h), 70%, var(--l));*/
     /*--c2: hsl(var(--h), 70%, var(--l2));*/
@@ -288,6 +307,10 @@ tr.pendency-row:nth-child(even) {
 
 .margin-top-30-negative {
     margin-top: -30px;
+}
+
+.margin-top-60-negative {
+    margin-top: -60px;
 }
 
 .icon-button {

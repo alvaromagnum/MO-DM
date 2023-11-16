@@ -10,14 +10,14 @@ function importDefaultDataResults() {
         method: "GET",
         url: "/project/loadConfig",
 
-    }).fail(function(jqXHR, textStatus, errorThrown) {
+    }).fail(function (jqXHR, textStatus, errorThrown) {
 
         $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
 
     }).done(function (dataToImport) {
 
-        if(dataToImport) {
+        if (dataToImport) {
 
             var projectName = dataToImport.projectName;
 
@@ -25,12 +25,12 @@ function importDefaultDataResults() {
 
             $("#labelProjectName").text(projectName);
 
-            if(!jsonConfig) {
+            if (!jsonConfig) {
                 $.LoadingOverlay("hide");
                 return;
             }
 
-            getFullProjectData(jsonConfig, true).then((result)=>{
+            getFullProjectData(jsonConfig, true).then((result) => {
                 generateRankings(result);
             });
 
@@ -45,12 +45,12 @@ function importDefaultDataResults() {
     $.ajax({
         method: "GET",
         url: "/users/get/loggedUserData",
-    }).fail(function(jqXHR, textStatus, errorThrown) {
+    }).fail(function (jqXHR, textStatus, errorThrown) {
         $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
     }).done(function (dataToImport) {
         $.LoadingOverlay("hide");
-        if(dataToImport) {
+        if (dataToImport) {
             var userName = dataToImport.userName;
             $("#labelUserName").text(userName);
         }
@@ -68,8 +68,8 @@ async function getImpactsFrom(id, option) {
     $.ajax({
         method: "POST",
         url: "/project/getImpacts",
-        data: { impactResultsIncomplete: JSON.stringify(impactResultsIncomplete) }
-    }).fail(function(jqXHR, textStatus, errorThrown) {
+        data: {impactResultsIncomplete: JSON.stringify(impactResultsIncomplete)}
+    }).fail(function (jqXHR, textStatus, errorThrown) {
         $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
     }).done(function (impactResultsComplete) {
@@ -85,27 +85,27 @@ function generateAndShowImpactsPopup(allData, option) {
 
     $("#tableImpacted").html("");
 
-    for(data of allData) {
+    for (data of allData) {
 
         var classE = "bg-gradient-success";
 
-        if(data.e < 70) classE = "bg-gradient-warning";
-        if(data.e < 40) classE = "bg-gradient-danger";
+        if (data.e < 70) classE = "bg-gradient-warning";
+        if (data.e < 40) classE = "bg-gradient-danger";
 
         var classV = "bg-gradient-success";
 
-        if(data.v < 70) classV = "bg-gradient-warning";
-        if(data.v < 40) classV = "bg-gradient-danger";
+        if (data.v < 70) classV = "bg-gradient-warning";
+        if (data.v < 40) classV = "bg-gradient-danger";
 
         var classC = "bg-gradient-danger";
 
-        if(data.c < 70) classC = "bg-gradient-warning";
-        if(data.c < 40) classC = "bg-gradient-success";
+        if (data.c < 70) classC = "bg-gradient-warning";
+        if (data.c < 40) classC = "bg-gradient-success";
 
         var classEVC = "bg-gradient-success";
 
-        if(data.evc < 70) classEVC = "bg-gradient-warning";
-        if(data.evc < 40) classEVC = "bg-gradient-danger";
+        if (data.evc < 70) classEVC = "bg-gradient-warning";
+        if (data.evc < 40) classEVC = "bg-gradient-danger";
 
         var row = $("<tr></tr>").html(`
           <td>
@@ -178,16 +178,16 @@ async function generateRankings(data) {
 
     evaluationData = data;
 
-    for(var step of data) {
+    for (var step of data) {
 
         var decisions = step.decisions;
 
-        for(var decision of decisions) {
+        for (var decision of decisions) {
 
             var idDecision = decision.id;
 
-            var queryWeightRanking = `[decisions.options[idDecision=${idDecision} and isComplete=true]^(>weight, option).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
-            var weightRankingItems = await jsonata(queryWeightRanking).evaluate(data);
+            // var queryWeightRanking = `[decisions.options[idDecision=${idDecision} and isComplete=true]^(>weight, option).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
+            // var weightRankingItems = await jsonata(queryWeightRanking).evaluate(data);
 
             var queryEvcRanking = `[decisions.options[idDecision=${idDecision} and isComplete=true]^(>meanEvc, option).$.{"id": id, "option": option, "weight": weight, "meanEVC": meanEvc, "agreement": agreement}]`;
             var evcRankingItems = await jsonata(queryEvcRanking).evaluate(data);
@@ -198,14 +198,14 @@ async function generateRankings(data) {
             var queryCurrentDecisionId = `$filter(decisions.options.Decision[%.%.id=${idDecision}], function($v, $i, $a) {$v != null}).EvaluationOptionId`;
             var currentDecisionId = await jsonata(queryCurrentDecisionId).evaluate(evaluationData);
 
-            var currentDecicionOnWeightRanking = _.find(weightRankingItems, (o)=>o.id === currentDecisionId);
-            var currentDecicionOnEvcRanking = _.find(evcRankingItems, (o)=>o.id === currentDecisionId);
+            // var currentDecicionOnWeightRanking = _.find(weightRankingItems, (o)=>o.id === currentDecisionId);
+            var currentDecicionOnEvcRanking = _.find(evcRankingItems, (o) => o.id === currentDecisionId);
 
-            var oldWeightRankingIndex = _.indexOf(weightRankingItems, currentDecicionOnWeightRanking);
+            // var oldWeightRankingIndex = _.indexOf(weightRankingItems, currentDecicionOnWeightRanking);
             var oldEvcRankingIndex = _.indexOf(evcRankingItems, currentDecicionOnEvcRanking);
 
-            if(oldWeightRankingIndex !== -1) _.move(weightRankingItems, oldWeightRankingIndex, 0);
-            if(oldEvcRankingIndex !== -1) _.move(evcRankingItems, oldEvcRankingIndex, 0);
+            // if(oldWeightRankingIndex !== -1) _.move(weightRankingItems, oldWeightRankingIndex, 0);
+            if (oldEvcRankingIndex !== -1) _.move(evcRankingItems, oldEvcRankingIndex, 0);
 
             var dashboard = $("<div></div>").html(`
             
@@ -217,10 +217,10 @@ async function generateRankings(data) {
                           <i class="material-icons opacity-10">workspace_premium</i>
                         </div>
                         <div class="padding-left-80 pt-1 text-2xl text-uppercase">
-                          ${decision.question}&nbsp;<b>[<span id="span${decision.id}">---</span>]</b><br/>
+                          ${decision.question}<br/>
                         </div>
                         <div class="padding-left-80 pt-1 text-2xl text-uppercase text-gray">
-                          DECISÃO ATUAL:&nbsp;<b>[<span id="span2${decision.id}">---</span>]</b><br/>
+                          ESCOLHA ATUAL:&nbsp;<b>[<span id="span2${decision.id}">---</span>]</b><br/>
                         </div>
                       </div>
                       <div class="card-body">
@@ -231,9 +231,6 @@ async function generateRankings(data) {
                             <div class="container container-results">
                               <div class="row row-results-header">
                                 <div class="col-sm text-xl-center">
-                                  <b>MAIS DESEJADOS</b>
-                                </div>
-                                <div class="col-sm text-xl-center">
                                   <b>MAIS MOTIVAÇÃO/ENGAJAMENTO</b>
                                 </div>
                                 <div class="col-sm text-xl-center">
@@ -241,9 +238,6 @@ async function generateRankings(data) {
                                 </div>
                               </div>
                               <div class="row row-results">
-                                <div class="col-sm">
-                                  <ol id="weightRanking${decision.id}" idDecision="${decision.id}" class="ol-ranking" style="--length: 1" role="list"></ol>
-                                </div>
                                 <div class="col-sm">
                                   <ol id="evcRanking${decision.id}" idDecision="${decision.id}" class="ol-ranking" style="--length: 1" role="list"></ol>
                                 </div>
@@ -259,36 +253,10 @@ async function generateRankings(data) {
                           <button id="btAcceptConvergence${decision.id}" onclick="acceptConvergence(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para aceitar a convergência"><i class="material-icons icon-button">adjust</i></button>
                           <button id="btDecide${decision.id}" onclick="showDecisionModal(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para escolher"><i class="material-icons icon-button">ads_click</i></button>
                         </div>
-                        <br/>
-                        <div class="d-flex">
-                          <i class="material-icons text-sm my-auto me-1">info</i>
-                          <p class="mb-0 text-sm"> Em caso de empate no topo dos rankings, é possível segurar e arrastar as opções para reordená-las e alcançar a convergência. </p>
-                        </div>
-                        <div class="d-flex">
-                          <i class="material-icons text-sm my-auto me-1">info</i>
-                          <p class="mb-0 text-sm"> Uma concordância a partir de 65% é considerada boa. </p>
-                        </div>
-                        <div class="d-flex">
-                          <i class="material-icons text-sm my-auto me-1">info</i>
-                          <p class="mb-0 text-sm"> Quando a primeira opção dos dois rankings forem iguais e a condordância do item do topo for maior ou igual a 65%, haverá convergência. Caso contrário, existe divergência. </p>
-                        </div>
-                        <div class="d-flex">
-                          <i class="material-icons text-sm my-auto me-1">info</i>
-                          <p class="mb-0 text-sm"> Em caso de divergências, pode-se evetuar uma nova rodada de avaliações pelos usuários, ou pode-se fazer uma escolha divergente. </p>
-                        </div>
-                        <div class="d-flex">
-                          <i class="material-icons text-sm my-auto me-1">info</i>
-                          <p class="mb-0 text-sm"> A ausência de opções no ranking possui duas justificativas: (1) ela ainda não foi avaliada por todos os stakeholder, ou (2) existe alguma avaliação inválida/incompleta (com zero estrela). </p>
-                        </div>
-                        <div class="d-flex">
-                          <i class="material-icons text-sm my-auto me-1">info</i>
-                          <p class="mb-0 text-sm"> Antes de tomar a decisão, certifique-se de checar o impacto da mesma em cada participante. Basta clicar na opção desejada. </p>
-                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-            
             `);
 
             $("#divResults").append(dashboard);
@@ -296,26 +264,31 @@ async function generateRankings(data) {
 
             var draggable = false;
 
-            var firstWeight = weightRankingItems[0] ? weightRankingItems[0].weight : undefined;
-
-            for(var weightRankingItem of weightRankingItems) {
-                draggable = firstWeight === weightRankingItem.weight;
-                $("#weightRanking" + decision.id).append(generateRankingItem(`weight_${weightRankingItem.id}`, weightRankingItem.option, weightRankingItem.weight, draggable));
-            }
+            // var firstWeight = weightRankingItems[0] ? weightRankingItems[0].weight : undefined;
+            //
+            // for(var weightRankingItem of weightRankingItems) {
+            //     draggable = firstWeight === weightRankingItem.weight;
+            //     $("#weightRanking" + decision.id).append(generateRankingItem(`weight_${weightRankingItem.id}`, weightRankingItem.option, weightRankingItem.weight, draggable));
+            // }
 
             var firstEvc = evcRankingItems[0] ? evcRankingItems[0].meanEVC : undefined;
 
-            for(var evcRankingItem of evcRankingItems) {
+            for (var evcRankingItem of evcRankingItems) {
                 draggable = firstEvc === evcRankingItem.meanEVC;
                 $("#evcRanking" + decision.id).append(generateRankingItem(`evc_${evcRankingItem.id}`, evcRankingItem.option, evcRankingItem.meanEVC, draggable));
             }
 
-            for(var agreementRankingItem of agreementRankingItems) {
+            for (var agreementRankingItem of agreementRankingItems) {
                 $("#agreementRanking" + decision.id).append(generateRankingItem(`agreement_${agreementRankingItem.id}`, agreementRankingItem.option, agreementRankingItem.agreement, false));
             }
 
-            Sortable.create(document.getElementById("weightRanking" + decision.id), {animation: 350, filter: '.filtered', preventOnFilter: true, draggable: ".draggable",});
-            Sortable.create(document.getElementById("evcRanking" + decision.id), {animation: 350, filter: '.filtered', preventOnFilter: true, draggable: ".draggable",});
+            // Sortable.create(document.getElementById("weightRanking" + decision.id), {animation: 350, filter: '.filtered', preventOnFilter: true, draggable: ".draggable",});
+            Sortable.create(document.getElementById("evcRanking" + decision.id), {
+                animation: 350,
+                filter: '.filtered',
+                preventOnFilter: true,
+                draggable: ".draggable",
+            });
 
             checkConvergence(decision.id);
             processCurrentDecision(decision.id);
@@ -337,8 +310,8 @@ async function generateRankings(data) {
 
             $("#divPopups").append(popup);
 
-            for(var item of evcRankingItems) {
-                $('#selectChosenOption'+decision.id).append($('<option/>').val(item.id).text(item.option));
+            for (var item of evcRankingItems) {
+                $('#selectChosenOption' + decision.id).append($('<option/>').val(item.id).text(item.option));
             }
 
             activateTooltips();
@@ -347,7 +320,7 @@ async function generateRankings(data) {
 
     }
 
-    $('li.li-ranking').click(function(event){
+    $('li.li-ranking').click(function (event) {
 
         var id = $(event.currentTarget).attr("uuid");
         var option = $(event.currentTarget).attr("option");
@@ -357,7 +330,7 @@ async function generateRankings(data) {
     });
 
     document.addEventListener("update", (e) => {
-        checkConvergence(Number($("#"+e.from.id).attr("idDecision")));
+        checkConvergence(Number($("#" + e.from.id).attr("idDecision")));
     });
 
 }
@@ -366,7 +339,7 @@ function acceptConvergence(idDecision) {
 
     var idOption = checkConvergence(idDecision);
 
-    if(!idOption) {
+    if (!idOption) {
 
         Swal.fire({
 
@@ -383,7 +356,7 @@ function acceptConvergence(idDecision) {
 
     }
 
-    $('#selectChosenOption'+idDecision).val(idOption);
+    $('#selectChosenOption' + idDecision).val(idOption);
 
     makeDecisionFor(idDecision);
 
@@ -394,45 +367,44 @@ async function processCurrentDecision(idDecision) {
     var queryCurrentDecision = `$filter(decisions.options.Decision[%.%.id=${idDecision}], function($v, $i, $a) {$v != null}).option`;
     var currentDecision = await jsonata(queryCurrentDecision).evaluate(evaluationData);
 
-    $("#span2"+idDecision).text(currentDecision);
+    $("#span2" + idDecision).text(currentDecision);
 
 }
 
 function checkConvergence(idDecision) {
 
-    var optionRanking1 = $("#weightRanking"+idDecision+" li:first-child");
-    var optionRanking2 = $("#evcRanking"+idDecision+" li:first-child");
+    // var optionRanking1 = $("#weightRanking"+idDecision+" li:first-child");
+    var optionRanking2 = $("#evcRanking" + idDecision + " li:first-child");
 
-    var uuid1 = optionRanking1.attr("uuid");
+    // var uuid1 = optionRanking1.attr("uuid");
     var uuid2 = optionRanking2.attr("uuid");
 
-    var percentual = Number($("#agreementRanking"+idDecision+" li[uuid='"+uuid1+"']").attr("percentual"));
+    var percentual = Number($("#evcRanking" + idDecision + " li[uuid='" + uuid2 + "']").attr("percentual"));
 
-    var option = optionRanking1.attr("option");
+    var option = optionRanking2.attr("option");
 
-    var labelConvergence = $("#span"+idDecision);
+    var labelConvergence = $("#span" + idDecision);
 
     labelConvergence.removeClass();
 
-    var result = (uuid1 === uuid2) && percentual >= 65;
+    var result = percentual >= 65;
 
-    if(result) {
+    if (result) {
         labelConvergence.addClass("text-success");
         labelConvergence.text(`CONVERGENTE - ${option}`);
-    }
-    else {
+    } else {
         labelConvergence.addClass("text-danger");
         labelConvergence.text("DIVERGENTE");
     }
 
-    return result ? uuid1 : undefined;
+    return result ? uuid2 : undefined;
 
 }
 
 function makeDecisionFor(decisionId) {
 
-    var optionId = $('#selectChosenOption'+decisionId).val();
-    var option = $('#selectChosenOption'+decisionId+" option:selected").text();
+    var optionId = $('#selectChosenOption' + decisionId).val();
+    var option = $('#selectChosenOption' + decisionId + " option:selected").text();
 
     Swal.fire({
 
@@ -480,7 +452,7 @@ function makeDecisionFor(decisionId) {
 
 function showDecisionModal(id) {
 
-    $('#decisionModal'+id).modalJ({
+    $('#decisionModal' + id).modalJ({
         fadeDuration: 100
     });
 
@@ -490,17 +462,44 @@ function generateRankingItem(id, label, value, draggable) {
 
     var uuid = id;
 
+    var isAgreement = uuid.toUpperCase().includes("AGREEMENT_");
+
     uuid = uuid.replace("evc_", "");
     uuid = uuid.replace("agreement_", "");
     uuid = uuid.replace("weight_", "");
 
     var itemClass = draggable ? "draggable" : "filtered";
 
-    var percentual = (value * 100).toFixed(2);
+    var percentual = Number((value * 100).toFixed(0));
+
+    var colorClass = "li-ranking-default";
+
+    if(!isAgreement) {
+
+        if(percentual >= 70) {
+            colorClass = "li-ranking-green";
+        }
+        else if(percentual >= 40) {
+            colorClass = "li-ranking-yellow";
+        }
+        else {
+            colorClass = "li-ranking-red";
+        }
+
+    }
+    else {
+
+        if(percentual >= 65) {
+            colorClass = "li-ranking-green";
+        }
+
+    }
+
+
 
     return `
-        <li id="li_${id}" uuid="${uuid}" option="${label}" percentual="${percentual}" class="li-ranking cursor-pointer ${itemClass}" style="--i: ${value}">
-          <div class="h3-ranking">${label}&nbsp;<b style="margin-left: 10px">${percentual}%</b></div>
+        <li id="li_${id}" uuid="${uuid}" option="${label}" percentual="${percentual}" class="li-ranking li-ranking-default ${colorClass} cursor-pointer ${itemClass}" style="--i: ${value}" data-toggle="tooltip" title="Clique para ver os impactos dessa escolha">
+          <div class="h3-ranking">${label}&nbsp;<b style="margin-left: 10px">${percentual} PONTOS</b></div>
         </li>
     `;
 
