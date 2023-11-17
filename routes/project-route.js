@@ -46,8 +46,16 @@ async function saveProjectConfig(req, res) {
 
                 if(oldDecision) {
 
-                    var oldStakeholers = oldDecision.stakeholdersIds;
-                    var stakeholdersToRemoveFromDecision = _.difference(oldStakeholers, newStakeholders).map((item)=>Number(item));
+                    var oldStakeholders = oldDecision.stakeholdersIds;
+                    var stakeholdersToRemoveFromDecision = _.difference(oldStakeholders, newStakeholders).map((item)=>Number(item));
+
+                    if(!arrayEquals(oldStakeholders, newStakeholders)) {
+
+                        await databaseConfig.Decision.destroy({
+                            where: {idProject: req.session.project.id, idDecision: newDecision.id}
+                        }, { transaction: transaction });
+
+                    }
 
                     if(stakeholdersToRemoveFromDecision.length === 0) continue;
 
@@ -100,6 +108,15 @@ async function saveProjectConfig(req, res) {
         res.status(500).send(error.message);
 
     }
+
+}
+
+function arrayEquals(a, b) {
+
+    a = _.sortBy(a, (item)=>item);
+    b = _.sortBy(b, (item)=>item);
+
+    return a.length === b.length && a.every((val, index) => val === b[index]);
 
 }
 

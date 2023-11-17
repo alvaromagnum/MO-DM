@@ -379,25 +379,18 @@ function checkConvergence(idDecision) {
     // var uuid1 = optionRanking1.attr("uuid");
     var uuid2 = optionRanking2.attr("uuid");
 
-    var percentual = Number($("#evcRanking" + idDecision + " li[uuid='" + uuid2 + "']").attr("percentual"));
+    var points = Number($("#evcRanking" + idDecision + " li[uuid='" + uuid2 + "']").attr("percentual"));
+    var agreement = Number($("#agreementRanking" + idDecision + " li[uuid='" + uuid2 + "']").attr("percentual"));
 
-    var option = optionRanking2.attr("option");
+    //var option = optionRanking2.attr("option");
 
-    var labelConvergence = $("#span" + idDecision);
+    //var labelConvergence = $("#span" + idDecision);
 
-    labelConvergence.removeClass();
+    //labelConvergence.removeClass();
 
-    var result = percentual >= 65;
+    var convergence = points >= 65 && agreement >= 65;
 
-    if (result) {
-        labelConvergence.addClass("text-success");
-        labelConvergence.text(`CONVERGENTE - ${option}`);
-    } else {
-        labelConvergence.addClass("text-danger");
-        labelConvergence.text("DIVERGENTE");
-    }
-
-    return result ? uuid2 : undefined;
+    return convergence ? uuid2 : undefined;
 
 }
 
@@ -499,7 +492,7 @@ function generateRankingItem(id, label, value, draggable) {
 
     return `
         <li id="li_${id}" uuid="${uuid}" option="${label}" percentual="${percentual}" class="li-ranking li-ranking-default ${colorClass} cursor-pointer ${itemClass}" style="--i: ${value}" data-toggle="tooltip" title="Clique para ver os impactos dessa escolha. Você também pode segurar, arrastar e trocar com outra opção de mesma pontuação">
-          <div class="h3-ranking">${label}&nbsp;<b style="margin-left: 10px">${percentual} PONTOS</b></div>
+          <div class="h3-ranking">${label}&nbsp;<b style="margin-left: 10px">${percentual} PONTO(S)</b></div>
         </li>
     `;
 
