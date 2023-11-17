@@ -250,8 +250,8 @@ async function generateRankings(data) {
                         </div>
                         <br/>
                         <div class="text-center">
-                          <button id="btAcceptConvergence${decision.id}" onclick="acceptConvergence(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para aceitar a convergência"><i class="material-icons icon-button">adjust</i></button>
-                          <button id="btDecide${decision.id}" onclick="showDecisionModal(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para escolher"><i class="material-icons icon-button">ads_click</i></button>
+                          <button id="btAcceptConvergence${decision.id}" onclick="acceptConvergence(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para aceitar a opção que mais motiva/engaja"><i class="material-icons icon-button">adjust</i></button>
+                          <button id="btDecide${decision.id}" onclick="showDecisionModal(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para fazer escolha personalizada"><i class="material-icons icon-button">ads_click</i></button>
                         </div>
                       </div>
                     </div>
