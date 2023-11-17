@@ -498,7 +498,7 @@ function generateRankingItem(id, label, value, draggable) {
 
 
     return `
-        <li id="li_${id}" uuid="${uuid}" option="${label}" percentual="${percentual}" class="li-ranking li-ranking-default ${colorClass} cursor-pointer ${itemClass}" style="--i: ${value}" data-toggle="tooltip" title="Clique para ver os impactos dessa escolha">
+        <li id="li_${id}" uuid="${uuid}" option="${label}" percentual="${percentual}" class="li-ranking li-ranking-default ${colorClass} cursor-pointer ${itemClass}" style="--i: ${value}" data-toggle="tooltip" title="Clique para ver os impactos dessa escolha. Você também pode segurar, arrastar e trocar com outra opção de mesma pontuação">
           <div class="h3-ranking">${label}&nbsp;<b style="margin-left: 10px">${percentual} PONTOS</b></div>
         </li>
     `;
