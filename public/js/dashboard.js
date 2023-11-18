@@ -126,7 +126,7 @@ async function generateProjectPendencies(allProjectData) {
 
                 if(missingEvaluation || incompleteEvaluation) {
                     var stakeholderPendencies = _.findWhere(dictionary, {id: stakeholder.idUser}).pendencies;
-                    stakeholderPendencies.push(`<b>🠞 DECISÃO "${decision.question}" [<u>OPÇÃO "${option.option}"</u>]</b>`);
+                    stakeholderPendencies.push(`<b>🠞 DECISÃO "${decision.question}" [<u>OPÇÃO "${option.option.toUpperCase()}"</u>]</b>`);
                 }
 
             }

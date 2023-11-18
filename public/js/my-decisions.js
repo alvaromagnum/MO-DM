@@ -89,7 +89,7 @@ async function processDecisions(jsonConfig) {
                                   </th>
                                 </tr>
                                 </thead>
-                                <tbody id="tableQuestions_${decision.decisionId}"></tbody>
+                                <tbody class="table-questions" id="tableQuestions_${decision.decisionId}"></tbody>
                               </table>
                             </div>
                           </div>
@@ -416,6 +416,8 @@ function hideNonEvaluated() {
         }
     });
 
+    hideCardIfAllDecisionsNotVisible();
+
 }
 
 function hideEvaluated() {
@@ -439,6 +441,50 @@ function hideEvaluated() {
             var row = this.parentElement.parentElement.parentElement.parentElement;
             if(!_.contains(nonEvaluated, row))$(row).addClass("none");
         }
+    });
+
+    hideCardIfAllDecisionsNotVisible2();
+
+}
+
+function hideCardIfAllDecisionsNotVisible() {
+
+    $('.table-questions').each(function(){
+
+        var allHidden = $(this).children().hasClass('none') || $(this).children().length === 0;
+
+        console.log(allHidden);
+
+        var itemToHide = $(this).parent().parent().parent().parent().parent();
+
+        if(allHidden) {
+            $(itemToHide).addClass("none");
+        }
+        else {
+            $(itemToHide).removeClass("none");
+        }
+
+    });
+
+}
+
+function hideCardIfAllDecisionsNotVisible2() {
+
+    $('.table-questions').each(function(){
+
+        var allHidden = $(this).children().hasClass('none');
+
+        console.log(allHidden);
+
+        var itemToHide = $(this).parent().parent().parent().parent().parent();
+
+        if(allHidden) {
+            $(itemToHide).addClass("none");
+        }
+        else {
+            $(itemToHide).removeClass("none");
+        }
+
     });
 
 }
