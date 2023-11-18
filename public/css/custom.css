@@ -108,6 +108,18 @@ tr.pendency-row:nth-child(even) {
     border: 1px solid slategrey!important;
 }
 
+.bg-gradient-warning-text {
+    color: orange;
+}
+
+.bg-gradient-danger-text {
+    color: orangered;
+}
+
+.bg-gradient-success-text {
+    color: green;
+}
+
 .ol-ranking { /*https://codepen.io/michellebarker/pen/poLoeRq*/
     list-style: none;
     counter-reset: list;

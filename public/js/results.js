@@ -123,7 +123,7 @@ function generateAndShowImpactsPopup(allData, option) {
           <td>
             <div class="progress-info">
               <div class="progress-percentage">
-                <span class="text-xs font-weight-bold">${data.e}%</span>
+                <span class="text-xs font-weight-bold ${classE}-text">${data.e} PONTO(S)</span>
               </div>
             </div>
             <div class="progress">
@@ -133,7 +133,7 @@ function generateAndShowImpactsPopup(allData, option) {
           <td>
             <div class="progress-info">
               <div class="progress-percentage">
-                <span class="text-xs font-weight-bold">${data.v}%</span>
+                <span class="text-xs font-weight-bold ${classV}-text">${data.v} PONTO(S)</span>
               </div>
             </div>
             <div class="progress">
@@ -143,7 +143,7 @@ function generateAndShowImpactsPopup(allData, option) {
           <td>
             <div class="progress-info">
               <div class="progress-percentage">
-                <span class="text-xs font-weight-bold">${data.c}%</span>
+                <span class="text-xs font-weight-bold ${classC}-text">${data.c} PONTO(S)</span>
               </div>
             </div>
             <div class="progress">
@@ -153,7 +153,7 @@ function generateAndShowImpactsPopup(allData, option) {
           <td>
             <div class="progress-info">
               <div class="progress-percentage">
-                <span class="text-xs font-weight-bold">${data.evc}%</span>
+                <span class="text-xs font-weight-bold ${classEVC}-text">${data.evc} PONTO(S)</span>
               </div>
             </div>
             <div class="progress">
