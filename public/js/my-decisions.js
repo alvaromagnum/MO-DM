@@ -5,6 +5,9 @@ var userId;
 var starRatingControl;
 var pageJsonConfig;
 
+const urlParams = new URLSearchParams(window.location.search);
+const pendenciesParam = urlParams.get('pendencies');
+
 function activateStarRating() {
     starRatingControl.rebuild();
 }
@@ -118,6 +121,11 @@ async function processDecisions(jsonConfig) {
 
             }
 
+        }
+
+        if(pendenciesParam) {
+            $("#selectDecisionsFilter").val("3");
+            hideEvaluated();
         }
 
         $.LoadingOverlay("hide");

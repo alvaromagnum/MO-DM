@@ -81,9 +81,16 @@ async function getImpactsFrom(id, option) {
 
 function generateAndShowImpactsPopup(allData, option) {
 
-    $("#labelImpactOption").text(option);
+    $("#labelImpactOption").text(option.toUpperCase());
 
     $("#tableImpacted").html("");
+
+    var meanV = math.mean(allData.map((o) => o.v)).toFixed(1);
+
+    var classMean = "bg-gradient-success";
+
+    if (meanV < 70) classMean = "bg-gradient-warning";
+    if (meanV < 40) classMean = "bg-gradient-danger";
 
     for (data of allData) {
 
@@ -164,9 +171,30 @@ function generateAndShowImpactsPopup(allData, option) {
 
         $("#tableImpacted").append(row);
 
-        activateTooltips();
-
     }
+
+    var endRow = $("<tr></tr>").html(`
+      <td>
+        <br/>
+        <div class="progress-info">
+          <div class="progress-percentage">
+            <span class="text-xl ${classMean}-text">PONTUAÇÃO DE VALORIZAÇÃO: <b>${meanV}</b></span>
+          </div>
+        </div>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+    `);
+
+    $("#tableImpacted").append(endRow);
+
+    activateTooltips();
 
     $('#resultsPerUserModal').modalJ({
         fadeDuration: 100
@@ -344,7 +372,7 @@ function acceptConvergence(idDecision) {
         Swal.fire({
 
             title: 'Atenção!',
-            html: `Só é possível fazer a aceitação em caso de CONVERGÊNCIA!`,
+            html: `Para a aceitação é necessário que a pontuação de motivação/engajamento e a concordância sejam maiores, ou iguais, a 65!`,
             icon: 'info',
             showCancelButton: false,
             cancelButtonText: "NÃO",
@@ -467,32 +495,28 @@ function generateRankingItem(id, label, value, draggable) {
 
     var colorClass = "li-ranking-default";
 
-    if(!isAgreement) {
+    if (!isAgreement) {
 
-        if(percentual >= 70) {
+        if (percentual >= 70) {
             colorClass = "li-ranking-green";
-        }
-        else if(percentual >= 40) {
+        } else if (percentual >= 40) {
             colorClass = "li-ranking-yellow";
-        }
-        else {
+        } else {
             colorClass = "li-ranking-red";
         }
 
-    }
-    else {
+    } else {
 
-        if(percentual >= 65) {
+        if (percentual >= 65) {
             colorClass = "li-ranking-green";
         }
 
     }
-
 
 
     return `
         <li id="li_${id}" uuid="${uuid}" option="${label}" percentual="${percentual}" class="li-ranking li-ranking-default ${colorClass} cursor-pointer ${itemClass}" style="--i: ${value}" data-toggle="tooltip" title="Clique para ver os impactos dessa escolha. Você também pode segurar, arrastar e trocar com outra opção de mesma pontuação">
-          <div class="h3-ranking">${label}&nbsp;<b style="margin-left: 10px">${percentual} PONTO(S)</b></div>
+          <div class="h3-ranking">${label.toUpperCase()}&nbsp;<b style="margin-left: 10px">${percentual} PONTO(S)</b></div>
         </li>
     `;
 
@@ -516,14 +540,14 @@ function hideNonDecided() {
 
     var spans = $('span[id^=span2]');
 
-    spans.each(function() {
-        if($(this).text() === "---") {
+    spans.each(function () {
+        if ($(this).text() === "---") {
             var row = $(this).parent().parent().parent().parent().parent().parent().parent();
             targets.push(row);
         }
     });
 
-    for(var target of targets) {
+    for (var target of targets) {
         $(target).addClass("none");
     }
 
@@ -537,24 +561,24 @@ function hideDecided() {
 
     var spans = $('span[id^=span2]');
 
-    spans.each(function() {
-        if($(this).text() !== "---") {
+    spans.each(function () {
+        if ($(this).text() !== "---") {
             var row = $(this).parent().parent().parent().parent().parent().parent().parent();
             targets.push(row);
         }
     });
 
-    for(var target of targets) {
+    for (var target of targets) {
         $(target).addClass("none");
     }
 
 }
 
-$("#btApplyFilter").click(function() {
+$("#btApplyFilter").click(function () {
 
     var selectedOption = Number($("#selectDecisionsFilter").val());
 
-    switch(selectedOption) {
+    switch (selectedOption) {
 
         case 2:
             hideNonDecided();
