@@ -188,29 +188,36 @@ User.belongsToMany(Project, { through: ProjectUser });
 Course.hasMany(User);
 User.belongsTo(Course);
 
-Project.hasMany(ProjectSnapshot);
+Project.hasMany(ProjectSnapshot,{
+    onDelete: 'CASCADE'
+});
 ProjectSnapshot.belongsTo(Project);
 
-Course.hasMany(Evaluation);
+Course.hasMany(Evaluation,{
+    onDelete: 'CASCADE'
+});
 Evaluation.belongsTo(Course);
 
-EvaluationOption.hasOne(Decision);
+EvaluationOption.hasOne(Decision, {
+    onDelete: 'CASCADE'
+});
 Decision.belongsTo(EvaluationOption);
 
-EvaluationOption.belongsTo(Project,{
+Project.hasMany(EvaluationOption,{
     onDelete: 'CASCADE'
 });
-Project.hasMany(EvaluationOption);
+EvaluationOption.belongsTo(Project);
 
-Evaluation.belongsTo(User,{
+User.hasMany(Evaluation,{
     onDelete: 'CASCADE'
 });
-User.hasMany(Evaluation);
+Evaluation.belongsTo(User);
 
-Evaluation.belongsTo(EvaluationOption,{
+EvaluationOption.hasMany(Evaluation,{
     onDelete: 'CASCADE'
 });
-EvaluationOption.hasMany(Evaluation);
+Evaluation.belongsTo(EvaluationOption);
+
 
 function databaseConnected() {
 
