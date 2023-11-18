@@ -84,7 +84,12 @@ function getRoot(req, res) {
     res.sendFile(__dirname + '/html/land-page.html');
 }
 
+function getAbout(req, res) {
+    res.sendFile(__dirname + '/html/about.html');
+}
+
 app.get('/', getRoot);
+app.get('/about', getAbout);
 
 function serverInitializedCallback() {
     console.log(messages.serverInitializedMessage);
