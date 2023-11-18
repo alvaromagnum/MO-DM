@@ -6,8 +6,4 @@
 
 . Usar biblioteca para melhorar cores dos gráficos (harmonizar)
 
-. Remover multiplas chamadas de pegar todos os dados do projeto ao gerar o sankey chart. Ver TO-DO no código.
-
-. Criar filtros na página de resultados.
-
-. Atualizar o json do projeto ao atualizar o usuário
+. Em um momento passou a ocorrer o seguinte erro: SQLITE_BUSY. Investigar.
