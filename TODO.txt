@@ -7,3 +7,5 @@
 . Usar biblioteca para melhorar cores dos gráficos (harmonizar)
 
 . Em um momento passou a ocorrer o seguinte erro: SQLITE_BUSY. Investigar.
+
+. Ao reavaliar uma decisão já tomada, tem que zerar a decisão anterior.
