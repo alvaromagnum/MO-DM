@@ -207,7 +207,7 @@ async function generateRankings(data) {
             // if(oldWeightRankingIndex !== -1) _.move(weightRankingItems, oldWeightRankingIndex, 0);
             if (oldEvcRankingIndex !== -1) _.move(evcRankingItems, oldEvcRankingIndex, 0);
 
-            var dashboard = $("<div></div>").html(`
+            var dashboard = $("<div class='decision-row'></div>").html(`
             
                 <div class="row">
                   <div class="col-xl-12 col-sm-6 mb-xl-0 mb-4">
@@ -257,10 +257,10 @@ async function generateRankings(data) {
                     </div>
                   </div>
                 </div>
+                <br/><br/>
             `);
 
             $("#divResults").append(dashboard);
-            $("#divResults").append("<br/><br/>");
 
             var draggable = false;
 
@@ -503,6 +503,74 @@ function activateTooltips() {
         $('[data-toggle="tooltip"]').tooltip();
     });
 }
+
+function showAllDecisions() {
+    $(".decision-row").removeClass("none");
+}
+
+function hideNonDecided() {
+
+    showAllDecisions();
+
+    var targets = [];
+
+    var spans = $('span[id^=span2]');
+
+    spans.each(function() {
+        if($(this).text() === "---") {
+            var row = $(this).parent().parent().parent().parent().parent().parent().parent();
+            targets.push(row);
+        }
+    });
+
+    for(var target of targets) {
+        $(target).addClass("none");
+    }
+
+}
+
+function hideDecided() {
+
+    showAllDecisions();
+
+    var targets = [];
+
+    var spans = $('span[id^=span2]');
+
+    spans.each(function() {
+        if($(this).text() !== "---") {
+            var row = $(this).parent().parent().parent().parent().parent().parent().parent();
+            targets.push(row);
+        }
+    });
+
+    for(var target of targets) {
+        $(target).addClass("none");
+    }
+
+}
+
+$("#btApplyFilter").click(function() {
+
+    var selectedOption = Number($("#selectDecisionsFilter").val());
+
+    switch(selectedOption) {
+
+        case 2:
+            hideNonDecided();
+            break;
+
+        case 3:
+            hideDecided();
+            break;
+
+        default:
+            showAllDecisions();
+            break;
+
+    }
+
+});
 
 importDefaultDataResults();
 activateTooltips();
