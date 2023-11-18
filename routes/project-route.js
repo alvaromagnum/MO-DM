@@ -258,7 +258,15 @@ async function saveEvaluations(req, res) {
 
             var evc = ((((0.3 * e + 0.3 * v) - 0.4 * c) + 1.8) / 5).toFixed(2);
 
-            if(e === 0 || v === 0 || c === 0) evc = 0;
+            if(e === 0 || v === 0 || c === 0) {
+
+                await databaseConfig.Decision.destroy({
+                    where: {idProject: req.session.project.id, idDecision: evaluation.decisionId}
+                }, { transaction: transaction });
+
+                evc = 0;
+
+            }
 
             await databaseConfig.Evaluation.create({
 
