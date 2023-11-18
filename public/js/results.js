@@ -245,7 +245,8 @@ async function generateRankings(data) {
                           <i class="material-icons opacity-10">workspace_premium</i>
                         </div>
                         <div class="padding-left-80 pt-1 text-2xl text-uppercase">
-                          ${decision.question}<br/>
+                          ${decision.question} <span class="text-danger cursor-pointer" id="span3${decision.id}" onclick="window.location.href='/project/decisions?pendencies=true'"
+                                       data-toggle="tooltip" title="Clique para sanar as suas pendências, caso existam!"></span><br/>
                         </div>
                         <div class="padding-left-80 pt-1 text-2xl text-uppercase text-gray">
                           ESCOLHA ATUAL:&nbsp;<b>[<span id="span2${decision.id}">---</span>]</b><br/>
@@ -255,7 +256,7 @@ async function generateRankings(data) {
                         <hr class="dark horizontal my-0">
                         <div class="col-lg-12 col-md-6 mb-md-0 mb-4"></div>
                         <div class="div-results-1">
-                          <div class="container-fluid div-results-2">
+                          <div id="divResult${decision.id}" class="container-fluid div-results-2">
                             <div class="container container-results">
                               <div class="row row-results-header">
                                 <div class="col-sm text-xl-center">
@@ -308,6 +309,16 @@ async function generateRankings(data) {
 
             for (var agreementRankingItem of agreementRankingItems) {
                 $("#agreementRanking" + decision.id).append(generateRankingItem(`agreement_${agreementRankingItem.id}`, agreementRankingItem.option, agreementRankingItem.agreement, false));
+            }
+
+            if(evcRankingItems.length === 0) {
+
+                $("#span3"+decision.id).text("[COM PENDÊNCIAS]");
+
+                $("#btDecide"+decision.id).hide();
+                $("#btAcceptConvergence"+decision.id).hide();
+                $("#divResult"+decision.id).hide();
+
             }
 
             // Sortable.create(document.getElementById("weightRanking" + decision.id), {animation: 350, filter: '.filtered', preventOnFilter: true, draggable: ".draggable",});
