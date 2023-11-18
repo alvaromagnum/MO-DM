@@ -34,8 +34,9 @@ async function saveProjectConfig(req, res) {
             for(var idDecision of decisionsToRemoveFromProject) {
 
                 await databaseConfig.EvaluationOption.destroy({
-                    where: {idDecision: idDecision, ProjectId: req.session.project.id}
-                }, { transaction: transaction });
+                    where: {idDecision: idDecision, ProjectId: req.session.project.id},
+                    transaction: transaction
+                });
 
             }
 
@@ -52,8 +53,9 @@ async function saveProjectConfig(req, res) {
                     if(!arrayEquals(oldStakeholders, newStakeholders)) {
 
                         await databaseConfig.Decision.destroy({
-                            where: {idProject: req.session.project.id, idDecision: newDecision.id}
-                        }, { transaction: transaction });
+                            where: {idProject: req.session.project.id, idDecision: newDecision.id},
+                            transaction: transaction
+                        });
 
                     }
 
@@ -84,8 +86,9 @@ async function saveProjectConfig(req, res) {
         else {
 
             await databaseConfig.EvaluationOption.destroy({
-                where: {ProjectId: req.session.project.id}
-            }, { transaction: transaction });
+                where: {ProjectId: req.session.project.id},
+                transaction: transaction
+            });
 
         }
 
@@ -261,8 +264,9 @@ async function saveEvaluations(req, res) {
             if(e === 0 || v === 0 || c === 0) {
 
                 await databaseConfig.Decision.destroy({
-                    where: {idProject: req.session.project.id, idDecision: evaluation.decisionId}
-                }, { transaction: transaction });
+                    where: {idProject: req.session.project.id, idDecision: evaluation.decisionId},
+                    transaction: transaction
+                });
 
                 evc = 0;
 

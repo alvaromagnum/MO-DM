@@ -41,7 +41,7 @@ function registerProject(req, res) {
     res.sendFile(path.resolve(__dirname, '..') + '/html/register-project.html');
 }
 
-function saveUser(req, res) {
+async function saveUser(req, res) {
 
     var name = req.body.name;
     var login = req.body.login;
@@ -49,45 +49,43 @@ function saveUser(req, res) {
     var password2 = req.body.password2;
     var idCourse = req.body.idCourse;
 
-    if(idCourse < 1) {
+    if (idCourse < 1) {
         res.status(500).send(messages.selectCourse);
         return;
     }
 
     var regex = /[^\w]/gi;
 
-    if(regex.test(login) === true) {
+    if (regex.test(login) === true) {
         res.status(500).send(messages.invalidLogin);
         return;
     }
 
-    if(name.trim() === "" || login.trim() === "" || password1.trim() === "" || password2.trim() === "") {
+    if (name.trim() === "" || login.trim() === "" || password1.trim() === "" || password2.trim() === "") {
         res.status(500).send(messages.nameLoginAndPasswordRequired);
         return;
     }
 
-    if(password1 !== password2) {
+    if (password1 !== password2) {
         res.status(500).send(messages.differentPasswords);
         return;
     }
 
-    databaseConfig.User.findOne({ where: { login: login } }).then((user)=>{
+    var user = await databaseConfig.User.findOne({where: {login: login}});
 
-        if(user !== null) {
-            res.status(500).send(messages.loginAlreadyExists);
-            return;
-        }
+    if (user !== null) {
+        res.status(500).send(messages.loginAlreadyExists);
+        return;
+    }
 
-        databaseConfig.User.create({
-            CourseId: idCourse,
-            name: name,
-            login: login,
-            password: SHA256(password1).toString(),
-        }).then(() => {
-            res.send(messages.userCreatedSuccess);
-        });
-
+    await databaseConfig.User.create({
+        CourseId: idCourse,
+        name: name,
+        login: login,
+        password: SHA256(password1).toString(),
     });
+
+    res.send(messages.userCreatedSuccess);
 
 }
 
@@ -222,12 +220,12 @@ async function saveProject(req, res) {
         return;
     }
 
-    databaseConfig.Project.create({
+    await databaseConfig.Project.create({
         name: projectName,
         key: key,
-    }).then(() => {
-        res.send(`${messages.projectCreatedSuccess} <b id="keyToCopy">${key}</b> <i data-toggle="tooltip" title="Clique para COPIAR A CHAVE de acesso do projeto" class="material-icons opacity-10" id="buttonCopyKey" style="cursor:pointer" onclick="copyKey()">content_copy</i>`);
     });
+
+    res.send(`${messages.projectCreatedSuccess} <b id="keyToCopy">${key}</b> <i data-toggle="tooltip" title="Clique para COPIAR A CHAVE de acesso do projeto" class="material-icons opacity-10" id="buttonCopyKey" style="cursor:pointer" onclick="copyKey()">content_copy</i>`);
 
 }
 
