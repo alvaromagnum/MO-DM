@@ -1,4 +1,4 @@
-async function generateLineChartStudents(divId, snapshots, evcRankings) {
+async function generateLineChartStudents(divId, snapshots, evcRankings, pageAllUsersEvc) {
 
     am5.array.each(am5.registry.rootElements,
         function(root) {
@@ -11,7 +11,7 @@ async function generateLineChartStudents(divId, snapshots, evcRankings) {
         }
     );
 
-    var userSeries = await processSnapshotsStudents(snapshots, evcRankings);
+    var userSeries = await processSnapshotsStudents(snapshots, evcRankings, pageAllUsersEvc);
 
     var root = am5.Root.new(divId);
 
@@ -166,7 +166,7 @@ function fillCircleColors(circleColors, colors, userSeries) {
 
 }
 
-async function processSnapshotsStudents(snapshots, evcRankings) {
+async function processSnapshotsStudents(snapshots, evcRankings, pageAllUsersEvc) {
 
     var userData = [];
     var point = 0;
@@ -191,17 +191,28 @@ async function processSnapshotsStudents(snapshots, evcRankings) {
 
     }
 
-    var currentEvcs = evcRankings.allUsersEvc;
+    var date = moment().format("DD-MM-YYYY HH:mm:ss");
 
-    if(currentEvcs) {
+    if(userData.length === 0) {
 
-        var date = moment().add(5, 'm').format("DD-MM-YYYY HH:mm:ss");
-
-        for(var user of currentEvcs) {
-            userData.push({point: point, id: user.id, label: user.label, date: date, value: Number((user.evc*100).toFixed(2))});
+        for(var user of pageAllUsersEvc) {
+            userData.push({point: 1, id: user.id, label: user.label, date: date, value: 0});
         }
 
     }
+
+    // var currentEvcs = evcRankings.allUsersEvc;
+    //
+    // if(currentEvcs) {
+    //
+    //     //var date = moment().add(5, 'm').format("DD-MM-YYYY HH:mm:ss");
+    //     var date = moment().format("DD-MM-YYYY HH:mm:ss");
+    //
+    //     for(var user of currentEvcs) {
+    //         userData.push({point: point, id: user.id, label: user.label, date: date, value: Number((user.evc*100).toFixed(2))});
+    //     }
+    //
+    // }
 
     var userSeries = [];
 
@@ -359,15 +370,22 @@ async function processSnapshotsGeneral(snapshots, evcRankings) {
 
     }
 
-    var currentEvc = evcRankings.generalEvc;
+    var date = moment().format("DD-MM-YYYY HH:mm:ss");
 
-    if(currentEvc) {
-
-        var date = moment().add(5, 'm').format("DD-MM-YYYY HH:mm:ss");
-
-        generalSerie.push({id: currentEvc.id, label: currentEvc.label, date: date, value: Number((currentEvc.evc*100).toFixed(2))});
-
+    if(generalSerie.length === 0) {
+        generalSerie.push({id: 0, label: "GERAL", date: date, value: 0});
     }
+
+    // var currentEvc = evcRankings.generalEvc;
+    //
+    // if(currentEvc) {
+    //
+    //     // var date = moment().add(5, 'm').format("DD-MM-YYYY HH:mm:ss");
+    //     var date = moment().format("DD-MM-YYYY HH:mm:ss");
+    //
+    //     generalSerie.push({id: currentEvc.id, label: currentEvc.label, date: date, value: Number((currentEvc.evc*100).toFixed(2))});
+    //
+    // }
 
     return generalSerie;
 

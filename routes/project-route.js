@@ -286,14 +286,14 @@ async function saveEvaluations(req, res) {
 
         }
 
-        var snapshot = req.body.snapshot;
-
-        await databaseConfig.ProjectSnapshot.create({
-
-            ProjectId: req.session.project.id,
-            jsonSnapshot: snapshot
-
-        }, { transaction: transaction });
+        // var snapshot = req.body.snapshot;
+        //
+        // await databaseConfig.ProjectSnapshot.create({
+        //
+        //     ProjectId: req.session.project.id,
+        //     jsonSnapshot: snapshot
+        //
+        // }, { transaction: transaction });
 
         await transaction.commit();
 
@@ -322,6 +322,19 @@ async function getResults(req, res) {
     });
 
     res.send(evaluationOptions);
+
+}
+
+async function checkIsChoice(req, res) {
+
+    if(!req.session.user || !req.session.project) {
+        res.redirect('/');
+        return;
+    }
+
+    var choice = await databaseConfig.Decision.findOne({where: {EvaluationOptionId: req.body.evaluationOptionId, idProject: req.session.project.id}});
+
+    res.send(choice !== null);
 
 }
 
@@ -460,8 +473,6 @@ async function makeDecision(req, res) {
 
     var decision = await databaseConfig.Decision.findOne({where: {idProject: idProject, idDecision: idDecision}});
 
-    var snapshot = req.body.snapshot;
-
     if(decision !== null) {
         decision.EvaluationOptionId = idOption;
         await decision.save();
@@ -478,10 +489,21 @@ async function makeDecision(req, res) {
 
     }
 
+    res.send(messages.genericTaskSuccess);
+
+}
+
+async function saveSnapshot(req, res) {
+
+    if(!req.session.user || !req.session.project) {
+        res.redirect('/');
+        return;
+    }
+
     await databaseConfig.ProjectSnapshot.create({
 
-        ProjectId: idProject,
-        jsonSnapshot: snapshot
+        ProjectId: req.session.project.id,
+        jsonSnapshot: req.body.snapshot
 
     });
 
@@ -513,6 +535,8 @@ projectRoute.post('/removeEvaluationOption', removeEvaluationOption);
 
 projectRoute.post('/makeDecision', makeDecision);
 
+projectRoute.post('/saveSnapshot', saveSnapshot);
+
 projectRoute.post('/saveEvaluations', saveEvaluations);
 
 projectRoute.post('/getEvaluations', getEvaluations);
@@ -524,6 +548,8 @@ projectRoute.get('/motivation/history', loadProjectSnapshots);
 projectRoute.post('/isDecisionFinished', isDecisionFinished);
 
 projectRoute.post('/hasAnyEvaluation', hasAnyEvaluation);
+
+projectRoute.post('/decisions/choice/check', checkIsChoice);
 
 projectRoute.get('/decisions', loadMyDecisions);
 projectRoute.post('/decisions', processDecisionsData);

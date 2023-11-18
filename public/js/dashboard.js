@@ -420,7 +420,7 @@ function importDefaultDataDashboard() {
 
                     snapshots = snapshotsToJson(snapshots);
 
-                    generateLineChartStudents("allStudentsMotivationDiv", snapshots, evcRankings);
+                    generateLineChartStudents("allStudentsMotivationDiv", snapshots, evcRankings, pageAllUsersEvc);
                     generateLineChartGeneral("generalMotivationDiv", snapshots, evcRankings);
 
                 }

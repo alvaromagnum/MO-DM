@@ -40,7 +40,7 @@ async function getEvcRankings(editorJson) {
 
     for(var user of allUsers) {
 
-        var queryUserEvc = "${\"evc\": $average(decisions.options[isComplete=true].Evaluations.evc[%.UserId="+user.idUser+"]), \"e\": $average($map(decisions.options[isComplete=true].Evaluations.e[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options[isComplete=true].Evaluations.v[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options[isComplete=true].Evaluations.c[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5}))}";
+        var queryUserEvc = "${\"evc\": $average(decisions.options[isComplete=true and isSelectedChoice=true].Evaluations.evc[%.UserId="+user.idUser+"]), \"e\": $average($map(decisions.options[isComplete=true and isSelectedChoice=true].Evaluations.e[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options[isComplete=true and isSelectedChoice=true].Evaluations.v[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options[isComplete=true and isSelectedChoice=true].Evaluations.c[%.UserId="+user.idUser+"], function($v, $k) {($v-1)/5}))}";
         var userEvc = await jsonata(queryUserEvc).evaluate(fullData);
 
         if(!userEvc.evc) userEvc = {evc: 0, e: 0, v: 0, c: 0};
@@ -53,7 +53,7 @@ async function getEvcRankings(editorJson) {
 
     for(var course of allCourses) {
 
-        var queryCourseEvc = "${\"evc\": $average(decisions.options[isComplete=true].Evaluations.evc[%.CourseId="+course.idCourse+"]), \"e\": $average($map(decisions.options[isComplete=true].Evaluations.e[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options[isComplete=true].Evaluations.v[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options[isComplete=true].Evaluations.c[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5}))}";
+        var queryCourseEvc = "${\"evc\": $average(decisions.options[isComplete=true and isSelectedChoice=true].Evaluations.evc[%.CourseId="+course.idCourse+"]), \"e\": $average($map(decisions.options[isComplete=true and isSelectedChoice=true].Evaluations.e[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5})), \"v\": $average($map(decisions.options[isComplete=true and isSelectedChoice=true].Evaluations.v[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5})), \"c\": $average($map(decisions.options[isComplete=true and isSelectedChoice=true].Evaluations.c[%.CourseId="+course.idCourse+"], function($v, $k) {($v-1)/5}))}";
         var courseEvc = await jsonata(queryCourseEvc).evaluate(fullData);
 
         if(!courseEvc.evc) courseEvc = {evc: 0, e: 0, v: 0, c: 0};
@@ -207,6 +207,8 @@ async function joinDataAddScores(steps, optionsWithEvaluations) {
                     option.Decision.option = option.option;
                 }
 
+                option.isSelectedChoice = await checkIsChoice(option.id);
+
             }
 
             decision.options = options;
@@ -216,6 +218,21 @@ async function joinDataAddScores(steps, optionsWithEvaluations) {
     }
 
     return steps;
+
+}
+
+async function checkIsChoice(evaluationOptionId) {
+
+    return $.ajax({
+        method: "POST",
+        url: "/project/decisions/choice/check",
+        data: { evaluationOptionId: evaluationOptionId }
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+        return false;
+    }).done(function (result) {
+        return result;
+    });
 
 }
 

@@ -453,26 +453,41 @@ function makeDecisionFor(decisionId) {
 
             $.LoadingOverlay("show");
 
-            var snapshot = await getEvcRankings(jsonConfig);
-
             $.ajax({
 
                 method: "POST",
                 url: "/project/makeDecision",
-                data: {idDecision: decisionId, idOption: optionId, snapshot: JSON.stringify(snapshot)}
+                data: {idDecision: decisionId, idOption: optionId}
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
 
                 $.LoadingOverlay("hide");
                 Swal.fire('Erro!', jqXHR.responseText, 'error');
 
-            }).done(function (msg) {
+            }).done(async function (msg) {
 
-                $("#span2" + decisionId).text(option);
+                var snapshot = await getEvcRankings(jsonConfig);
 
-                $.modalJ.close();
-                $.LoadingOverlay("hide");
-                $.notify(msg, "success");
+                $.ajax({
+
+                    method: "POST",
+                    url: "/project/saveSnapshot",
+                    data: {snapshot: JSON.stringify(snapshot)}
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                    $.LoadingOverlay("hide");
+                    Swal.fire('Erro!', jqXHR.responseText, 'error');
+
+                }).done(async function (msg) {
+
+                    $("#span2" + decisionId).text(option);
+
+                    $.modalJ.close();
+                    $.LoadingOverlay("hide");
+                    $.notify(msg, "success");
+
+                });
 
             });
 
