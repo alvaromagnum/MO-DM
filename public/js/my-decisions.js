@@ -416,7 +416,7 @@ function hideNonEvaluated() {
         }
     });
 
-    hideCardIfAllDecisionsNotVisible();
+    //hideCardIfAllDecisionsNotVisible();
 
 }
 
@@ -443,7 +443,7 @@ function hideEvaluated() {
         }
     });
 
-    hideCardIfAllDecisionsNotVisible2();
+    //hideCardIfAllDecisionsNotVisible2();
 
 }
 

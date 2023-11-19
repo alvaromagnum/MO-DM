@@ -1,5 +1,6 @@
 var evaluationData;
 var jsonConfig;
+var myId;
 
 function importDefaultDataResults() {
 
@@ -8,52 +9,55 @@ function importDefaultDataResults() {
     $.ajax({
 
         method: "GET",
-        url: "/project/loadConfig",
+        url: "/users/get/loggedUserData",
 
-    }).fail(function (jqXHR, textStatus, errorThrown) {
+    }).fail(function(jqXHR, textStatus, errorThrown) {
 
         $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
 
-    }).done(function (dataToImport) {
+    }).done(function (user) {
 
-        if (dataToImport) {
+        myId = user.userId;
 
-            var projectName = dataToImport.projectName;
+        $("#labelUserName").text(user.userName);
 
-            jsonConfig = dataToImport.jsonConfig;
+        $.ajax({
 
-            $("#labelProjectName").text(projectName);
+            method: "GET",
+            url: "/project/loadConfig",
 
-            if (!jsonConfig) {
-                $.LoadingOverlay("hide");
-                return;
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+
+            $.LoadingOverlay("hide");
+            Swal.fire('Erro!', jqXHR.responseText, 'error');
+
+        }).done(function (dataToImport) {
+
+            if (dataToImport) {
+
+                var projectName = dataToImport.projectName;
+
+                jsonConfig = dataToImport.jsonConfig;
+
+                $("#labelProjectName").text(projectName);
+
+                if (!jsonConfig) {
+                    $.LoadingOverlay("hide");
+                    return;
+                }
+
+                getFullProjectData(jsonConfig, true).then(async (result) => {
+                    await generateRankings(result);
+                    showMine();
+                });
+
             }
 
-            getFullProjectData(jsonConfig, true).then((result) => {
-                generateRankings(result);
-            });
+            $.LoadingOverlay("hide");
 
-        }
+        });
 
-        $.LoadingOverlay("hide");
-
-    });
-
-    $.LoadingOverlay("show");
-
-    $.ajax({
-        method: "GET",
-        url: "/users/get/loggedUserData",
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        $.LoadingOverlay("hide");
-        Swal.fire('Erro!', jqXHR.responseText, 'error');
-    }).done(function (dataToImport) {
-        $.LoadingOverlay("hide");
-        if (dataToImport) {
-            var userName = dataToImport.userName;
-            $("#labelUserName").text(userName);
-        }
     });
 
 }
@@ -235,7 +239,9 @@ async function generateRankings(data) {
             // if(oldWeightRankingIndex !== -1) _.move(weightRankingItems, oldWeightRankingIndex, 0);
             if (oldEvcRankingIndex !== -1) _.move(evcRankingItems, oldEvcRankingIndex, 0);
 
-            var dashboard = $("<div class='decision-row'></div>").html(`
+            var isMine = _.find(decision.stakeholders, (o) => o.idUser === myId) !== undefined;
+
+            var dashboard = $(`<div class='decision-row ${isMine ? "is-mine" : ""}'></div>`).html(`
             
                 <div class="row">
                   <div class="col-xl-12 col-sm-6 mb-xl-0 mb-4">
@@ -311,7 +317,9 @@ async function generateRankings(data) {
                 $("#agreementRanking" + decision.id).append(generateRankingItem(`agreement_${agreementRankingItem.id}`, agreementRankingItem.option, agreementRankingItem.agreement, false));
             }
 
-            if(evcRankingItems.length === 0) {
+            var isComplete = evcRankingItems.length === decision.stakeholders.length;
+
+            if(evcRankingItems.length === 0 || !isComplete) {
 
                 $("#span3"+decision.id).text("[COM PENDÊNCIAS]");
 
@@ -580,6 +588,15 @@ function hideNonDecided() {
 
 }
 
+function showMine() {
+
+    showAllDecisions();
+
+    $('.decision-row').addClass("none");
+    $('.decision-row.is-mine').removeClass("none");
+
+}
+
 function hideDecided() {
 
     showAllDecisions();
@@ -613,6 +630,10 @@ $("#btApplyFilter").click(function () {
 
         case 3:
             hideDecided();
+            break;
+
+        case 4:
+            showMine();
             break;
 
         default:

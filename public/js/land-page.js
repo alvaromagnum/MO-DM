@@ -18,6 +18,7 @@ var evaluationData = null;
 var jsonConfig = null;
 var pageJsonConfig = null;
 var projectCurrentJson = null;
+var myId = null;
 
 $('#loginButton').click(function () {
 
