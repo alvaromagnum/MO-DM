@@ -83,9 +83,15 @@ async function generateLineChartStudents(divId, snapshots, evcRankings, pageAllU
 
         var data = userSerie;
 
+        var color = am5.color('#'+(Math.random()*(1<<24)|0).toString(16));
+
+        colors.push(color);
+
         var series = chart.series.push(
             am5xy.LineSeries.new(root, {
                 name: data[0].label,
+                fill: null,
+                stroke: color,
                 xAxis: xAxis,
                 yAxis: yAxis,
                 valueYField: "value",
@@ -99,8 +105,6 @@ async function generateLineChartStudents(divId, snapshots, evcRankings, pageAllU
                 })
             })
         );
-
-        colors.push(series.get("fill"));
 
         series.data.processor = am5.DataProcessor.new(root, {
             dateFormat: "dd-MM-yyyy HH:mm:ss",
