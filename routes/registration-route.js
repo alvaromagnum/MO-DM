@@ -151,39 +151,43 @@ async function updateUser(req, res) {
         include: [{model: databaseConfig.Course}]
     });
 
-    req.session.user = user;
+    if(jsonConfig) {
 
-    var project = await databaseConfig.Project.findOne({where: {id: req.session.project.id}});
+        req.session.user = user;
 
-    var jsonConfig = project.jsonConfig;
+        var project = await databaseConfig.Project.findOne({where: {id: req.session.project.id}});
 
-    var userId = user.id;
-    var userName = user.name;
-    var courseName = user.Course.name;
-    var courseId = user.Course.id;
+        var jsonConfig = project.jsonConfig;
 
-    var newData1 = {
-        "data": {
-            "user_id": user.id.toString(),
-            "user_name": userName,
-            "course_name": courseName,
-            "course_id": courseId.toString()
+        var userId = user.id;
+        var userName = user.name;
+        var courseName = user.Course.name;
+        var courseId = user.Course.id;
+
+        var newData1 = {
+            "data": {
+                "user_id": user.id.toString(),
+                "user_name": userName,
+                "course_name": courseName,
+                "course_id": courseId.toString()
+            }
         }
+
+        var newData2 = `<div class=\\"node-user-name df-user-course-name-div-${userId}\\"><b>${userName} - ${courseName}</b></div>`;
+
+        var regex1 = new RegExp(`"data":{"user_id":"${userId}"[^]*?}`, "g");
+        var regex2 = new RegExp(`<div class=\\\\"node-user-name df-user-course-name-div-${userId}\\\\"[^]*?</div>`, "g");
+
+        jsonConfig = jsonConfig.replaceAll(regex1, JSON.stringify(newData1).slice(1, -1));
+        jsonConfig = jsonConfig.replaceAll(regex2, newData2);
+
+        project.jsonConfig = jsonConfig;
+
+        await project.save();
+
+        req.session.project = project;
+
     }
-
-    var newData2 = `<div class=\\"node-user-name df-user-course-name-div-${userId}\\"><b>${userName} - ${courseName}</b></div>`;
-
-    var regex1 = new RegExp(`"data":{"user_id":"${userId}"[^]*?}`, "g");
-    var regex2 = new RegExp(`<div class=\\\\"node-user-name df-user-course-name-div-${userId}\\\\"[^]*?</div>`, "g");
-
-    jsonConfig = jsonConfig.replaceAll(regex1, JSON.stringify(newData1).slice(1, -1));
-    jsonConfig = jsonConfig.replaceAll(regex2, newData2);
-
-    project.jsonConfig = jsonConfig;
-
-    await project.save();
-
-    req.session.project = project;
 
     res.send(messages.profileUpdateSuccess);
 
