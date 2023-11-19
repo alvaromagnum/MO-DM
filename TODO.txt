@@ -6,6 +6,6 @@
 
 . Usar biblioteca para melhorar cores dos gráficos (harmonizar)
 
-. Em um momento passou a ocorrer o seguinte erro: SQLITE_BUSY. Investigar.
+. Colocar mais filtros nos resultados: APENAS MINHA, COM/SEM RESTRIÇÕES, ETC.
 
 . Ao reavaliar uma decisão já tomada, tem que zerar a decisão anterior.

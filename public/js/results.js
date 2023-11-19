@@ -260,7 +260,7 @@ async function generateRankings(data) {
                             <div class="container container-results">
                               <div class="row row-results-header">
                                 <div class="col-sm text-xl-center">
-                                  <b>MAIS MOTIVAÇÃO/ENGAJAMENTO</b>
+                                  <b>MOTIVAÇÃO/ENGAJAMENTO</b>
                                 </div>
                                 <div class="col-sm text-xl-center">
                                   <b>CONCORDÂNCIA</b>
@@ -383,7 +383,7 @@ function acceptConvergence(idDecision) {
         Swal.fire({
 
             title: 'Atenção!',
-            html: `Para a aceitação é necessário que a pontuação de motivação/engajamento e a concordância sejam maiores, ou iguais, a 65!`,
+            html: `Para a aceitação é necessário que a pontuação de motivação/engajamento seja maior ou igual a 60 pontos e o nível concordância seja de, pelo menos, 65%!`,
             icon: 'info',
             showCancelButton: false,
             cancelButtonText: "NÃO",
@@ -427,7 +427,7 @@ function checkConvergence(idDecision) {
 
     //labelConvergence.removeClass();
 
-    var convergence = points >= 65 && agreement >= 65;
+    var convergence = points >= 60 && agreement >= 65;
 
     return convergence ? uuid2 : undefined;
 
@@ -539,10 +539,11 @@ function generateRankingItem(id, label, value, draggable) {
 
     }
 
+    var sufix = isAgreement ? "%" : " PONTO(S)";
 
     return `
         <li id="li_${id}" uuid="${uuid}" option="${label}" percentual="${percentual}" class="li-ranking li-ranking-default ${colorClass} cursor-pointer ${itemClass}" style="--i: ${value}" data-toggle="tooltip" title="Clique para ver os impactos dessa escolha. Você também pode segurar, arrastar e trocar com outra opção de mesma pontuação">
-          <div class="h3-ranking">${label.toUpperCase()}&nbsp;<b style="margin-left: 10px">${percentual} PONTO(S)</b></div>
+          <div class="h3-ranking">${label.toUpperCase()}&nbsp;<b style="margin-left: 10px">${percentual}${sufix}</b></div>
         </li>
     `;
 
