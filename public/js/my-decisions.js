@@ -6,7 +6,7 @@ var starRatingControl;
 var pageJsonConfig;
 
 const urlParams = new URLSearchParams(window.location.search);
-const pendenciesParam = urlParams.get('pendencies');
+const filterParam = urlParams.get('filter');
 
 function activateStarRating() {
     starRatingControl.rebuild();
@@ -130,8 +130,8 @@ async function processDecisions(jsonConfig) {
 
         }
 
-        if(pendenciesParam) {
-            $("#selectDecisionsFilter").val("3");
+        if(filterParam) {
+            $("#selectDecisionsFilter").val(filterParam.toString());
             hideEvaluated();
         }
 
@@ -369,15 +369,36 @@ $("#btSave").click(async function () {
     }
 
     $.ajax({
+
         method: "POST",
         url: "/project/saveEvaluations",
         data: {evaluations: evaluations, snapshot: JSON.stringify(snapshot)}
+
     }).fail(function (jqXHR, textStatus, errorThrown) {
+
         $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
+
     }).done(function (msg) {
+
         $.LoadingOverlay("hide");
-        $.notify(msg, "success");
+
+        Swal.fire({
+
+            title: 'Sucesso!',
+            html: msg,
+            icon: 'success',
+            showCancelButton: false,
+            confirmButtonText: 'OK!'
+
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                window.location.href='/project/decisions?filter='+$("#selectDecisionsFilter").val();
+            }
+
+        });
+
     });
 
 });
