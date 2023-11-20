@@ -72,7 +72,7 @@ async function processDecisions(jsonConfig) {
 
                 for(var decision of step.decisions) {
 
-                    var card = $("<div class='padding-bottom-20'></div>").html(`
+                    var card = $(`<div id="cardDecision_${decision.decisionId}" class='padding-bottom-20'></div>`).html(`
                         <div class="card card-white">
                           <div class="card-body px-0 pb-2">
                             <div class="table-responsive hide-scroll">
@@ -84,7 +84,7 @@ async function processDecisions(jsonConfig) {
                                   <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7">Valor<sup><i data-toggle="tooltip" title="O quanto você deseja essa opção" class="material-icons text-sm my-auto me-1">info</i></sup></th>
                                   <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7">Custo<sup><i data-toggle="tooltip" title="O quão custosa você acha que é essa opção" class="material-icons text-sm my-auto me-1">info</i></sup></th>
                                   <th class="text-uppercase text-secondary text-xx font-weight-bolder opacity-7 text-center">
-                                    <button onclick="addNewDecisionOption('${"#tableQuestions_"+decision.decisionId}', ${decision.decisionId}, ${step.stepId}, crypto.randomUUID(), 'Clique aqui para mudar o título da opção de decisão')" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Adicionar Opção"><i class="material-icons icon-button">add</i></button>
+                                    <button onclick="addNewDecisionOption('${"#tableQuestions_"+decision.decisionId}', '${"#cardDecision_"+decision.decisionId}', true, ${decision.decisionId}, ${step.stepId}, crypto.randomUUID(), 'Clique aqui para mudar o título da opção de decisão')" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Adicionar Opção"><i class="material-icons icon-button">add</i></button>
                                     <button onclick="hideItem(this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement)" class="btn btn-outline-white align-bottom margin-top-10" data-toggle="tooltip" title="Esconder Decisão"><i class="material-icons icon-button">visibility_off</i></button>
                                   </th>
                                 </tr>
@@ -101,11 +101,18 @@ async function processDecisions(jsonConfig) {
                     var queryEvaluatedEvaluations = `[*[idDecision=${decision.decisionId} and idStep=${step.stepId}]]`;
                     var evaluatedEvaluations = await jsonata(queryEvaluatedEvaluations).evaluate(evaluations);
 
+                    var card = $("#cardDecision_"+decision.decisionId);
+
+                    if(evaluatedEvaluations.length === 0 ) card.addClass("incomplete");
+                    else card.addClass(_.some(evaluatedEvaluations, (o)=> o.e === 0 || o.v === 0 || o.c === 0) ? "incomplete" : "complete");
+
                     _.each(evaluatedEvaluations, (evaluatedEvaluation)=> {
 
-                        addNewDecisionOption("#tableQuestions_" + evaluatedEvaluation.idDecision, evaluatedEvaluation.idDecision, evaluatedEvaluation.idStep, evaluatedEvaluation.id, evaluatedEvaluation.option);
+                        var idDecision = evaluatedEvaluation.idDecision;
 
-                        var sufixId = evaluatedEvaluation.idDecision + "_" + evaluatedEvaluation.id;
+                        addNewDecisionOption("#tableQuestions_" + idDecision, card, false, idDecision, evaluatedEvaluation.idStep, evaluatedEvaluation.id, evaluatedEvaluation.option);
+
+                        var sufixId = idDecision + "_" + evaluatedEvaluation.id;
 
                         var selectExpectancy = _.find(starRatingControl.widgets, function(item){ return item.el.id === "selectExpectancy_" + sufixId });
                         var selectValue = _.find(starRatingControl.widgets, function(item){ return item.el.id === "selectValue_" + sufixId });
@@ -242,7 +249,13 @@ function removeDecisionOption(row) {
 
 }
 
-function addNewDecisionOption(table, decisionId, stepId, elementId, title) {
+function addNewDecisionOption(table, card, markIncomplete, decisionId, stepId, elementId, title) {
+
+    if(markIncomplete) {
+        $(card).removeClass("complete");
+        $(card).removeClass("incomplete");
+        $(card).addClass("incomplete");
+    }
 
     var row = $(`<tr uuid="${elementId}"></tr>`).html(`
         <td>
@@ -416,7 +429,7 @@ function hideNonEvaluated() {
         }
     });
 
-    //hideCardIfAllDecisionsNotVisible();
+    $(".incomplete").addClass("none");
 
 }
 
@@ -443,49 +456,7 @@ function hideEvaluated() {
         }
     });
 
-    //hideCardIfAllDecisionsNotVisible2();
-
-}
-
-function hideCardIfAllDecisionsNotVisible() {
-
-    $('.table-questions').each(function(){
-
-        var allHidden = $(this).children().hasClass('none') || $(this).children().length === 0;
-
-        console.log(allHidden);
-
-        var itemToHide = $(this).parent().parent().parent().parent().parent();
-
-        if(allHidden) {
-            $(itemToHide).addClass("none");
-        }
-        else {
-            $(itemToHide).removeClass("none");
-        }
-
-    });
-
-}
-
-function hideCardIfAllDecisionsNotVisible2() {
-
-    $('.table-questions').each(function(){
-
-        var allHidden = $(this).children().hasClass('none');
-
-        console.log(allHidden);
-
-        var itemToHide = $(this).parent().parent().parent().parent().parent();
-
-        if(allHidden) {
-            $(itemToHide).addClass("none");
-        }
-        else {
-            $(itemToHide).removeClass("none");
-        }
-
-    });
+    $(".complete").addClass("none");
 
 }
 
