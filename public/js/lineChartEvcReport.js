@@ -77,15 +77,25 @@ async function generateLineChartStudents(divId, snapshots, evcRankings, pageAllU
 
     var colors = [];
 
+    for(var m = 0; m < userSeries.length; m++) {
+
+        let c = chroma.random();
+
+        while(_.contains(colors, c)) c = chroma.random();
+
+        colors.push(c);
+
+    }
+
     var circleColors = [];
+
+    var j = 0;
 
     for(var userSerie of userSeries) {
 
         var data = userSerie;
 
-        var color = am5.color('#'+(Math.random()*(1<<24)|0).toString(16));
-
-        colors.push(color);
+        var color = colors[j++];
 
         var series = chart.series.push(
             am5xy.LineSeries.new(root, {
