@@ -12,7 +12,8 @@ function showDashboard(req, res) {
         return;
     }
 
-    res.sendFile(path.resolve(__dirname, '..') + '/html/dashboard.html');
+    if(req.session.user.login === "admin") res.sendFile(path.resolve(__dirname, '..') + '/html/admin.html');
+    else res.sendFile(path.resolve(__dirname, '..') + '/html/dashboard.html');
 
 }
 

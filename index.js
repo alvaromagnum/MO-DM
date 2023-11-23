@@ -80,7 +80,12 @@ async function deleteAllFilesInDir(dirPath) {
 var session;
 
 function getRoot(req, res) {
-    req.session.destroy();
+
+    if(req.session && req.session.user) {
+        res.redirect('/dashboard');
+        return;
+    }
+
     res.sendFile(__dirname + '/html/land-page.html');
 }
 

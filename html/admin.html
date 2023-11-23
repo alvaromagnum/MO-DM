@@ -138,20 +138,10 @@
                         <hr class="dark horizontal my-0">
                         <br/>
                         <div class="align-right">
-                            <label for="selectNodeType" class="form-label">Modo:</label>
-                            <select id="selectNodeType" class="select-node">
-                                <option value="-3" class="select-divider">-- PADRÃO --</option>
-                                <option value="-1">Etapa</option>
-                                <option value="0">Decisão</option>
-                                <option value="-2" class="select-divider">-- STAKEHOLDERS --</option>
+                            <label for="selectProjectNames" class="form-label">Projeto:</label>
+                            <select id="selectProjectNames" class="select-node">
+                                <option value="0" selected>TODOS</option>
                             </select>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button id="btImport" class="btn btn-outline-white" data-toggle="tooltip"
-                                    title="Recarregar dados salvos do projeto"><i class="material-icons icon-button">autorenew</i>
-                            </button>
-                            <button id="btReset" class="btn btn-outline-white" data-toggle="tooltip"
-                                    title="Limpar tudo (sem salvar)"><i class="material-icons icon-button">delete</i>
-                            </button>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <button id="btZoomOut" class="btn btn-outline-white" data-toggle="tooltip" title="Zoom Out">
                                 <i class="material-icons icon-button">zoom_out</i></button>
@@ -161,10 +151,7 @@
                                     title="Zoom Padrão"><i class="material-icons icon-button">center_focus_weak</i>
                             </button>
                             <button id="btZoomIn" class="btn btn-outline-white" data-toggle="tooltip" title="Zoom In"><i
-                                    class="material-icons icon-button">zoom_in</i></button>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button id="btSave" class="btn btn-outline-white" data-toggle="tooltip"
-                                    title="Salvar dados do projeto"><i class="material-icons icon-button">save</i>
+                                    class="material-icons icon-button">zoom_in</i>
                             </button>
                         </div>
                         <br/>
@@ -436,9 +423,7 @@
                     <div class="card-header p-0 position-relative mt-n4 mx-3 bg-transparent">
                         <div class="shadow-dark border-radius-lg pendencies text-dark">
                             <div class="table-responsive">
-                                <table class="table align-items-center mb-0 border-white border-line cursor-pointer"
-                                       onclick="window.location.href='/project/decisions?filter=3'"
-                                       data-toggle="tooltip" title="Clique para sanar as suas pendências, caso existam!">
+                                <table class="table align-items-center mb-0 border-white border-line">
                                     <thead>
                                     <tr class="light-silver">
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -461,8 +446,7 @@
                         <hr class="dark horizontal">
                         <div class="d-flex">
                             <i class="material-icons text-sm my-auto me-1">info</i>
-                            <p class="mb-0 text-sm"> Para sanar as pendências, cada membro deve visitar a seção
-                                "DECISÕES" e fazer as avaliações. </p>
+                            <p class="mb-0 text-sm"> As pendências só poderão ser sanadas pelos próprios usuários ao fazerem a(s) avaliação(ões). </p>
                         </div>
                     </div>
                 </div>
@@ -557,7 +541,7 @@
 <script src="/js/gaugeChartEvcReport.js"></script>
 <script src="/js/bubbleChartEvcReport.js"></script>
 <script src="/js/lineChartEvcReport.js"></script>
-<script src="/js/dashboard.js" type="module"></script>
+<script src="/js/admin.js" type="module"></script>
 </body>
 
 </html>

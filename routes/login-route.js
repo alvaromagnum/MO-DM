@@ -6,8 +6,6 @@ const messages = require("../messages");
 
 async function doLogin(req, res) {
 
-    //req.session.destroy();
-
     var login = req.body.login;
     var password = SHA256(req.body.password).toString();
     var key = req.body.key;
@@ -28,12 +26,14 @@ async function doLogin(req, res) {
 
     var project = await databaseConfig.Project.findOne({where: {key: key}});
 
+    if(user.login === "admin") project = {id: 0, name: "ADMIN", jsonConfig: null};
+
     if (project === null) {
         res.status(500).send(messages.projectNotFound);
         return;
     }
 
-    project.addUser(user);
+    if(user.login !== "admin") project.addUser(user);
 
     req.session.user = user;
     req.session.project = project;

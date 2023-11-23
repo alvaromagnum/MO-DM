@@ -134,9 +134,11 @@ async function loadProjectConfig(req, res) {
         where: {id: req.session.project.id}
     });
 
+    if(!project) project = {id: 0, name: "ADMIN", jsonConfig: null};
+
     res.send({
         jsonConfig: project.jsonConfig,
-        projectName: `[${req.session.project.name} ➤ ${req.session.project.key}]`,
+        projectName: `[${req.session.project.name} ➤ ADMIN]`,
         projectId: req.session.project.id
     });
 
@@ -527,6 +529,27 @@ async function isDecisionFinished(req, res) {
 
 }
 
+async function getAllProjects(req, res) {
+
+    if(!req.session.user || !req.session.project) {
+        res.redirect('/');
+        return;
+    }
+
+    var projects = await databaseConfig.Project.findAll();
+
+    var allProjects = [];
+
+    for(const project of projects) {
+        allProjects.push({id: project.id, name: project.name});
+    }
+
+    allProjects = _.sortBy(allProjects, (o) => o.name);
+
+    res.send(allProjects);
+
+}
+
 projectRoute.post('/saveConfig', saveProjectConfig);
 
 projectRoute.post('/getImpacts', getImpacts);
@@ -542,6 +565,8 @@ projectRoute.post('/saveEvaluations', saveEvaluations);
 projectRoute.post('/getEvaluations', getEvaluations);
 
 projectRoute.get('/loadConfig', loadProjectConfig);
+
+projectRoute.get('/get/all', getAllProjects);
 
 projectRoute.get('/motivation/history', loadProjectSnapshots);
 
