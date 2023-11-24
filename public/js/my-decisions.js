@@ -132,7 +132,7 @@ async function processDecisions(jsonConfig) {
 
         if(filterParam) {
             $("#selectDecisionsFilter").val(filterParam.toString());
-            hideEvaluated();
+            $("#btApplyFilter").click();
         }
 
         $.LoadingOverlay("hide");
