@@ -8,4 +8,4 @@
 
 . Colocar mais filtros nos resultados: APENAS MINHA, COM/SEM RESTRIÇÕES, ETC.
 
-. Ao reavaliar uma decisão já tomada, tem que zerar a decisão anterior.
+. O modo como as tooltips são exibidas nos nós da configuração do projeto, ao carregar do bd, não está otimizado. Estranho. Checar.

@@ -1528,10 +1528,10 @@ export default class Drawflow {
     addNodeImport(dataNode, precanvas) {
         const parent = document.createElement('div');
         parent.classList.add("parent-node");
-
+        var nodeId = "node-" + dataNode.id;
         const node = document.createElement('div');
         node.innerHTML = "";
-        node.setAttribute("id", "node-" + dataNode.id);
+        node.setAttribute("id", nodeId);
         node.classList.add("drawflow-node");
         if (dataNode.class != '') {
             node.classList.add(...dataNode.class.split(' '));
@@ -1631,6 +1631,7 @@ export default class Drawflow {
                     if(key[0] === "step_name" || key[0] === "question"){
                         node.setAttribute("data-toggle", "tooltip");
                         node.setAttribute("title", key[1]);
+                        elems[i].setAttribute("tooltipid", nodeId);
                     }
                     if (elems[i].isContentEditable) {
                         elems[i].innerText = key[1];
@@ -1669,6 +1670,12 @@ export default class Drawflow {
         node.style.left = dataNode.pos_x + "px";
         parent.appendChild(node);
         this.precanvas.appendChild(parent);
+
+        // TODO - MAGNUM
+        $('[tooltipid]').each(function() {
+            $(this).on("keyup", function(){setDrawFlowTooltipImport(this, nodeId)});
+        });
+
         activateTooltips();
     }
 

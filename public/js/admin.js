@@ -367,7 +367,6 @@ async function load(dataToImport) {
         $('input').attr("readonly", "readonly");
 
         await processProjectConfig();
-
         await generateEvcCharts(jsonConfig);
 
         var evcRankings = await getEvcRankings(jsonConfig);

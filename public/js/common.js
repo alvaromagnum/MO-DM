@@ -290,3 +290,7 @@ function setDrawFlowTooltip(el) {
     $('#'+id).attr("data-bs-original-title", val);
 
 }
+
+function setDrawFlowTooltipImport(el, tooltipId) {
+    $('#'+tooltipId).attr("data-bs-original-title", $(el).val());
+}
