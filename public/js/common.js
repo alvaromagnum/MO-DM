@@ -294,3 +294,24 @@ function setDrawFlowTooltip(el) {
 function setDrawFlowTooltipImport(el, tooltipId) {
     $('#'+tooltipId).attr("data-bs-original-title", $(el).val());
 }
+
+function clearAllCharts() {
+
+    $("#tablePendencies").html("<tr class='pendency-row text-2xl'><td colspan='2'><center>-- SEM PENDÊNCIAS --</center></td></tr>");
+
+    am5.array.each(am5.registry.rootElements,
+        function(root) {
+            try{
+                root.dispose();
+            }
+            catch(err){}
+        }
+    );
+
+}
+
+function clearCharts() {
+    clearAllCharts();
+    clearAllCharts();
+    clearAllCharts();
+}

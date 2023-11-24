@@ -372,6 +372,7 @@ export default class Drawflow {
             this.pos_x = e_pos_x;
             this.pos_y = e_pos_y;
 
+            if(this.editor_mode === 'admin') return;
             if (this.ele_selected === null) return;
 
             hideTooltips();

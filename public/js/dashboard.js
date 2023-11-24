@@ -3,8 +3,6 @@ import Drawflow from '../js/drawflow.js';
 darkMode(true);
 activateTooltips();
 
-var sankeyChartRoot = am5.Root.new("sankeyChartDiv");
-
 var pageAllUsersEvc;
 var pageAllCoursesEvc;
 var pageGeneralEvc;
@@ -517,7 +515,18 @@ $('#btReset').click(function(){
 
 function generateProjectSankeyChart(nodes, links) {
 
-    sankeyChartRoot.container.children.clear();
+    am5.array.each(am5.registry.rootElements,
+        function(root) {
+            try{
+                if (root.dom.id == "sankeyChartDiv") {
+                    root.dispose();
+                }
+            }
+            catch(err){}
+        }
+    );
+
+    var sankeyChartRoot = am5.Root.new("sankeyChartDiv");
 
     sankeyChartRoot.setThemes([
         am5themes_Animated.new(sankeyChartRoot)

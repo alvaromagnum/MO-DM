@@ -155,8 +155,6 @@ async function loadProjectConfig(req, res) {
         return;
     }
 
-    console.log("PROJECT ID: " + req.session.project.id);
-
     var project = await databaseConfig.Project.findOne({
         where: {id: req.session.project.id}
     });
@@ -481,7 +479,8 @@ function showResults(req, res) {
         return;
     }
 
-    res.sendFile(path.resolve(__dirname, '..') + '/html/results.html');
+    if(req.session.user.login === "admin") res.sendFile(path.resolve(__dirname, '..') + '/html/results-admin.html');
+    else res.sendFile(path.resolve(__dirname, '..') + '/html/results.html');
 
 }
 
