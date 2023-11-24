@@ -123,15 +123,19 @@ function arrayEquals(a, b) {
 
 }
 
-async function loadProjectConfig(req, res) {
+async function setCurrentProject(req, res) {
 
-    if (!req.session.user || !req.session.project) {
+    if (!req.session.user || !req.session.project || req.session.user.login !== "admin") {
         res.redirect('/');
         return;
     }
 
+    var idProject = Number(req.body.idProject);
+
+    req.session.project.id = idProject;
+
     var project = await databaseConfig.Project.findOne({
-        where: {id: req.session.project.id}
+        where: {id: idProject}
     });
 
     if(!project) project = {id: 0, name: "ADMIN", jsonConfig: null};
@@ -139,6 +143,29 @@ async function loadProjectConfig(req, res) {
     res.send({
         jsonConfig: project.jsonConfig,
         projectName: `[${req.session.project.name} ➤ ADMIN]`,
+        projectId: req.session.project.id
+    });
+
+}
+
+async function loadProjectConfig(req, res) {
+
+    if (!req.session.user || !req.session.project) {
+        res.redirect('/');
+        return;
+    }
+
+    console.log("PROJECT ID: " + req.session.project.id);
+
+    var project = await databaseConfig.Project.findOne({
+        where: {id: req.session.project.id}
+    });
+
+    if(!project) project = {id: 0, name: "ADMIN", jsonConfig: null, key: "ADMIN"};
+
+    res.send({
+        jsonConfig: project.jsonConfig,
+        projectName: `[${req.session.project.name} ➤ ${project.key}]`,
         projectId: req.session.project.id
     });
 
@@ -578,6 +605,8 @@ projectRoute.post('/decisions/choice/check', checkIsChoice);
 
 projectRoute.get('/decisions', loadMyDecisions);
 projectRoute.post('/decisions', processDecisionsData);
+
+projectRoute.post('/setCurrent', setCurrentProject);
 
 projectRoute.get('/results', showResults);
 projectRoute.post('/results', getResults);

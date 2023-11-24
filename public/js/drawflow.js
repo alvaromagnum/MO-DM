@@ -181,7 +181,6 @@ export default class Drawflow {
     click(e) {
         this.dispatch('click', e);
         if (this.editor_mode === 'fixed') {
-            //return false;
             e.preventDefault();
             if (e.target.classList[0] === 'parent-drawflow' || e.target.classList[0] === 'drawflow') {
                 this.ele_selected = e.target.closest(".parent-drawflow");
@@ -374,6 +373,8 @@ export default class Drawflow {
             this.pos_y = e_pos_y;
 
             if (this.ele_selected === null) return;
+
+            hideTooltips();
 
             this.ele_selected.style.top = (this.ele_selected.offsetTop - y) + "px";
             this.ele_selected.style.left = (this.ele_selected.offsetLeft - x) + "px";
@@ -572,6 +573,7 @@ export default class Drawflow {
         }
         ;
         if (this.node_selected || this.connection_selected) {
+            if(this.editor_mode === 'admin') return;
             var deletebox = document.createElement('div');
             deletebox.classList.add("drawflow-delete");
             deletebox.innerHTML = "x";
@@ -595,7 +597,6 @@ export default class Drawflow {
         if (this.precanvas.getElementsByClassName("drawflow-delete").length) {
             this.precanvas.getElementsByClassName("drawflow-delete")[0].remove()
         }
-        ;
     }
 
     key(e) {
@@ -1144,7 +1145,7 @@ export default class Drawflow {
 
     dblclick(e) {
         // TODO - MAGNUM
-        //var mousePos = getMousePos(configCanvas, evt);
+        if(this.editor_mode === 'admin') return;
         var pos_x = this.pos_x * (this.precanvas.clientWidth / (this.precanvas.clientWidth * this.zoom)) - (this.precanvas.getBoundingClientRect().x * (this.precanvas.clientWidth / (this.precanvas.clientWidth * this.zoom)));
         var pos_y = this.pos_y * (this.precanvas.clientHeight / (this.precanvas.clientHeight * this.zoom)) - (this.precanvas.getBoundingClientRect().y * (this.precanvas.clientHeight / (this.precanvas.clientHeight * this.zoom)));
 
@@ -1167,7 +1168,7 @@ export default class Drawflow {
                         </div>
                         <div><br/></div>
                         <div>
-                            <input onClick="this.select();" class="rounded" type="text" df-step_name/>
+                            <input onClick="this.select(); hideTooltips();" onkeyup="setDrawFlowTooltip(this)" class="rounded" type="text" df-step_name/>
                         </div>
                     </div>
                 `;
@@ -1185,7 +1186,7 @@ export default class Drawflow {
                         </div>
                         <div><br/></div>
                         <div>
-                            <input onClick="this.select();" class="rounded" type="text" df-question/>
+                            <input onClick="this.select(); hideTooltips();" onkeyup="setDrawFlowTooltip(this)" class="rounded" type="text" df-question/>
                         </div>
                     </div>
                 `;
@@ -1373,6 +1374,8 @@ export default class Drawflow {
         const node = document.createElement('div');
         node.innerHTML = "";
         node.setAttribute("id", "node-" + newNodeId);
+        node.setAttribute("data-toggle", "tooltip");
+        node.setAttribute("title", data.step_name || data.question);
         node.classList.add("drawflow-node");
         if (classoverride != '') {
             node.classList.add(...classoverride.split(' '));
@@ -1516,6 +1519,9 @@ export default class Drawflow {
         if (!this.useuuid) {
             this.nodeId++;
         }
+
+        activateTooltips();
+
         return newNodeId;
     }
 
@@ -1622,12 +1628,16 @@ export default class Drawflow {
                 var elems = content.querySelectorAll('[df-' + key[0] + ']');
                 for (var i = 0; i < elems.length; i++) {
                     elems[i].value = key[1];
+                    if(key[0] === "step_name" || key[0] === "question"){
+                        node.setAttribute("data-toggle", "tooltip");
+                        node.setAttribute("title", key[1]);
+                    }
                     if (elems[i].isContentEditable) {
                         elems[i].innerText = key[1];
                     }
                 }
             }
-        })
+        });
 
         function insertObjectkeys(object, name, completname) {
             if (object === null) {
@@ -1659,6 +1669,7 @@ export default class Drawflow {
         node.style.left = dataNode.pos_x + "px";
         parent.appendChild(node);
         this.precanvas.appendChild(parent);
+        activateTooltips();
     }
 
     addRerouteImport(dataNode) {

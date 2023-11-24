@@ -18,7 +18,7 @@ var configCanvas = document.getElementById("projectConfigCanvas");
 var configEditor = new Drawflow(configCanvas);
 
 configEditor.start();
-configEditor.editor_mode = 'fixed';
+configEditor.editor_mode = 'admin';
 
 async function processProjectConfig() {
 
@@ -335,64 +335,71 @@ function importDefaultDataDashboard() {
 
     }).done(async function (dataToImport) {
 
-        if (dataToImport) {
-
-            var projectName = dataToImport.projectName;
-            var jsonConfig = dataToImport.jsonConfig;
-
-            $("#labelProjectName").text(projectName);
-
-            if (!jsonConfig) {
-                $.LoadingOverlay("hide");
-                return;
-            }
-
-            currentProjectJson = JSON.parse(jsonConfig);
-
-            configEditor.import(currentProjectJson);
-
-            projectZoom = configEditor.zoom;
-            projectPositionX = configEditor.x;
-            projectPositionY = configEditor.y;
-
-            await processProjectConfig();
-
-            await generateEvcCharts(jsonConfig);
-
-            var evcRankings = await getEvcRankings(jsonConfig);
-
-            $.LoadingOverlay("show");
-
-            $.ajax({
-
-                method: "GET",
-                url: "/project/motivation/history",
-
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-
-                $.LoadingOverlay("hide");
-                Swal.fire('Erro!', jqXHR.responseText, 'error');
-
-            }).done(function (snapshots) {
-
-                if(snapshots) {
-
-                    snapshots = snapshotsToJson(snapshots);
-
-                    generateLineChartStudents("allStudentsMotivationDiv", snapshots, evcRankings, pageAllUsersEvc);
-                    generateLineChartGeneral("generalMotivationDiv", snapshots, evcRankings);
-
-                }
-
-                $.LoadingOverlay("hide");
-
-            });
-
-        }
-
+        await load(dataToImport);
         $.LoadingOverlay("hide");
 
     });
+
+}
+
+async function load(dataToImport) {
+
+    if (dataToImport) {
+
+        var projectName = dataToImport.projectName;
+        var jsonConfig = dataToImport.jsonConfig;
+
+        $("#labelProjectName").text(projectName);
+
+        if (!jsonConfig) {
+            $.LoadingOverlay("hide");
+            return;
+        }
+
+        currentProjectJson = JSON.parse(jsonConfig);
+
+        configEditor.import(currentProjectJson);
+
+        projectZoom = configEditor.zoom;
+        projectPositionX = configEditor.x;
+        projectPositionY = configEditor.y;
+
+        $('input').attr("readonly", "readonly");
+
+        await processProjectConfig();
+
+        await generateEvcCharts(jsonConfig);
+
+        var evcRankings = await getEvcRankings(jsonConfig);
+
+        $.LoadingOverlay("show");
+
+        $.ajax({
+
+            method: "GET",
+            url: "/project/motivation/history",
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+
+            $.LoadingOverlay("hide");
+            Swal.fire('Erro!', jqXHR.responseText, 'error');
+
+        }).done(function (snapshots) {
+
+            if (snapshots) {
+
+                snapshots = snapshotsToJson(snapshots);
+
+                generateLineChartStudents("allStudentsMotivationDiv", snapshots, evcRankings, pageAllUsersEvc);
+                generateLineChartGeneral("generalMotivationDiv", snapshots, evcRankings);
+
+            }
+
+            $.LoadingOverlay("hide");
+
+        });
+
+    }
 
 }
 
@@ -577,9 +584,21 @@ $("#btShowCustomChart").click(function(){
 
 $('#selectProjectNames').change(function() {
 
-    var selectedProject = $('#selectProjectNames').val();
+    var selectedProjectId = $('#selectProjectNames').val();
 
-    console.log(selectedProject);
+    $.LoadingOverlay("show");
+
+    $.ajax({
+        method: "POST",
+        url: "/project/setCurrent",
+        data: { idProject: selectedProjectId }
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+        $.LoadingOverlay("hide");
+    }).done(async function (result) {
+        await load(result);
+        $.LoadingOverlay("hide");
+    });
 
 });
 

@@ -242,6 +242,12 @@ function activateTooltips() {
     });
 }
 
+function hideTooltips() {
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip('hide');
+    });
+}
+
 function activateEditables() {
     $('.input').jinplace({"inputClass": "editable-input"});
 }
@@ -274,4 +280,13 @@ function checkAvatarImages() {
             avatarImage.attr("src", "/img/0.jpg");
         });
     });
+}
+
+function setDrawFlowTooltip(el) {
+
+    var id = $(el).parent().parent().parent().parent()[0].id;
+    var val = $(el).val();
+
+    $('#'+id).attr("data-bs-original-title", val);
+
 }
