@@ -1376,7 +1376,7 @@ export default class Drawflow {
         node.innerHTML = "";
         node.setAttribute("id", "node-" + newNodeId);
         node.setAttribute("data-toggle", "tooltip");
-        node.setAttribute("title", data.step_name || data.question);
+        node.setAttribute("title", data.step_name || data.question || data.user_name);
         node.classList.add("drawflow-node");
         if (classoverride != '') {
             node.classList.add(...classoverride.split(' '));
@@ -1629,7 +1629,7 @@ export default class Drawflow {
                 var elems = content.querySelectorAll('[df-' + key[0] + ']');
                 for (var i = 0; i < elems.length; i++) {
                     elems[i].value = key[1];
-                    if(key[0] === "step_name" || key[0] === "question"){
+                    if(key[0] === "step_name" || key[0] === "question" || key[0] === "user_name"){
                         node.setAttribute("data-toggle", "tooltip");
                         node.setAttribute("title", key[1]);
                         elems[i].setAttribute("tooltipid", nodeId);
