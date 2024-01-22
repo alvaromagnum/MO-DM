@@ -317,7 +317,7 @@ async function generateRankings(data) {
                 $("#agreementRanking" + decision.id).append(generateRankingItem(`agreement_${agreementRankingItem.id}`, agreementRankingItem.option, agreementRankingItem.agreement, false));
             }
 
-            var isComplete = decision.evaluations.length === decision.stakeholders.length;
+            var isComplete = _.every(decision.options, function(o) { return o.Evaluations.length == decision.stakeholders.length });
 
             if(evcRankingItems.length === 0 || !isComplete) {
 
