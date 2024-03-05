@@ -132,18 +132,17 @@ async function setCurrentProject(req, res) {
 
     var idProject = Number(req.body.idProject);
 
-    req.session.project.id = idProject;
-
     var project = await databaseConfig.Project.findOne({
         where: {id: idProject}
     });
 
-    if(!project) project = {id: 0, name: "ADMIN", jsonConfig: null};
+    if(!project) project = {id: 0, name: "TODOS", key: "---", jsonConfig: null};
+    else req.session.project = project;
 
     res.send({
         jsonConfig: project.jsonConfig,
-        projectName: `[${req.session.project.name} ➤ ADMIN]`,
-        projectId: req.session.project.id
+        projectName: `[${project.name} ➤ ${project.key}]`,
+        projectId: idProject
     });
 
 }
@@ -159,7 +158,7 @@ async function loadProjectConfig(req, res) {
         where: {id: req.session.project.id}
     });
 
-    if(!project) project = {id: 0, name: "ADMIN", jsonConfig: null, key: "ADMIN"};
+    if(!project) project = {id: 0, name: "ADMIN", jsonConfig: null, key: "---"};
 
     res.send({
         jsonConfig: project.jsonConfig,

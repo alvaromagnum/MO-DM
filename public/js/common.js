@@ -752,4 +752,5 @@ function clearCharts() {
     clearAllCharts();
     clearAllCharts();
     clearAllCharts();
+    clearAllCharts();
 }
