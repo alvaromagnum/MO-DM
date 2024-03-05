@@ -133,10 +133,7 @@ async function generateProjectPendencies(allProjectData) {
 
     }
 
-    for(var user of dictionary) {
-        //if(user.pendencies.length === 0) user.pendencies.push(`<b>🠞 DECISÃO "${decision.question}" [SEM PENDÊNCIAS]</b>`);
-        if(user.pendencies.length === 0) user.pendencies.push("-- SEM PENDÊNCIAS --");
-    }
+    for(var user of dictionary) if(user.pendencies.length === 0) user.pendencies.push("-- SEM PENDÊNCIAS --");
 
     $("#tablePendencies").html("");
 
