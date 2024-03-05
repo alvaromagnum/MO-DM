@@ -66,7 +66,7 @@ async function generateProjectPendencies(allProjectData) {
             for(var stakeholder of stakeholders) {
 
                 var stakeholderPendencies = _.findWhere(dictionary, {id: stakeholder.idUser}).pendencies;
-                stakeholderPendencies.push(`<b>🠞 DECISÃO "${decision.question}"</b>`);
+                stakeholderPendencies.push(`<b CLASS="text-yellow">🠞 DECISÃO "${decision.question}" [PENDENTE]</b>`);
 
             }
 
@@ -83,7 +83,7 @@ async function generateProjectPendencies(allProjectData) {
 
                 if(missingEvaluation || incompleteEvaluation) {
                     var stakeholderPendencies = _.findWhere(dictionary, {id: stakeholder.idUser}).pendencies;
-                    stakeholderPendencies.push(`<b>🠞 DECISÃO "${decision.question}" [<u>OPÇÃO "${option.option.toUpperCase()}"</u>]</b>`);
+                    stakeholderPendencies.push(`<b class="text-yellow">🠞 DECISÃO "${decision.question}"</b><br/>- <u>OPÇÃO "${option.option.toUpperCase()}" PENDENTE</u><br/>`);
                 }
 
             }
@@ -92,15 +92,31 @@ async function generateProjectPendencies(allProjectData) {
 
     }
 
-    for(var user of dictionary) {
-        if(user.pendencies.length === 0) user.pendencies.push("-- SEM PENDÊNCIAS --");
-    }
+    var noPendenciesText = "<b>-- SEM PENDÊNCIAS --</b>";
 
-    dictionary = _.sortBy(dictionary, (o)=>o.name);
+    for(var user of dictionary) if(user.pendencies.length === 0) user.pendencies.push();
 
     $("#tablePendencies").html("");
 
-    for(var user of dictionary) {
+    var dictionaryUnique = _.uniq(dictionary, (o)=> o.id);
+
+    for(var itemDictionary of dictionaryUnique) {
+
+        var repeatedItems = _.filter(dictionary, function(o){ return o.id === itemDictionary.id; });
+        var currentUserPendencies = [];
+
+        for(var repeatedItem of repeatedItems) currentUserPendencies = currentUserPendencies.concat(repeatedItem.pendencies);
+
+        if(_.every(currentUserPendencies, function(i) { return i === noPendenciesText; })) currentUserPendencies = [noPendenciesText];
+        else currentUserPendencies = _.filter(currentUserPendencies, function(i){ return i !== noPendenciesText; });
+
+        itemDictionary.pendencies = currentUserPendencies;
+
+    }
+
+    dictionaryUnique = _.sortBy(dictionaryUnique, (o)=>o.name);
+
+    for(var user of dictionaryUnique) {
 
         var row = $("<tr class='pendency-row'></tr>").html(`
             <td class="align-middle text-sm width-30 avatar-container">
