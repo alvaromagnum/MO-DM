@@ -95,6 +95,8 @@ async function generateLineChartStudents(divId, snapshots, evcRankings, pageAllU
 
         var data = userSerie;
 
+        //if(data.length === 0) continue;
+
         var color = colors[j++];
 
         var series = chart.series.push(
@@ -230,10 +232,30 @@ async function processSnapshotsStudents(snapshots, evcRankings, pageAllUsersEvc)
 
     var userSeries = [];
 
+    snapshots = _.sortBy(snapshots, function(o){ return o.createdAt; });
+
     for(var userId of allUsersIds) {
 
         var queryUserSerie = `[*[id=${userId}]^(point)]`;
         var userSerie = await jsonata(queryUserSerie).evaluate(userData);
+
+        if(userSerie.length === 0) {
+
+            var pointNumber = 0;
+
+            for(var item of snapshots) {
+
+                userSerie.push({
+                    "point": pointNumber++,
+                    "id": userId,
+                    "label": _.filter(pageAllUsersEvc, function(o){ return o.id === userId; })[0].label,
+                    "date": moment(item.createdAt).format("DD-MM-YYYY HH:mm:ss"),
+                    "value": 0
+                });
+
+            }
+
+        }
 
         userSeries.push(userSerie);
 

@@ -318,6 +318,7 @@ async function generateRankings(data) {
             }
 
             var isComplete = _.every(decision.options, function(o) { return o.Evaluations.length == decision.stakeholders.length });
+            //var isComplete = decision.evaluations.length === decision.stakeholders.length;
 
             if(evcRankingItems.length === 0 || !isComplete) {
 
