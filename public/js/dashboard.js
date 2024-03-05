@@ -107,7 +107,7 @@ async function generateProjectPendencies(allProjectData) {
             for(var stakeholder of stakeholders) {
 
                 var stakeholderPendencies = _.findWhere(dictionary, {id: stakeholder.idUser}).pendencies;
-                stakeholderPendencies.push(`<b>🠞 DECISÃO "${decision.question}" [PENDENTE]</b>`);
+                stakeholderPendencies.push(`<b CLASS="text-yellow">🠞 DECISÃO "${decision.question}" [PENDENTE]</b>`);
 
             }
 
@@ -124,7 +124,7 @@ async function generateProjectPendencies(allProjectData) {
 
                 if(missingEvaluation || incompleteEvaluation) {
                     var stakeholderPendencies = _.findWhere(dictionary, {id: stakeholder.idUser}).pendencies;
-                    stakeholderPendencies.push(`<b>🠞 DECISÃO "${decision.question}"<br/>- <u>OPÇÃO "${option.option.toUpperCase()}" PENDENTE</u></b><br/>`);
+                    stakeholderPendencies.push(`<b class="text-yellow">🠞 DECISÃO "${decision.question}"</b><br/>- <u>OPÇÃO "${option.option.toUpperCase()}" PENDENTE</u><br/>`);
                 }
 
             }
@@ -133,7 +133,9 @@ async function generateProjectPendencies(allProjectData) {
 
     }
 
-    for(var user of dictionary) if(user.pendencies.length === 0) user.pendencies.push("-- SEM PENDÊNCIAS --");
+    var noPendenciesText = "<b>-- SEM PENDÊNCIAS --</b>";
+
+    for(var user of dictionary) if(user.pendencies.length === 0) user.pendencies.push();
 
     $("#tablePendencies").html("");
 
@@ -146,8 +148,8 @@ async function generateProjectPendencies(allProjectData) {
 
         for(var repeatedItem of repeatedItems) currentUserPendencies = currentUserPendencies.concat(repeatedItem.pendencies);
 
-        if(_.every(currentUserPendencies, function(i) { return i === "-- SEM PENDÊNCIAS --"; })) currentUserPendencies = ["-- SEM PENDÊNCIAS --"];
-        else currentUserPendencies = _.filter(currentUserPendencies, function(i){ return i !== "-- SEM PENDÊNCIAS --"; });
+        if(_.every(currentUserPendencies, function(i) { return i === noPendenciesText; })) currentUserPendencies = [noPendenciesText];
+        else currentUserPendencies = _.filter(currentUserPendencies, function(i){ return i !== noPendenciesText; });
 
         itemDictionary.pendencies = currentUserPendencies;
 
