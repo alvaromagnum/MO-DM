@@ -1,10 +1,6 @@
-. Remover avaliações quando um nodo ou uma conexão for removida da configuração do projeto.
-
 . Separar html / js / css
 
 . Criar página do ADMIN
-
-. Usar biblioteca para melhorar cores dos gráficos (harmonizar)
 
 . Colocar mais filtros nos resultados: APENAS MINHA, COM/SEM RESTRIÇÕES, ETC.
 
