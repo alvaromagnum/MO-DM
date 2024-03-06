@@ -147,6 +147,8 @@ async function getAllProjectsJson(req, res) {
         var jsonObject = JSON.parse(project.jsonConfig);
 
         jsonObject.projectId = project.id;
+        jsonObject.projectName = project.name;
+
         jsons.push(JSON.stringify(jsonObject));
 
     }

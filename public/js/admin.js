@@ -243,10 +243,15 @@ async function loadAllProjectData(allJsons) {
     for(var json of allJsons) {
 
         var jsonObject = JSON.parse(json);
+
         var projectId = jsonObject.projectId;
+        var projectName = jsonObject.projectName;
+
         var projectData = await getFullProjectData(json, false, projectId);
 
-        generateProjectPendencies(projectData, false);
+        $("#tablePendencies").append(`<td colspan="2" class="background-row-pendencies"><center><b>${projectName}</b></center></td>`);
+
+        await generateProjectPendencies(projectData, false);
 
     }
 
