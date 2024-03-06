@@ -113,19 +113,25 @@ async function load(dataToImport) {
         var projectName = dataToImport.projectName;
         var jsonConfig = dataToImport.jsonConfig;
 
+        $("#labelProjectName").text(projectName);
+        $("#selectProjectNames").val(dataToImport.projectId);
+
         if(projectName !== "[TODOS ➤ ADMIN]") {
+
             $('#buttonResults').show();
             $('#divCardSankeyChart').show();
             $('#divCardProjectConfig').show();
+
         }
         else {
+
             $('#buttonResults').hide();
             $('#divCardSankeyChart').hide();
             $('#divCardProjectConfig').hide();
-        }
 
-        $("#labelProjectName").text(projectName);
-        $("#selectProjectNames").val(dataToImport.projectId);
+            loadAllProjects();
+
+        }
 
         if (!jsonConfig) {
             $.LoadingOverlay("hide");
@@ -194,6 +200,41 @@ $('#btZoomReset').click(function(){
 $('#btZoomDefault').click(function(){
     configEditor.zoom_reset();
 });
+
+function getAllProjectIds() {
+
+    var allProjectIds = new Array();
+
+    $('#selectProjectNames option').each(function(){
+        var id = Number(this.value);
+        if(id > 0) allProjectIds.push(id);
+    });
+
+    return allProjectIds;
+
+}
+
+function loadAllProjects() {
+
+    $.LoadingOverlay("show");
+
+    $.ajax({
+        method: "POST",
+        url: "/project/getAllJson",
+        data: {projectIds: getAllProjectIds()}
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+        $.LoadingOverlay("hide");
+    }).done(async function (result) {
+        loadAllProjectData(result.jsons);
+        $.LoadingOverlay("hide");
+    });
+
+}
+
+function loadAllProjectData(allJsons) {
+    console.log(allJsons);
+}
 
 $('#selectProjectNames').change(function() {
 

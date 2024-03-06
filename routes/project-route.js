@@ -123,6 +123,35 @@ function arrayEquals(a, b) {
 
 }
 
+async function getAllProjectsJson(req, res) {
+
+    if (!req.session.user || !req.session.project || req.session.user.login !== "admin") {
+        res.redirect('/');
+        return;
+    }
+
+    var projecIds = req.body.projectIds;
+
+    var projects = await databaseConfig.Project.findAll({
+        where: {
+            id: {
+                [Op.in]: projecIds
+            }
+        }
+    });
+
+    var jsons = new Array();
+
+    for(var project of projects) jsons.push(project.jsonConfig);
+
+    req.session.project = {id: 0, name: "TODOS", key: "ADMIN", jsonConfig: null};
+
+    res.send({
+        jsons: jsons
+    });
+
+}
+
 async function setCurrentProject(req, res) {
 
     if (!req.session.user || !req.session.project || req.session.user.login !== "admin") {
@@ -606,6 +635,8 @@ projectRoute.get('/decisions', loadMyDecisions);
 projectRoute.post('/decisions', processDecisionsData);
 
 projectRoute.post('/setCurrent', setCurrentProject);
+
+projectRoute.post('/getAllJson', getAllProjectsJson);
 
 projectRoute.get('/results', showResults);
 projectRoute.post('/results', getResults);
