@@ -45,7 +45,7 @@ function importDefaultDataResults() {
 
                 getFullProjectData(jsonConfig, true).then(async (result) => {
                     await generateRankings(result);
-                    showMine();
+                    showAllDecisions();
                 });
 
             }
@@ -95,37 +95,10 @@ function generateRankingItem(id, label, value, draggable) {
     var sufix = isAgreement ? "%" : " PONTO(S)";
 
     return `
-        <li id="li_${id}" uuid="${uuid}" option="${label}" percentual="${percentual}" class="li-ranking li-ranking-default ${colorClass} cursor-pointer ${itemClass}" style="--i: ${value}" data-toggle="tooltip" title="Clique para ver os impactos dessa escolha. Você também pode segurar, arrastar e trocar com outra opção de mesma pontuação.">
+        <li id="li_${id}" uuid="${uuid}" option="${label}" percentual="${percentual}" class="li-ranking li-ranking-default ${colorClass} cursor-pointer ${itemClass}" style="--i: ${value}" data-toggle="tooltip" title="Clique para ver os impactos dessa escolha.">
           <div class="h3-ranking">${label.toUpperCase()}&nbsp;<b style="margin-left: 10px">${percentual}${sufix}</b></div>
         </li>
     `;
-
-}
-
-function acceptConvergence(idDecision) {
-
-    var idOption = checkConvergence(idDecision);
-
-    if (!idOption) {
-
-        Swal.fire({
-
-            title: 'Atenção!',
-            html: `Para a aceitação é necessário que a pontuação de motivação/engajamento seja maior ou igual a 60 pontos e o nível concordância seja de, pelo menos, 65%!`,
-            icon: 'info',
-            showCancelButton: false,
-            cancelButtonText: "NÃO",
-            confirmButtonText: 'OK'
-
-        });
-
-        return;
-
-    }
-
-    $('#selectChosenOption' + idDecision).val(idOption);
-
-    makeDecisionFor(idDecision);
 
 }
 
@@ -208,8 +181,7 @@ async function generateRankings(data) {
                         </div>
                         <br/>
                         <div class="text-center">
-                          <button id="btAcceptConvergence${decision.id}" onclick="acceptConvergence(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para aceitar a opção que mais motiva/engaja"><i class="material-icons icon-button">adjust</i></button>
-                          <button id="btDecide${decision.id}" onclick="showDecisionModal(${decision.id})" class="btn btn-outline-white" data-toggle="tooltip" title="Clique para fazer escolha personalizada"><i class="material-icons icon-button">ads_click</i></button>
+                          &nbsp;
                         </div>
                       </div>
                     </div>
@@ -222,17 +194,7 @@ async function generateRankings(data) {
 
             var draggable = false;
 
-            // var firstWeight = weightRankingItems[0] ? weightRankingItems[0].weight : undefined;
-            //
-            // for(var weightRankingItem of weightRankingItems) {
-            //     draggable = firstWeight === weightRankingItem.weight;
-            //     $("#weightRanking" + decision.id).append(generateRankingItem(`weight_${weightRankingItem.id}`, weightRankingItem.option, weightRankingItem.weight, draggable));
-            // }
-
-            var firstEvc = evcRankingItems[0] ? evcRankingItems[0].meanEVC : undefined;
-
             for (var evcRankingItem of evcRankingItems) {
-                draggable = firstEvc === evcRankingItem.meanEVC;
                 $("#evcRanking" + decision.id).append(generateRankingItem(`evc_${evcRankingItem.id}`, evcRankingItem.option, evcRankingItem.meanEVC, draggable));
             }
 
@@ -241,7 +203,6 @@ async function generateRankings(data) {
             }
 
             var isComplete = _.every(decision.options, function(o) { return o.Evaluations.length == decision.stakeholders.length });
-            //var isComplete = decision.evaluations.length === decision.stakeholders.length;
 
             if(evcRankingItems.length === 0 || !isComplete) {
 
@@ -253,7 +214,6 @@ async function generateRankings(data) {
 
             }
 
-            // Sortable.create(document.getElementById("weightRanking" + decision.id), {animation: 350, filter: '.filtered', preventOnFilter: true, draggable: ".draggable",});
             Sortable.create(document.getElementById("evcRanking" + decision.id), {
                 animation: 350,
                 filter: '.filtered',
@@ -305,149 +265,6 @@ async function generateRankings(data) {
     });
 
 }
-
-function makeDecisionFor(decisionId) {
-
-    var optionId = $('#selectChosenOption' + decisionId).val();
-    var option = $('#selectChosenOption' + decisionId + " option:selected").text();
-
-    Swal.fire({
-
-        title: 'Atenção!',
-        html: `Tem certeza que deseja decidir por esta opção?<br/><b class='text-2xl'>[${option}]</b>`,
-        icon: 'info',
-        showCancelButton: true,
-        cancelButtonText: "NÃO",
-        confirmButtonText: 'SIM'
-
-    }).then(async (result) => {
-
-        if (result.isConfirmed) {
-
-            $.LoadingOverlay("show");
-
-            $.ajax({
-
-                method: "POST",
-                url: "/project/makeDecision",
-                data: {idDecision: decisionId, idOption: optionId}
-
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-
-                $.LoadingOverlay("hide");
-                Swal.fire('Erro!', jqXHR.responseText, 'error');
-
-            }).done(async function (msg) {
-
-                var snapshot = await getEvcRankings(jsonConfig);
-
-                $.ajax({
-
-                    method: "POST",
-                    url: "/project/saveSnapshot",
-                    data: {snapshot: JSON.stringify(snapshot)}
-
-                }).fail(function (jqXHR, textStatus, errorThrown) {
-
-                    $.LoadingOverlay("hide");
-                    Swal.fire('Erro!', jqXHR.responseText, 'error');
-
-                }).done(async function (msg) {
-
-                    $("#span2" + decisionId).text(option);
-
-                    $.modalJ.close();
-                    $.LoadingOverlay("hide");
-                    $.notify(msg, "success");
-
-                    window.location.href='/project/results';
-
-                });
-
-            });
-
-        }
-
-    });
-
-}
-
-function hideNonDecided() {
-
-    showAllDecisions();
-
-    var targets = [];
-
-    var spans = $('span[id^=span2]');
-
-    spans.each(function () {
-        if ($(this).text() === "---") {
-            var row = $(this).parent().parent().parent().parent().parent().parent().parent();
-            targets.push(row);
-        }
-    });
-
-    for (var target of targets) {
-        $(target).addClass("none");
-    }
-
-}
-
-function showMine() {
-
-    showAllDecisions();
-
-    $('.decision-row').addClass("none");
-    $('.decision-row.is-mine').removeClass("none");
-
-}
-
-function hideDecided() {
-
-    showAllDecisions();
-
-    var targets = [];
-
-    var spans = $('span[id^=span2]');
-
-    spans.each(function () {
-        if ($(this).text() !== "---") {
-            var row = $(this).parent().parent().parent().parent().parent().parent().parent();
-            targets.push(row);
-        }
-    });
-
-    for (var target of targets) {
-        $(target).addClass("none");
-    }
-
-}
-
-$("#btApplyFilter").click(function () {
-
-    var selectedOption = Number($("#selectDecisionsFilter").val());
-
-    switch (selectedOption) {
-
-        case 2:
-            hideNonDecided();
-            break;
-
-        case 3:
-            hideDecided();
-            break;
-
-        case 4:
-            showMine();
-            break;
-
-        default:
-            showAllDecisions();
-            break;
-
-    }
-
-});
 
 importDefaultDataResults();
 activateTooltips();

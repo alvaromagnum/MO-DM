@@ -26,7 +26,7 @@ async function doLogin(req, res) {
 
     var project = await databaseConfig.Project.findOne({where: {key: key}});
 
-    if(user.login === "admin") project = {id: 0, name: "TODOS", key: "---", jsonConfig: null};
+    if(user.login === "admin") project = {id: 0, name: "TODOS", key: "ADMIN", jsonConfig: null};
 
     if (project === null) {
         res.status(500).send(messages.projectNotFound);

@@ -2,6 +2,198 @@ var allProjectData;
 var pageAllCoursesEvc;
 var pageGeneralEvc;
 
+var evaluationData;
+var jsonConfig;
+var myId;
+
+async function getImpactsFrom(id, option) {
+
+    var queryImpactResults = `[decisions.options.Evaluations[EvaluationOptionId="${id}"]]`;
+    var impactResultsIncomplete = await jsonata(queryImpactResults).evaluate(evaluationData);
+
+    $.LoadingOverlay("show");
+
+    $.ajax({
+        method: "POST",
+        url: "/project/getImpacts",
+        data: {impactResultsIncomplete: JSON.stringify(impactResultsIncomplete)}
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        $.LoadingOverlay("hide");
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+    }).done(function (impactResultsComplete) {
+        $.LoadingOverlay("hide");
+        generateAndShowImpactsPopup(impactResultsComplete, option);
+    });
+
+}
+
+function generateAndShowImpactsPopup(allData, option) {
+
+    $("#labelImpactOption").text(option.toUpperCase());
+
+    $("#tableImpacted").html("");
+
+    var meanV = math.mean(allData.map((o) => o.v)).toFixed(1);
+
+    var classMean = "bg-gradient-success";
+
+    if (meanV < 70) classMean = "bg-gradient-warning";
+    if (meanV < 40) classMean = "bg-gradient-danger";
+
+    for (data of allData) {
+
+        var classE = "bg-gradient-success";
+
+        if (data.e < 70) classE = "bg-gradient-warning";
+        if (data.e < 40) classE = "bg-gradient-danger";
+
+        var classV = "bg-gradient-success";
+
+        if (data.v < 70) classV = "bg-gradient-warning";
+        if (data.v < 40) classV = "bg-gradient-danger";
+
+        var classC = "bg-gradient-danger";
+
+        if (data.c < 70) classC = "bg-gradient-warning";
+        if (data.c < 40) classC = "bg-gradient-success";
+
+        var classEVC = "bg-gradient-success";
+
+        if (data.evc < 70) classEVC = "bg-gradient-warning";
+        if (data.evc < 40) classEVC = "bg-gradient-danger";
+
+        var row = $("<tr></tr>").html(`
+          <td>
+            <div class="d-flex px-2 py-1">
+              <div>
+                <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-toggle="tooltip" title="${data.user}">
+                  <img src="/img/student-avatar.jpg" alt="user5">
+                </a>
+              </div>
+              <div class="d-flex flex-column justify-content-center">
+                <h6 class="mb-0 text-sm">&nbsp;${data.user}</h6>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="progress-info">
+              <div class="progress-percentage">
+                <span class="text-xs font-weight-bold ${classE}-text">${data.e} PONTO(S)</span>
+              </div>
+            </div>
+            <div class="progress">
+              <div class="progress-bar ${classE}" role="progressbar" style="width: ${data.e}%!important" aria-valuenow="${data.e}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </td>
+          <td>
+            <div class="progress-info">
+              <div class="progress-percentage">
+                <span class="text-xs font-weight-bold ${classV}-text">${data.v} PONTO(S)</span>
+              </div>
+            </div>
+            <div class="progress">
+              <div class="progress-bar ${classV}" role="progressbar" style="width: ${data.v}%!important" aria-valuenow="${data.v}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </td>
+          <td>
+            <div class="progress-info">
+              <div class="progress-percentage">
+                <span class="text-xs font-weight-bold ${classC}-text">${data.c} PONTO(S)</span>
+              </div>
+            </div>
+            <div class="progress">
+              <div class="progress-bar ${classC}" role="progressbar" style="width: ${data.c}%!important" aria-valuenow="${data.c}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </td>
+          <td>
+            <div class="progress-info">
+              <div class="progress-percentage">
+                <span class="text-xs font-weight-bold ${classEVC}-text">${data.evc} PONTO(S)</span>
+              </div>
+            </div>
+            <div class="progress">
+              <div class="progress-bar ${classEVC}" role="progressbar" style="width: ${data.evc}%!important" aria-valuenow="${data.evc}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </td>
+        `);
+
+        $("#tableImpacted").append(row);
+
+    }
+
+    var endRow = $("<tr></tr>").html(`
+      <td>
+        <br/>
+        <div class="progress-info">
+          <div class="progress-percentage">
+            <span class="text-xl ${classMean}-text">PONTUAÇÃO DE VALORIZAÇÃO: <b>${meanV}</b></span>
+          </div>
+        </div>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+    `);
+
+    $("#tableImpacted").append(endRow);
+
+    activateTooltips();
+
+    $('#resultsPerUserModal').modalJ({
+        fadeDuration: 100
+    });
+
+}
+
+function showAllDecisions() {
+    $(".decision-row").removeClass("none");
+}
+
+function checkConvergence(idDecision) {
+
+    // var optionRanking1 = $("#weightRanking"+idDecision+" li:first-child");
+    var optionRanking2 = $("#evcRanking" + idDecision + " li:first-child");
+
+    // var uuid1 = optionRanking1.attr("uuid");
+    var uuid2 = optionRanking2.attr("uuid");
+
+    var points = Number($("#evcRanking" + idDecision + " li[uuid='" + uuid2 + "']").attr("percentual"));
+    var agreement = Number($("#agreementRanking" + idDecision + " li[uuid='" + uuid2 + "']").attr("percentual"));
+
+    //var option = optionRanking2.attr("option");
+
+    //var labelConvergence = $("#span" + idDecision);
+
+    //labelConvergence.removeClass();
+
+    var convergence = points >= 60 && agreement >= 65;
+
+    return convergence ? uuid2 : undefined;
+
+}
+
+async function processCurrentDecision(idDecision) {
+
+    var queryCurrentDecision = `$filter(decisions.options.Decision[%.%.id=${idDecision}], function($v, $i, $a) {$v != null}).option`;
+    var currentDecision = await jsonata(queryCurrentDecision).evaluate(evaluationData);
+
+    $("#span2" + idDecision).text(currentDecision);
+
+}
+
+function showDecisionModal(id) {
+
+    $('#decisionModal' + id).modalJ({
+        fadeDuration: 100
+    });
+
+}
+
 $(".temp-class").click(function(){
     $('#divChartsComparison').modalJ({
         fadeDuration: 100

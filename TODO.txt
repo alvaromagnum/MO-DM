@@ -7,3 +7,5 @@
 . O modo como as tooltips são exibidas nos nós da configuração do projeto, ao carregar do bd, não está otimizado. Estranho. Checar.
 
 . Quando vai fazer um comparativo dos gráficos do EVC personalizado, na lista do administrador aparecem todas as pessoas de todos os projetos. Todavia, todos os evcs dos usuários não foram carregados, então dá erro ao pressionar o botão para exibir. Erro no método $("#btShowCustomChart").click(function() do custom.js
+
+. Colocar legenda de cores na página de resultados.

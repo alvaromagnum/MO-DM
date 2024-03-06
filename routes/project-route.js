@@ -136,7 +136,7 @@ async function setCurrentProject(req, res) {
         where: {id: idProject}
     });
 
-    if(!project) project = {id: 0, name: "TODOS", key: "---", jsonConfig: null};
+    if(!project) project = {id: 0, name: "TODOS", key: "ADMIN", jsonConfig: null};
     else req.session.project = project;
 
     res.send({
@@ -158,7 +158,7 @@ async function loadProjectConfig(req, res) {
         where: {id: req.session.project.id}
     });
 
-    if(!project) project = {id: 0, name: "ADMIN", jsonConfig: null, key: "---"};
+    if(!project) project = {id: 0, name: "ADMIN", jsonConfig: null, key: "ADMIN"};
 
     res.send({
         jsonConfig: project.jsonConfig,
