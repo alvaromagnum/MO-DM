@@ -115,9 +115,16 @@
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
+        <center>
+            <label for="selectProjectNames" class="form-label">PROJETO:</label>
+            <select id="selectProjectNames" class="select-node">
+                <option value="0" selected>TODOS</option>
+            </select>
+            <br/><br/><br/>
+        </center>
         <div class="row">
             <div class="col-xl-12 col-sm-6 mb-xl-0 mb-4">
-                <div class="card">
+                <div class="card" id="divCardProjectConfig">
                     <div class="card-header p-3 pt-2">
                         <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
                             <i class="material-icons opacity-10">share_location</i>
@@ -130,11 +137,6 @@
                         <hr class="dark horizontal my-0">
                         <br/>
                         <div class="align-right">
-                            <label for="selectProjectNames" class="form-label">Projeto:</label>
-                            <select id="selectProjectNames" class="select-node">
-                                <option value="0" selected>TODOS</option>
-                            </select>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <button id="btZoomOut" class="btn btn-outline-white" data-toggle="tooltip" title="Zoom Out">
                                 <i class="material-icons icon-button">zoom_out</i></button>
                             <button id="btZoomReset" class="btn btn-outline-white" data-toggle="tooltip"
@@ -168,7 +170,7 @@
         <div class="row mt-5"></div>
         <div class="row">
             <div class="col-xl-12 col-sm-6 mb-xl-0 mb-4">
-                <div class="card">
+                <div class="card" id="divCardSankeyChart">
                     <div class="card-header p-3 pt-2">
                         <div class="icon icon-lg icon-shape bg-gradient-dark shadow-info text-center border-radius-xl mt-n4 position-absolute">
                             <i class="material-icons opacity-10">arrow_forward</i>

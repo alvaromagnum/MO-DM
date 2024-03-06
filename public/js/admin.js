@@ -92,19 +92,37 @@ function importDefaultDataDashboard() {
 
 }
 
+function clearLabels() {
+
+    $('#labelMoreMotivatedStudent').text('---');
+    $('#labelLessMotivatedStudent').text('---');
+    $('#labelMoreMotivatedCourse').text('---');
+    $('#labelLessMotivatedCourse').text('---');
+
+}
+
 async function load(dataToImport) {
 
     configEditor.clear();
 
     clearCharts();
+    clearLabels();
 
     if (dataToImport) {
 
         var projectName = dataToImport.projectName;
         var jsonConfig = dataToImport.jsonConfig;
 
-        if(projectName !== "[TODOS ➤ ADMIN]") $('#buttonResults').show();
-        else $('#buttonResults').hide();
+        if(projectName !== "[TODOS ➤ ADMIN]") {
+            $('#buttonResults').show();
+            $('#divCardSankeyChart').show();
+            $('#divCardProjectConfig').show();
+        }
+        else {
+            $('#buttonResults').hide();
+            $('#divCardSankeyChart').hide();
+            $('#divCardProjectConfig').hide();
+        }
 
         $("#labelProjectName").text(projectName);
         $("#selectProjectNames").val(dataToImport.projectId);
@@ -200,6 +218,8 @@ $('#selectProjectNames').change(function() {
 configEditor.zoom_out_by_value(0.3);
 
 $('#buttonResults').hide();
+$('#divCardSankeyChart').hide();
+$('#divCardProjectConfig').hide();
 
 importProjectNames();
 importDefaultDataDashboard();
