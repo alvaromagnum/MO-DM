@@ -137,7 +137,8 @@ async function setCurrentProject(req, res) {
     });
 
     if(!project) project = {id: 0, name: "TODOS", key: "ADMIN", jsonConfig: null};
-    else req.session.project = project;
+
+    req.session.project = project;
 
     res.send({
         jsonConfig: project.jsonConfig,

@@ -103,6 +103,9 @@ async function load(dataToImport) {
         var projectName = dataToImport.projectName;
         var jsonConfig = dataToImport.jsonConfig;
 
+        if(projectName !== "[TODOS ➤ ADMIN]") $('#buttonResults').show();
+        else $('#buttonResults').hide();
+
         $("#labelProjectName").text(projectName);
         $("#selectProjectNames").val(dataToImport.projectId);
 
@@ -195,6 +198,8 @@ $('#selectProjectNames').change(function() {
 });
 
 configEditor.zoom_out_by_value(0.3);
+
+$('#buttonResults').hide();
 
 importProjectNames();
 importDefaultDataDashboard();
