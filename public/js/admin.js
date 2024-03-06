@@ -17,7 +17,9 @@ configEditor.editor_mode = 'admin';
 
 async function processProjectConfig() {
 
-    allProjectData = await getFullProjectData(configEditor.getJson(), false);
+    allProjectData = await getFullProjectData(configEditor.getJson(), false, 0);
+
+    console.log(JSON.stringify(allProjectData, null, "\t"));
 
     var editorJson = configEditor.getJson();
     var configData = await getConfigData(editorJson);
@@ -25,7 +27,7 @@ async function processProjectConfig() {
 
     generateProjectSankeyChart(linksNodes.nodes, linksNodes.links);
 
-    await generateProjectPendencies(allProjectData);
+    await generateProjectPendencies(allProjectData, true);
 
     return({configData: configData, nodes: linksNodes.nodes, links: linksNodes.links});
 
@@ -232,8 +234,24 @@ function loadAllProjects() {
 
 }
 
-function loadAllProjectData(allJsons) {
-    console.log(allJsons);
+async function loadAllProjectData(allJsons) {
+
+    $.LoadingOverlay("show");
+
+    $("#tablePendencies").html("");
+
+    for(var json of allJsons) {
+
+        var jsonObject = JSON.parse(json);
+        var projectId = jsonObject.projectId;
+        var projectData = await getFullProjectData(json, false, projectId);
+
+        generateProjectPendencies(projectData, false);
+
+    }
+
+    $.LoadingOverlay("hide");
+
 }
 
 $('#selectProjectNames').change(function() {

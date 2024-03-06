@@ -20,8 +20,8 @@ $('#btSave').click(async function () {
 
     if(!currentProjectJson) currentProjectJson = newJson;
 
-    var fullOldData = await getFullProjectData(JSON.stringify(currentProjectJson), true);
-    var fullNewData = await getFullProjectData(JSON.stringify(newJson), true);
+    var fullOldData = await getFullProjectData(JSON.stringify(currentProjectJson), true, 0);
+    var fullNewData = await getFullProjectData(JSON.stringify(newJson), true, 0);
 
     var queryData = "[decisions.[${\"id\": id, \"stakeholdersIds\": [stakeholders.idUser]}].*]";
 
@@ -58,7 +58,7 @@ $('#btImport').click(function(){
 
 async function processProjectConfig() {
 
-    allProjectData = await getFullProjectData(configEditor.getJson(), false);
+    allProjectData = await getFullProjectData(configEditor.getJson(), false, 0);
 
     var editorJson = configEditor.getJson();
     var configData = await getConfigData(editorJson);
@@ -66,7 +66,7 @@ async function processProjectConfig() {
 
     generateProjectSankeyChart(linksNodes.nodes, linksNodes.links);
 
-    await generateProjectPendencies(allProjectData);
+    await generateProjectPendencies(allProjectData, true);
 
     return({configData: configData, nodes: linksNodes.nodes, links: linksNodes.links});
 

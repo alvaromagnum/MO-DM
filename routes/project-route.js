@@ -142,7 +142,14 @@ async function getAllProjectsJson(req, res) {
 
     var jsons = new Array();
 
-    for(var project of projects) jsons.push(project.jsonConfig);
+    for(var project of projects) {
+
+        var jsonObject = JSON.parse(project.jsonConfig);
+
+        jsonObject.projectId = project.id;
+        jsons.push(JSON.stringify(jsonObject));
+
+    }
 
     req.session.project = {id: 0, name: "TODOS", key: "ADMIN", jsonConfig: null};
 
@@ -372,8 +379,10 @@ async function getResults(req, res) {
         return;
     }
 
+    var projectId = Number(req.body.projectId);
+
     var evaluationOptions = await databaseConfig.EvaluationOption.findAll({
-        where: { ProjectId: req.session.project.id },
+        where: { ProjectId: req.session.user.login === "admin" && projectId !== 0 ? req.body.projectId : req.session.project.id },
         include: [{model: databaseConfig.Evaluation}, {model: databaseConfig.Decision}]
     });
 

@@ -43,7 +43,7 @@ function importDefaultDataResults() {
                     return;
                 }
 
-                getFullProjectData(jsonConfig, true).then(async (result) => {
+                getFullProjectData(jsonConfig, true, 0).then(async (result) => {
                     await generateRankings(result);
                     showMine();
                 });

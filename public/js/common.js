@@ -367,7 +367,7 @@ function generateEvcCharts(editorJson) {
 
 }
 
-async function generateProjectPendencies(allProjectData) {
+async function generateProjectPendencies(allProjectData, clearTable) {
 
     var queryDecisions = `[*.decisions]`;
     var decisions = await jsonata(queryDecisions).evaluate(allProjectData);
@@ -429,7 +429,7 @@ async function generateProjectPendencies(allProjectData) {
 
     for(var user of dictionary) if(user.pendencies.length === 0) user.pendencies.push();
 
-    $("#tablePendencies").html("");
+    if(clearTable) $("#tablePendencies").html("");
 
     var dictionaryUnique = _.uniq(dictionary, (o)=> o.id);
 
@@ -661,7 +661,7 @@ async function getConfigData(json) {
 
 async function getEvcRankings(editorJson) {
 
-    var fullData = await getFullProjectData(editorJson, true);
+    var fullData = await getFullProjectData(editorJson, true, 0);
 
     var queryAllUsers = `[$distinct(decisions.stakeholders.$.{"idUser": idUser, "stakeholderName": stakeholderName, "courseName": courseName, "idCourse": idCourse})]`;
     var allUsers = await jsonata(queryAllUsers).evaluate(fullData);
@@ -714,17 +714,17 @@ async function getEvcRankings(editorJson) {
 
 }
 
-async function getFullProjectData(projectJson, showLoading) {
+async function getFullProjectData(projectJson, showLoading, projectId) {
 
     if(showLoading) $.LoadingOverlay("show");
 
     var steps = await getConfigData(projectJson);
-
     var result = [];
 
     var optionsWithEvaluations = await $.ajax({
         method: "POST",
         url: "/project/results",
+        data: {projectId: projectId}
     }).fail(function (jqXHR, textStatus, errorThrown) {
         Swal.fire('Erro!', jqXHR.responseText, 'error');
         return result;
