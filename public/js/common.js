@@ -607,6 +607,9 @@ async function populateCustomChartsSelect(generalEvc, usersOtionsSelect, courses
     usersOtionsSelect = await jsonata(queryOrderedOptions).evaluate(usersOtionsSelect);
     coursesOptionsSelect = await jsonata(queryOrderedOptions).evaluate(coursesOptionsSelect);
 
+    $('#selectChart1Content').empty();
+    $('#selectChart2Content').empty();
+
     addOptionToSelectCustomChart("selectChart1Content", generalEvc.id, generalEvc.label, "general");
     addOptionToSelectCustomChart("selectChart2Content", generalEvc.id, generalEvc.label, "general");
 

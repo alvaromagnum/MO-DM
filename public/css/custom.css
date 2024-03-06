@@ -21,7 +21,7 @@
 
 .modal-chart {
     width: 750px!important;
-    height: 600px!important;
+    height: 720px!important;
 }
 
 .custom-border-white {
@@ -92,6 +92,8 @@ tr.pendency-row:nth-child(even) {
     height: 350px;
     background: white;
     margin-top: -1px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
@@ -369,6 +371,8 @@ tr.pendency-row:nth-child(even) {
     padding: 5px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .select-decision {
