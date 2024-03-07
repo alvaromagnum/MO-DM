@@ -6,4 +6,6 @@
 
 . Colocar legenda de cores na página de resultados.
 
-. Depois de remover um usuário de um projeto, seu EVC em outro projeto está impactando o projeto atual. Não pode.
+. Depois de remover um usuário de um projeto, do nodo, está removendo avaliações de outros projetos.
+
+. O gráfico da evolução GERAL no modo administrativo não está fazendo a média dos snapshots.

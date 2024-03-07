@@ -108,7 +108,9 @@ async function load(dataToImport) {
 
     configEditor.clear();
 
-    clearCharts(4);
+    $("#tablePendencies").html("<tr class='pendency-row text-2xl'><td colspan='2'><center>-- SEM PENDÊNCIAS --</center></td></tr>");
+
+    clearCharts(11);
     clearLabels();
     clearAllUsersTable();
 

@@ -1021,8 +1021,6 @@ function setDrawFlowTooltipImport(el, tooltipId) {
 
 function clearAllCharts() {
 
-    $("#tablePendencies").html("<tr class='pendency-row text-2xl'><td colspan='2'><center>-- SEM PENDÊNCIAS --</center></td></tr>");
-
     am5.array.each(am5.registry.rootElements,
         function(root) {
             try{
