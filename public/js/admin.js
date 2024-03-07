@@ -3,7 +3,6 @@ import Drawflow from '../js/drawflow.js';
 darkMode(true);
 activateTooltips();
 
-var pageAllUsersEvc;
 var projectZoom;
 var projectPositionX;
 var projectPositionY;

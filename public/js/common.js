@@ -1,6 +1,7 @@
 var allProjectData;
 var pageAllCoursesEvc;
 var pageGeneralEvc;
+var pageAllUsersEvc;
 
 var evaluationData;
 var jsonConfig;
