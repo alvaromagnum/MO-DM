@@ -153,34 +153,40 @@ async function load(dataToImport) {
 
         var evcRankings = await getEvcRankings(jsonConfig);
 
-        $.LoadingOverlay("show");
-
-        $.ajax({
-
-            method: "GET",
-            url: "/project/motivation/history",
-
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-
-            $.LoadingOverlay("hide");
-            Swal.fire('Erro!', jqXHR.responseText, 'error');
-
-        }).done(function (snapshots) {
-
-            if (snapshots) {
-
-                snapshots = snapshotsToJson(snapshots);
-
-                generateLineChartStudents("allStudentsMotivationDiv", snapshots, evcRankings, pageAllUsersEvc);
-                generateLineChartGeneral("generalMotivationDiv", snapshots, evcRankings);
-
-            }
-
-            $.LoadingOverlay("hide");
-
-        });
+        generateLineCharts(evcRankings);
 
     }
+
+}
+
+function generateLineCharts(evcRankings) {
+
+    $.LoadingOverlay("show");
+
+    $.ajax({
+
+        method: "GET",
+        url: "/project/motivation/history",
+
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+
+        $.LoadingOverlay("hide");
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+
+    }).done(function (snapshots) {
+
+        if (snapshots) {
+
+            snapshots = snapshotsToJson(snapshots);
+
+            generateLineChartStudents("allStudentsMotivationDiv", snapshots, evcRankings, pageAllUsersEvc);
+            generateLineChartGeneral("generalMotivationDiv", snapshots, evcRankings);
+
+        }
+
+        $.LoadingOverlay("hide");
+
+    });
 
 }
 
@@ -249,7 +255,7 @@ async function loadAllProjectData(allJsons) {
 
         var projectData = await getFullProjectData(json, false, projectId);
 
-        $("#tablePendencies").append(`<td colspan="2" class="background-row-pendencies"><center><b>${projectName}</b></center></td>`);
+        $("#tablePendencies").append(`<td colspan="2" class="background-row-pendencies"><b>PROJETO:</b> ${projectName}</td>`);
 
         await generateProjectPendencies(projectData, false);
 
