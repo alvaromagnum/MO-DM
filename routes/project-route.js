@@ -399,7 +399,9 @@ async function checkIsChoice(req, res) {
         return;
     }
 
-    var choice = await databaseConfig.Decision.findOne({where: {EvaluationOptionId: req.body.evaluationOptionId, idProject: req.session.project.id}});
+    var projectId = Number(req.body.projectId);
+
+    var choice = await databaseConfig.Decision.findOne({where: {EvaluationOptionId: req.body.evaluationOptionId, idProject: req.session.user.login === "admin" && projectId !== 0 ? req.body.projectId : req.session.project.id}});
 
     res.send(choice !== null);
 

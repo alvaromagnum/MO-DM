@@ -733,7 +733,7 @@ async function getFullProjectData(projectJson, showLoading, projectId) {
     });
 
     if (optionsWithEvaluations) {
-        result = await joinDataAddScores(steps, optionsWithEvaluations);
+        result = await joinDataAddScores(steps, optionsWithEvaluations, projectId);
     }
 
     if(showLoading) $.LoadingOverlay("hide");
@@ -742,7 +742,7 @@ async function getFullProjectData(projectJson, showLoading, projectId) {
 
 }
 
-async function joinDataAddScores(steps, optionsWithEvaluations) {
+async function joinDataAddScores(steps, optionsWithEvaluations, projectId) {
 
     for(var step of steps) {
 
@@ -840,7 +840,7 @@ async function joinDataAddScores(steps, optionsWithEvaluations) {
                     option.Decision.option = option.option;
                 }
 
-                option.isSelectedChoice = await checkIsChoice(option.id);
+                option.isSelectedChoice = await checkIsChoice(option.id, projectId);
 
             }
 
@@ -854,12 +854,12 @@ async function joinDataAddScores(steps, optionsWithEvaluations) {
 
 }
 
-async function checkIsChoice(evaluationOptionId) {
+async function checkIsChoice(evaluationOptionId, projectId) {
 
     return $.ajax({
         method: "POST",
         url: "/project/decisions/choice/check",
-        data: { evaluationOptionId: evaluationOptionId }
+        data: { evaluationOptionId: evaluationOptionId, projectId: projectId }
     }).fail(function(jqXHR, textStatus, errorThrown) {
         Swal.fire('Erro!', jqXHR.responseText, 'error');
         return false;
