@@ -423,6 +423,21 @@ async function loadProjectSnapshots(req, res) {
 
 }
 
+async function loadAllProjectSnapshots(req, res) {
+
+    if (!req.session.user || !req.session.project || req.session.user.login !== "admin") {
+        res.redirect('/');
+        return;
+    }
+
+    var data = await databaseConfig.ProjectSnapshot.findAll({
+        order: ["createdAt"]
+    });
+
+    res.send(data);
+
+}
+
 async function hasAnyEvaluation(req, res) {
 
     if(!req.session.user || !req.session.project) {
@@ -637,6 +652,7 @@ projectRoute.get('/loadConfig', loadProjectConfig);
 projectRoute.get('/get/all', getAllProjects);
 
 projectRoute.get('/motivation/history', loadProjectSnapshots);
+projectRoute.get('/motivation/allHistory', loadAllProjectSnapshots);
 
 projectRoute.post('/isDecisionFinished', isDecisionFinished);
 

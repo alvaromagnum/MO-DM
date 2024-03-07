@@ -153,20 +153,20 @@ async function load(dataToImport) {
 
         var evcRankings = await getEvcRankings(jsonConfig);
 
-        generateLineCharts(evcRankings);
+        generateLineCharts(evcRankings, false);
 
     }
 
 }
 
-function generateLineCharts(evcRankings) {
+function generateLineCharts(evcRankings, full) {
 
     $.LoadingOverlay("show");
 
     $.ajax({
 
         method: "GET",
-        url: "/project/motivation/history",
+        url: full ? "/project/motivation/allHistory" : "/project/motivation/history",
 
     }).fail(function (jqXHR, textStatus, errorThrown) {
 
@@ -314,6 +314,7 @@ async function loadAllProjectData(allJsons) {
     var allData = {generalEvc: generalEvc, allUsersEvc: allUsersEvc, allCoursesEvc: allCoursesEvc};
 
     generateEvcChartsFromEvcRankings(allData);
+    generateLineCharts(allData, true);
 
     $.LoadingOverlay("hide");
 
