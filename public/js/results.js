@@ -1,3 +1,6 @@
+const urlParams = new URLSearchParams(window.location.search);
+const filterParam = urlParams.get('success');
+
 function importDefaultDataResults() {
 
     $.LoadingOverlay("show");
@@ -360,7 +363,7 @@ function makeDecisionFor(decisionId) {
                     $.LoadingOverlay("hide");
                     $.notify(msg, "success");
 
-                    window.location.href='/project/results';
+                    window.location.href='/project/results?success=ok';
 
                 });
 
@@ -448,6 +451,8 @@ $("#btApplyFilter").click(function () {
     }
 
 });
+
+if(filterParam) Swal.fire('Sucesso!', "Operação realizada com sucesso!", 'success');
 
 importDefaultDataResults();
 activateTooltips();

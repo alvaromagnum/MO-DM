@@ -615,10 +615,19 @@ async function saveSnapshot(req, res) {
         return;
     }
 
+    var avgEVC = 0;
+
+    var allEvaluations = await databaseConfig.Evaluation.findAll();
+
+    var sum = _.reduce(_.map(allEvaluations, (o)=>o.evc), function(memo, num){ return memo + num; }, 0);
+
+    avgEVC = sum/((await allEvaluations).length);
+
     await databaseConfig.ProjectSnapshot.create({
 
         ProjectId: req.session.project.id,
-        jsonSnapshot: req.body.snapshot
+        jsonSnapshot: req.body.snapshot,
+        avgEVC: avgEVC.toFixed(2)
 
     });
 

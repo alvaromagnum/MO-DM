@@ -176,6 +176,11 @@ const ProjectSnapshot = sequelize.define('ProjectSnapshot', {
     jsonSnapshot: {
         type: DataTypes.TEXT,
         allowNull: true
+    },
+
+    avgEVC: {
+        type: DataTypes.FLOAT,
+        allowNull: false
     }
 
 });

@@ -266,7 +266,7 @@ async function processSnapshotsStudents(snapshots, evcRankings, pageAllUsersEvc)
 
 }
 
-async function generateLineChartGeneral(divId, snapshots, evcRankings) {
+async function generateLineChartGeneral(divId, snapshots, evcRankings, full) {
 
     am5.array.each(am5.registry.rootElements,
         function(root) {
@@ -279,7 +279,7 @@ async function generateLineChartGeneral(divId, snapshots, evcRankings) {
         }
     );
 
-    var generalSerie = await processSnapshotsGeneral(snapshots, evcRankings);
+    var generalSerie = await processSnapshotsGeneral(snapshots, evcRankings, full);
 
     var root = am5.Root.new(divId);
 
@@ -394,7 +394,7 @@ async function generateLineChartGeneral(divId, snapshots, evcRankings) {
 
 }
 
-async function processSnapshotsGeneral(snapshots, evcRankings) {
+async function processSnapshotsGeneral(snapshots, evcRankings, full) {
 
     var generalSerie = [];
 
@@ -404,7 +404,7 @@ async function processSnapshotsGeneral(snapshots, evcRankings) {
 
         var generalEvc = snapshot.jsonSnapshot.generalEvc;
 
-        generalSerie.push({id: generalEvc.id, label: generalEvc.label, date: date, value: Number((generalEvc.evc*100).toFixed(2))});
+        generalSerie.push({id: generalEvc.id, label: generalEvc.label, date: date, value: Number(((full ? snapshot.avgEVC : generalEvc.evc)*100).toFixed(2))});
 
     }
 

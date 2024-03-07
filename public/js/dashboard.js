@@ -179,7 +179,7 @@ async function load(dataToImport) {
                 snapshots = snapshotsToJson(snapshots);
 
                 generateLineChartStudents("allStudentsMotivationDiv", snapshots, evcRankings, pageAllUsersEvc);
-                generateLineChartGeneral("generalMotivationDiv", snapshots, evcRankings);
+                generateLineChartGeneral("generalMotivationDiv", snapshots, evcRankings, false);
 
             }
 

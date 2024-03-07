@@ -78,7 +78,7 @@ function removeUserFromProject(userId) {
 
             Swal.fire({
 
-                title: 'Atenção!',
+                title: 'Sucesso!',
                 html: `Membro removido da equipe com sucesso!`,
                 icon: 'success',
                 confirmButtonText: 'OK'

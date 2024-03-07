@@ -190,7 +190,7 @@ function generateLineCharts(evcRankings, full) {
             snapshots = snapshotsToJson(snapshots);
 
             generateLineChartStudents("allStudentsMotivationDiv", snapshots, evcRankings, pageAllUsersEvc);
-            generateLineChartGeneral("generalMotivationDiv", snapshots, evcRankings);
+            generateLineChartGeneral("generalMotivationDiv", snapshots, evcRankings, true);
 
         }
 
