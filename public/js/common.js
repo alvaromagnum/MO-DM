@@ -31,7 +31,7 @@ function loadAllUsers(projectUsers) {
             </td>
             <td class="align-middle text-sm">
               <div class="pendencies-container">
-                <a href="#" id="buttonRemoveMember" onclick="confirmRemoveUserFromProject(${projectUser.id}, '${projectUser.name}')" idToRemove="${projectUser.id}" style="cursor: pointer!important" data-toggle="tooltip" title="Clique para REMOVER ${projectUser.name.toUpperCase()} da equipe.">[REMOVER]</a>
+                <a href="#" id="buttonRemoveMember" onclick="confirmRemoveUserFromProject(${projectUser.id}, '${projectUser.name}')" idToRemove="${projectUser.id}" style="cursor: pointer!important" data-toggle="tooltip" title="Clique para REMOVER ${projectUser.name.toUpperCase()} da equipe.">[REMOVER VÍNCULO]</a>
               </div>
             </td>
         `);
@@ -47,7 +47,7 @@ function confirmRemoveUserFromProject(userId, userName) {
     Swal.fire({
 
         title: 'Atenção!',
-        html: `Tem certeza de que deseja REMOVER ${userName.toUpperCase()} da equipe?`,
+        html: `Tem certeza de que deseja REMOVER O VÍNCULO DE ${userName.toUpperCase()} com a equipe?`,
         icon: 'info',
         showCancelButton: true,
         cancelButtonText: "NÃO",

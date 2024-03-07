@@ -27,7 +27,7 @@ module.exports = {
     projectCreatedSuccess: `Projeto criado com sucesso. Anote a chave de acesso e compartilhe com a equipe:`,
     decisionsSavedSuccess: `Decisões salvas com sucesso!`,
     genericTaskError: `Operação não realizada! Tente novamente!`,
-    cantAutoRemove: `Um membro não pode remover a si mesmo! Solicite a outra pessoa da equipe ou administrador!`,
+    cantAutoRemove: `Um membro não pode remover a sí mesmo! Solicite a outra pessoa da equipe ou administrador!`,
     genericTaskSuccess: `Operação realizada com sucesso!`,
     avatarsRemoved: `Pasta de avatares limpa com sucesso!`,
     incorrectImageTypeError: `Imagem no formato incorreto! Apenas imagens .JPG são aceitas.`,
