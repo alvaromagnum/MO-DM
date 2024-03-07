@@ -7,6 +7,43 @@ var evaluationData;
 var jsonConfig;
 var myId;
 
+function clearAllUsersTable() {
+
+    $("#tableAllUsers").html("");
+    $("#tableAllUsers").append(`<tr class='allUsers-row text-2xl'><td colspan='2'><center>-- SEM MEMBROS --</center></td></tr>`);
+
+}
+
+function loadAllUsers(projectUsers) {
+
+    clearAllUsersTable();
+
+    if(projectUsers.length >0) $("#tableAllUsers").html("");
+
+    for(var projectUser of projectUsers) {
+
+        var row = $("<tr class='pendency-row'></tr>").html(`
+            <td class="align-middle text-sm width-30 avatar-container">
+              <img id="userAvatar${projectUser.id}" src="/avatars/${projectUser.id}.jpg" alt="userAvatar" class="avatar avatar-sm rounded-circle-black-mini"/>
+              &nbsp;${projectUser.name}
+            </td>
+            <td class="align-middle text-sm">
+              <div class="pendencies-container">
+                <a href="#" id="buttonRemoveMember" onclick="removeUserFromProject(${projectUser.id})" idToRemove="${projectUser.id}" style="cursor: pointer!important" data-toggle="tooltip" title="Clique para REMOVER ${projectUser.name.toUpperCase()} da equipe.">[REMOVER]</a>
+              </div>
+            </td>
+        `);
+
+        $("#tableAllUsers").append(row);
+
+    }
+
+}
+
+function removeUserFromProject(userId) {
+    console.log(userId);
+}
+
 async function getImpactsFrom(id, option) {
 
     var queryImpactResults = `[decisions.options.Evaluations[EvaluationOptionId="${id}"]]`;

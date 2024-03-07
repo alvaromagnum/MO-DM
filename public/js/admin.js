@@ -58,16 +58,20 @@ function importDefaultDataDashboard() {
     $.LoadingOverlay("show");
 
     $.ajax({
+
         method: "GET",
         url: "/users/get/loggedUserData",
+
     }).fail(function(jqXHR, textStatus, errorThrown) {
+
         $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
+
     }).done(function (user) {
-        if(user) {
-            $("#labelUserName").text(user.userName);
-        }
+
+        if(user) $("#labelUserName").text(user.userName);
         $.LoadingOverlay("hide");
+
     });
 
     $.LoadingOverlay("show");
@@ -105,8 +109,8 @@ async function load(dataToImport) {
     configEditor.clear();
 
     clearCharts(4);
-
     clearLabels();
+    clearAllUsersTable();
 
     if (dataToImport) {
 
@@ -121,6 +125,7 @@ async function load(dataToImport) {
             $('#buttonResults').show();
             $('#divCardSankeyChart').show();
             $('#divCardProjectConfig').show();
+            $('#divAllUsers').show();
 
         }
         else {
@@ -128,6 +133,7 @@ async function load(dataToImport) {
             $('#buttonResults').hide();
             $('#divCardSankeyChart').hide();
             $('#divCardProjectConfig').hide();
+            $('#divAllUsers').hide();
 
             loadAllProjects();
 
@@ -137,6 +143,8 @@ async function load(dataToImport) {
             $.LoadingOverlay("hide");
             return;
         }
+
+        loadAllUsers(dataToImport.projectUsers);
 
         currentProjectJson = JSON.parse(jsonConfig);
 
@@ -435,6 +443,7 @@ configEditor.zoom_out_by_value(0.3);
 $('#buttonResults').hide();
 $('#divCardSankeyChart').hide();
 $('#divCardProjectConfig').hide();
+$('#divAllUsers').hide();
 
 importProjectNames();
 importDefaultDataDashboard();

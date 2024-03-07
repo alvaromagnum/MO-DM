@@ -3,7 +3,6 @@ import Drawflow from '../js/drawflow.js';
 darkMode(true);
 activateTooltips();
 
-var pageAllUsersEvc;
 var projectZoom;
 var projectPositionX;
 var projectPositionY;
@@ -106,9 +105,7 @@ function importDefaultDataDashboard() {
         $.LoadingOverlay("hide");
         Swal.fire('Erro!', jqXHR.responseText, 'error');
     }).done(function (user) {
-        if(user) {
-            $("#labelUserName").text(user.userName);
-        }
+        if(user) $("#labelUserName").text(user.userName);
         $.LoadingOverlay("hide");
     });
 
@@ -126,64 +123,71 @@ function importDefaultDataDashboard() {
 
     }).done(async function (dataToImport) {
 
-        if (dataToImport) {
-
-            var projectName = dataToImport.projectName;
-            var jsonConfig = dataToImport.jsonConfig;
-
-            $("#labelProjectName").text(projectName);
-
-            if (!jsonConfig) {
-                $.LoadingOverlay("hide");
-                return;
-            }
-
-            currentProjectJson = JSON.parse(jsonConfig);
-
-            configEditor.import(currentProjectJson);
-
-            projectZoom = configEditor.zoom;
-            projectPositionX = configEditor.x;
-            projectPositionY = configEditor.y;
-
-            await processProjectConfig();
-
-            await generateEvcCharts(jsonConfig);
-
-            var evcRankings = await getEvcRankings(jsonConfig);
-
-            $.LoadingOverlay("show");
-
-            $.ajax({
-
-                method: "GET",
-                url: "/project/motivation/history",
-
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-
-                $.LoadingOverlay("hide");
-                Swal.fire('Erro!', jqXHR.responseText, 'error');
-
-            }).done(function (snapshots) {
-
-                if(snapshots) {
-
-                    snapshots = snapshotsToJson(snapshots);
-
-                    generateLineChartStudents("allStudentsMotivationDiv", snapshots, evcRankings, pageAllUsersEvc);
-                    generateLineChartGeneral("generalMotivationDiv", snapshots, evcRankings);
-
-                }
-
-                $.LoadingOverlay("hide");
-
-            });
-
-        }
-
+        await load(dataToImport);
         $.LoadingOverlay("hide");
 
     });
+
+}
+
+async function load(dataToImport) {
+
+    if(dataToImport) {
+
+        var projectName = dataToImport.projectName;
+        var jsonConfig = dataToImport.jsonConfig;
+
+        $("#labelProjectName").text(projectName);
+
+        if (!jsonConfig) {
+            $.LoadingOverlay("hide");
+            return;
+        }
+
+        loadAllUsers(dataToImport.projectUsers);
+
+        currentProjectJson = JSON.parse(jsonConfig);
+
+        configEditor.import(currentProjectJson);
+
+        projectZoom = configEditor.zoom;
+        projectPositionX = configEditor.x;
+        projectPositionY = configEditor.y;
+
+        await processProjectConfig();
+
+        await generateEvcCharts(jsonConfig);
+
+        var evcRankings = await getEvcRankings(jsonConfig);
+
+        $.LoadingOverlay("show");
+
+        $.ajax({
+
+            method: "GET",
+            url: "/project/motivation/history",
+
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+
+            $.LoadingOverlay("hide");
+            Swal.fire('Erro!', jqXHR.responseText, 'error');
+
+        }).done(function (snapshots) {
+
+            if(snapshots) {
+
+                snapshots = snapshotsToJson(snapshots);
+
+                generateLineChartStudents("allStudentsMotivationDiv", snapshots, evcRankings, pageAllUsersEvc);
+                generateLineChartGeneral("generalMotivationDiv", snapshots, evcRankings);
+
+            }
+
+            $.LoadingOverlay("hide");
+
+        });
+
+    }
 
 }
 

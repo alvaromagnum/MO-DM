@@ -189,6 +189,12 @@ async function setCurrentProject(req, res) {
         where: {id: idProject}
     });
 
+    var projectUsers = [];
+
+    var allUsers = project ? await project.getUsers() : [];
+
+    for(var user of allUsers) projectUsers.push({name: user.name, id: user.id});
+
     if(!project) project = {id: 0, name: "TODOS", key: "ADMIN", jsonConfig: null};
 
     req.session.project = project;
@@ -196,7 +202,8 @@ async function setCurrentProject(req, res) {
     res.send({
         jsonConfig: project.jsonConfig,
         projectName: `[${project.name} ➤ ${project.key}]`,
-        projectId: idProject
+        projectId: idProject,
+        projectUsers: projectUsers
     });
 
 }
@@ -212,12 +219,19 @@ async function loadProjectConfig(req, res) {
         where: {id: req.session.project.id}
     });
 
+    var projectUsers = [];
+
+    var allUsers = project ? await project.getUsers() : [];
+
+    for(var user of allUsers) projectUsers.push({name: user.name, id: user.id});
+
     if(!project) project = {id: 0, name: "ADMIN", jsonConfig: null, key: "ADMIN"};
 
     res.send({
         jsonConfig: project.jsonConfig,
         projectName: `[${req.session.project.name} ➤ ${project.key}]`,
-        projectId: req.session.project.id
+        projectId: req.session.project.id,
+        projectUsers: projectUsers
     });
 
 }
