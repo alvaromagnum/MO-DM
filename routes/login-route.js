@@ -33,6 +33,13 @@ async function doLogin(req, res) {
         return;
     }
 
+    var userProject = await user.getProject();
+
+    if (userProject !== null && userProject.id !== project.id) {
+        res.status(500).send(messages.userAlreadyInProject);
+        return;
+    }
+
     if(user.login !== "admin") project.addUser(user);
 
     req.session.user = user;

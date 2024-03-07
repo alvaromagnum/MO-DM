@@ -23,6 +23,7 @@ module.exports = {
     databaseConnected: 'Conectado ao banco de dados!',
     cantLogin: 'Não foi possível efetuar o login! Tente novamente!',
     projectNotFound: 'Projeto não encontrado! Tente novamente!',
+    userAlreadyInProject: 'Usuário já faz parte de um projeto! Remova-o, antes!',
     projectCreatedSuccess: `Projeto criado com sucesso. Anote a chave de acesso e compartilhe com a equipe:`,
     decisionsSavedSuccess: `Decisões salvas com sucesso!`,
     genericTaskError: `Operação não realizada! Tente novamente!`,

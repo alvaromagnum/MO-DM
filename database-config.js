@@ -180,10 +180,8 @@ const ProjectSnapshot = sequelize.define('ProjectSnapshot', {
 
 });
 
-const ProjectUser = sequelize.define('ProjectUser', {});
-
-Project.belongsToMany(User, { through: ProjectUser });
-User.belongsToMany(Project, { through: ProjectUser });
+Project.hasMany(User);
+User.belongsTo(Project);
 
 Course.hasMany(User);
 User.belongsTo(Course);
@@ -228,7 +226,6 @@ function databaseConnected() {
     Evaluation.sync({ force: true }).then(() => {console.log(messages.evaluationOptionsTableCreated)});
     Decision.sync({ force: true }).then(() => {console.log(messages.decisionsTableCreated)});
     EvaluationOption.sync({ force: true }).then(() => {console.log(messages.evaluationsTableCreated)});
-    ProjectUser.sync({ force: true }).then(() => {console.log(messages.projectUsersTableCreated)});
     ProjectSnapshot.sync({ force: true }).then(() => {console.log(messages.projectSnapshotsTableCreated)});
     User.sync({ force: true }).then(() => {console.log(messages.usersTableCreated)});
     Project.sync({ force: true }).then(() => {console.log(messages.projectsTableCreated)});
@@ -315,7 +312,6 @@ module.exports = {
     User: User,
     Project: Project,
     ProjectSnapshot: ProjectSnapshot,
-    ProjectUser: ProjectUser,
     Course: Course,
     EvaluationOption: EvaluationOption,
     Evaluation: Evaluation,
