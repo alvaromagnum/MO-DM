@@ -105,7 +105,8 @@ async function load(dataToImport) {
 
     configEditor.clear();
 
-    clearCharts();
+    clearCharts(4);
+
     clearLabels();
 
     if (dataToImport) {

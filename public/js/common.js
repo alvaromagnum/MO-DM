@@ -943,9 +943,6 @@ function clearAllCharts() {
 
 }
 
-function clearCharts() {
-    clearAllCharts();
-    clearAllCharts();
-    clearAllCharts();
-    clearAllCharts();
+function clearCharts(numberOfCharts) {
+    for(var i = 1; i <= numberOfCharts; i++) clearAllCharts();
 }
