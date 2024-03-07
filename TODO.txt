@@ -9,3 +9,5 @@
 . Colocar mensagem de sucesso ao selecionar escolha de uma decisão. Checar outros locais.
 
 . Ver o que acontece com os inputs quando preenche automaticamente com histórico do navegador / teclado.
+
+. De vez em quando a página do admin está carregando com um ponto extra no gráfico de linha geral. Quando recarrega a página, conserta.

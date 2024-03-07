@@ -242,7 +242,7 @@ function loadAllProjects() {
         Swal.fire('Erro!', jqXHR.responseText, 'error');
         $.LoadingOverlay("hide");
     }).done(async function (result) {
-        loadAllProjectData(result.jsons);
+        await loadAllProjectData(result.jsons);
         $.LoadingOverlay("hide");
     });
 
@@ -283,7 +283,7 @@ async function loadAllProjectData(allJsons) {
 
     for(var evcRanking of evcRankings) {
 
-        allGeneral.push(evcRanking.generalEvc);
+        if(Number(evcRanking.generalEvc.evc) !== 0) allGeneral.push(evcRanking.generalEvc);
         allUsers.push(evcRanking.allUsersEvc);
         allCourses.push(evcRanking.allCoursesEvc);
 

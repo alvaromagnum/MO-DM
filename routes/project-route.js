@@ -617,11 +617,21 @@ async function saveSnapshot(req, res) {
 
     var avgEVC = 0;
 
-    var allEvaluations = await databaseConfig.Evaluation.findAll();
+    var allDecisions = await databaseConfig.Decision.findAll();
+
+    var allEvaluations = await databaseConfig.Evaluation.findAll({
+
+        where: {
+            EvaluationOptionId: {
+                [Op.in]: _.map(allDecisions, (o) => o.EvaluationOptionId)
+            }
+        }
+
+    });
 
     var sum = _.reduce(_.map(allEvaluations, (o)=>o.evc), function(memo, num){ return memo + num; }, 0);
 
-    avgEVC = sum/((await allEvaluations).length);
+    avgEVC = sum/(allEvaluations.length);
 
     await databaseConfig.ProjectSnapshot.create({
 
