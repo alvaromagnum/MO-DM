@@ -28,19 +28,21 @@ async function doLogin(req, res) {
 
     if(user.login === "admin") project = {id: 0, name: "TODOS", key: "ADMIN", jsonConfig: null};
 
-    if (project === null) {
+    var userProject = await user.getProject();
+
+    if (project === null && userProject === null) {
         res.status(500).send(messages.projectNotFound);
         return;
     }
 
-    var userProject = await user.getProject();
+    if(!project) project = userProject;
 
     if (userProject !== null && userProject.id !== project.id) {
         res.status(500).send(messages.userAlreadyInProject);
         return;
     }
 
-    if(user.login !== "admin") project.addUser(user);
+    if(user.login !== "admin" && userProject === null) project.addUser(user);
 
     req.session.user = user;
     req.session.project = project;
