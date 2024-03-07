@@ -29,7 +29,7 @@ function loadAllUsers(projectUsers) {
             </td>
             <td class="align-middle text-sm">
               <div class="pendencies-container">
-                <a href="#" id="buttonRemoveMember" onclick="removeUserFromProject(${projectUser.id})" idToRemove="${projectUser.id}" style="cursor: pointer!important" data-toggle="tooltip" title="Clique para REMOVER ${projectUser.name.toUpperCase()} da equipe.">[REMOVER]</a>
+                <a href="#" id="buttonRemoveMember" onclick="removeUserFromProject(${projectUser.id}, '${projectUser.name}')" idToRemove="${projectUser.id}" style="cursor: pointer!important" data-toggle="tooltip" title="Clique para REMOVER ${projectUser.name.toUpperCase()} da equipe.">[REMOVER]</a>
               </div>
             </td>
         `);
@@ -40,8 +40,26 @@ function loadAllUsers(projectUsers) {
 
 }
 
-function removeUserFromProject(userId) {
-    console.log(userId);
+function removeUserFromProject(userId, userName) {
+
+    Swal.fire({
+
+        title: 'Atenção!',
+        html: `Tem certeza de que deseja REMOVER ${userName.toUpperCase()} da equipe?`,
+        icon: 'info',
+        showCancelButton: true,
+        cancelButtonText: "NÃO",
+        confirmButtonText: 'SIM'
+
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+            console.log("OK")
+            //window.location.href = "/login/out";
+        }
+
+    });
+
 }
 
 async function getImpactsFrom(id, option) {
@@ -928,7 +946,7 @@ $("#btLogout").click(function() {
     Swal.fire({
 
         title: 'Atenção!',
-        html: "Tem certeza de que deseja sair ?",
+        html: "Tem certeza de que deseja sair?",
         icon: 'info',
         showCancelButton: true,
         cancelButtonText: "NÃO",
