@@ -4,8 +4,4 @@
 
 . O modo como as tooltips são exibidas nos nós da configuração do projeto, ao carregar do bd, não está otimizado. Estranho. Checar.
 
-. Colocar legenda de cores na página de resultados.
-
-. Depois de remover um usuário de um projeto, do nodo, está removendo avaliações de outros projetos.
-
 . O gráfico da evolução GERAL no modo administrativo não está fazendo a média dos snapshots.

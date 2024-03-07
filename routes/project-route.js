@@ -63,7 +63,7 @@ async function saveProjectConfig(req, res) {
                     if(stakeholdersToRemoveFromDecision.length === 0) continue;
 
                     var evaluationOptions = await databaseConfig.EvaluationOption.findAll({
-                        where: {idDecision: newDecision.id},
+                        where: {ProjectId: req.session.project.id, idDecision: newDecision.id},
                         include: [{model: databaseConfig.Evaluation}]
                     });
 
