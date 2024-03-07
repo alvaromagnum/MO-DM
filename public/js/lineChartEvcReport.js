@@ -222,8 +222,8 @@ async function processSnapshotsStudents(snapshots, evcRankings, pageAllUsersEvc)
 
     if(currentEvcs && showCurrent) {
 
-        //var date = moment().add(5, 'm').format("DD-MM-YYYY HH:mm:ss");
-        var date = moment().format("DD-MM-YYYY HH:mm:ss");
+        var date = moment().add(.1, 'm').format("DD-MM-YYYY HH:mm:ss");
+        // var date = moment().format("DD-MM-YYYY HH:mm:ss");
 
         for(var user of currentEvcs) {
             userData.push({point: point, id: user.id, label: user.label, date: date, value: Number((user.evc*100).toFixed(2))});
@@ -419,8 +419,8 @@ async function processSnapshotsGeneral(snapshots, evcRankings) {
 
     if(currentEvc && showCurrent) {
 
-        // var date = moment().add(5, 'm').format("DD-MM-YYYY HH:mm:ss");
-        var date = moment().format("DD-MM-YYYY HH:mm:ss");
+        var date = moment().add(.1, 'm').format("DD-MM-YYYY HH:mm:ss");
+        // var date = moment().format("DD-MM-YYYY HH:mm:ss");
 
         generalSerie.push({id: currentEvc.id, label: currentEvc.label, date: date, value: Number((currentEvc.evc*100).toFixed(2))});
 
