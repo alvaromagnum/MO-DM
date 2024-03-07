@@ -25,7 +25,8 @@ function generateBubbleChart(divId, allEvc) {
     allEvc = Array.from(allEvc);
 
     for(var evcData of allEvc) {
-        data.children.push({ id: evcData.id, name: evcData.label, value: evcData.evc * 100 });
+        var value = (evcData.evc * 100).toFixed(0);
+        data.children.push({ id: evcData.id, userName: evcData.label, name: `${evcData.label}\n[bold]${value}[/]`, value: value });
     }
 
     var container = root.container.children.push(
@@ -44,6 +45,7 @@ function generateBubbleChart(divId, allEvc) {
             initialDepth: 1,
             maxRadius: 60,
             minRadius: 20,
+            dataField: "value",
             valueField: "value",
             categoryField: "name",
             childDataField: "children",
@@ -53,7 +55,8 @@ function generateBubbleChart(divId, allEvc) {
     );
 
     series.nodes.template.setAll({
-        cursorOverStyle: "pointer"
+        cursorOverStyle: "pointer",
+        tooltipText: `{userName}: [bold]{value}[/]`
     });
 
     series.labels.template.setAll({
