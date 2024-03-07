@@ -19,8 +19,6 @@ async function processProjectConfig() {
 
     allProjectData = await getFullProjectData(configEditor.getJson(), false, 0);
 
-    console.log(JSON.stringify(allProjectData, null, "\t"));
-
     var editorJson = configEditor.getJson();
     var configData = await getConfigData(editorJson);
     var linksNodes = await getSankeyChartDataFromConfig(configData);
@@ -275,21 +273,17 @@ async function loadAllProjectData(allJsons) {
 
     }
 
-    for(var users of allUsers) {
-        allUsersEvc = allUsersEvc.concat(users);
-    }
+    var evc = (_.reduce(_.map(allGeneral, (o) => Number(o.evc)), function(x, y){ return (x + y); }, 0)/allGeneral.length).toFixed(2);
+    var e = (_.reduce(_.map(allGeneral, (o) => Number(o.e)), function(x, y){ return (x + y); }, 0)/allGeneral.length).toFixed(2);
+    var v = (_.reduce(_.map(allGeneral, (o) => Number(o.v)), function(x, y){ return (x + y); }, 0)/allGeneral.length).toFixed(2);
+    var c = (_.reduce(_.map(allGeneral, (o) => Number(o.c)), function(x, y){ return (x + y); }, 0)/allGeneral.length).toFixed(2);
 
-    for(var courses of allCourses) {
-        allCoursesEvcWithDuplicates = allCoursesEvcWithDuplicates.concat(courses);
-    }
+    var generalEvc = {id: 0, label: "Geral", evc: evc, e: e, v: v, c: c};
 
-    console.log("ALL COURSES WITH DUPLICATES:");
-    console.log(allCoursesEvcWithDuplicates);
+    for(var users of allUsers) allUsersEvc = allUsersEvc.concat(users);
+    for(var courses of allCourses) allCoursesEvcWithDuplicates = allCoursesEvcWithDuplicates.concat(courses);
 
     allCoursesEvc = _.uniq(allCoursesEvcWithDuplicates, (o) => o.id);
-
-    console.log("ALL COURSES OLD:");
-    console.log(allCoursesEvc);
 
     var newAllCoursesEvc = new Array();
 
@@ -300,10 +294,10 @@ async function loadAllProjectData(allJsons) {
         var duplicates = _.filter(allCoursesEvcWithDuplicates, (o) => o.id === id);
         var itemsCount = duplicates.length;
 
-        var evc = _.reduce(_.map(duplicates, (o) => Number(o.evc)), function(x, y){ return (x + y); }, 0)/itemsCount.toFixed(2);
-        var e = _.reduce(_.map(duplicates, (o) => Number(o.e)), function(x, y){ return (x + y); }, 0)/itemsCount.toFixed(2);
-        var v = _.reduce(_.map(duplicates, (o) => Number(o.v)), function(x, y){ return (x + y); }, 0)/itemsCount.toFixed(2);
-        var c = _.reduce(_.map(duplicates, (o) => Number(o.c)), function(x, y){ return (x + y); }, 0)/itemsCount.toFixed(2);
+        var evc = (_.reduce(_.map(duplicates, (o) => Number(o.evc)), function(x, y){ return (x + y); }, 0)/itemsCount).toFixed(2);
+        var e = (_.reduce(_.map(duplicates, (o) => Number(o.e)), function(x, y){ return (x + y); }, 0)/itemsCount).toFixed(2);
+        var v = (_.reduce(_.map(duplicates, (o) => Number(o.v)), function(x, y){ return (x + y); }, 0)/itemsCount).toFixed(2);
+        var c = (_.reduce(_.map(duplicates, (o) => Number(o.c)), function(x, y){ return (x + y); }, 0)/itemsCount).toFixed(2);
 
         newAllCoursesEvc.push({id: id, label: label, evc: evc, e: e, v: v, c: c});
 
@@ -311,15 +305,9 @@ async function loadAllProjectData(allJsons) {
 
     allCoursesEvc = newAllCoursesEvc;
 
-    console.log("ALL COURSES NEW:");
-    console.log(allCoursesEvc);
+    var allData = {generalEvc: generalEvc, allUsersEvc: allUsersEvc, allCoursesEvc: allCoursesEvc};
 
-    var allData = {generalEvc: {}, allUsersEvc: allUsersEvc, allCoursesEvc: allCoursesEvc};
-
-    // console.log("ALL DATA:");
-    // console.log(allData);
-
-    //generateEvcChartsFromEvcRankings(allData);
+    generateEvcChartsFromEvcRankings(allData);
 
     $.LoadingOverlay("hide");
 
