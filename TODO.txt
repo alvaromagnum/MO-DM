@@ -13,3 +13,5 @@
 . Impedir usuários de se cadastrar em mais de uma equipe.
 
 . Criar página de remoção de usuários da equipe.
+
+. Checar se admin, ao entrar com chave-convite, fica associado ao projeto.

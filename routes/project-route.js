@@ -132,19 +132,34 @@ async function getAllProjectsJson(req, res) {
 
     var projecIds = req.body.projectIds;
 
-    var projects = await databaseConfig.Project.findAll({
-        where: {
-            id: {
-                [Op.in]: projecIds
+    var projects = [];
+
+    try {
+
+        projects = await databaseConfig.Project.findAll({
+
+            where: {
+                id: {
+                    [Op.in]: projecIds
+                }
             }
-        }
-    });
+
+        });
+
+    }
+    catch (err) {
+
+        console.log(err);
+
+    }
 
     var jsons = new Array();
 
     for(var project of projects) {
 
         var jsonObject = JSON.parse(project.jsonConfig);
+
+        if(!jsonObject) jsonObject = {};
 
         jsonObject.projectId = project.id;
         jsonObject.projectName = project.name;
