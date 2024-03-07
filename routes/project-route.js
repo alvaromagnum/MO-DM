@@ -6,6 +6,7 @@ const path = require("path");
 const { Op } = require("sequelize");
 const _ = require("underscore");
 const jsonata = require('jsonata');
+const SHA256 = require("crypto-js/sha256");
 
 var projectRoute = express.Router();
 
@@ -662,6 +663,35 @@ async function getAllProjects(req, res) {
 
 }
 
+async function removeUser(req, res) {
+
+    var userId = req.body.userId;
+
+    var user = await databaseConfig.User.findOne({where: {id: userId}, include: databaseConfig.Project});
+
+    if (user === null) {
+        res.status(500).send(messages.genericTaskError);
+        return;
+    }
+
+    if (user.id === req.session.user.id) {
+        res.status(500).send(messages.cantAutoRemove);
+        return;
+    }
+
+    var project = user.Project;
+
+    if (project.id !== req.session.project.id) {
+        res.status(500).send(messages.genericTaskError);
+        return;
+    }
+
+    project.removeUser(user);
+
+    res.send(true);
+
+}
+
 projectRoute.post('/saveConfig', saveProjectConfig);
 
 projectRoute.post('/getImpacts', getImpacts);
@@ -686,6 +716,8 @@ projectRoute.get('/motivation/allHistory', loadAllProjectSnapshots);
 projectRoute.post('/isDecisionFinished', isDecisionFinished);
 
 projectRoute.post('/hasAnyEvaluation', hasAnyEvaluation);
+
+projectRoute.post('/remove/user', removeUser);
 
 projectRoute.post('/decisions/choice/check', checkIsChoice);
 

@@ -18,6 +18,8 @@ function loadAllUsers(projectUsers) {
 
     clearAllUsersTable();
 
+    projectUsers = _.sortBy(projectUsers, (o) => o.name);
+
     if(projectUsers.length >0) $("#tableAllUsers").html("");
 
     for(var projectUser of projectUsers) {
@@ -29,7 +31,7 @@ function loadAllUsers(projectUsers) {
             </td>
             <td class="align-middle text-sm">
               <div class="pendencies-container">
-                <a href="#" id="buttonRemoveMember" onclick="removeUserFromProject(${projectUser.id}, '${projectUser.name}')" idToRemove="${projectUser.id}" style="cursor: pointer!important" data-toggle="tooltip" title="Clique para REMOVER ${projectUser.name.toUpperCase()} da equipe.">[REMOVER]</a>
+                <a href="#" id="buttonRemoveMember" onclick="confirmRemoveUserFromProject(${projectUser.id}, '${projectUser.name}')" idToRemove="${projectUser.id}" style="cursor: pointer!important" data-toggle="tooltip" title="Clique para REMOVER ${projectUser.name.toUpperCase()} da equipe.">[REMOVER]</a>
               </div>
             </td>
         `);
@@ -40,7 +42,7 @@ function loadAllUsers(projectUsers) {
 
 }
 
-function removeUserFromProject(userId, userName) {
+function confirmRemoveUserFromProject(userId, userName) {
 
     Swal.fire({
 
@@ -53,10 +55,43 @@ function removeUserFromProject(userId, userName) {
 
     }).then((result) => {
 
-        if (result.isConfirmed) {
-            console.log("OK")
-            //window.location.href = "/login/out";
+        if (result.isConfirmed) removeUserFromProject(userId);
+
+    });
+
+}
+
+function removeUserFromProject(userId) {
+
+    $.LoadingOverlay("show");
+
+    $.ajax({
+        method: "POST",
+        url: "/project/remove/user",
+        data: {userId: userId}
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        $.LoadingOverlay("hide");
+        Swal.fire('Erro!', jqXHR.responseText, 'error');
+    }).done(function (result) {
+
+        if(result) {
+
+            Swal.fire({
+
+                title: 'Atenção!',
+                html: `Membro removido da equipe com sucesso!`,
+                icon: 'success',
+                confirmButtonText: 'OK'
+
+            }).then((result) => {
+
+                window.location.href = "/dashboard";
+
+            });
+
         }
+
+        $.LoadingOverlay("hide");
 
     });
 
