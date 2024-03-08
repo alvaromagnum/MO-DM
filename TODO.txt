@@ -10,4 +10,6 @@
 
 . Ver o que acontece com os inputs quando preenche automaticamente com histórico do navegador / teclado.
 
-. De vez em quando a página do admin está carregando com um ponto extra no gráfico de linha geral. Quando recarrega a página, conserta.
+. De vez em quando a página do admin está carregando com um ponto extra no gráfico de linha geral. Quando recarrega a página, conserta. Aconteceu uma vez quando salvou um snapshot de um projeto e depois foi para o modo admin. Salva snapshot quando faz uma decisão.
+
+. Avaliação 5 5 3 está gerando inconsistência entre o evc gerado na tabela de avaliação e o avgEVC do snapshot.

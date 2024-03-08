@@ -132,6 +132,8 @@ function importDefaultDataDashboard() {
 
 async function load(dataToImport) {
 
+    clearCharts(11);
+
     if(dataToImport) {
 
         var projectName = dataToImport.projectName;

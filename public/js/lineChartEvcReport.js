@@ -424,7 +424,7 @@ async function processSnapshotsGeneral(snapshots, evcRankings, full) {
         var date = moment().add(1, 'm').format("DD-MM-YYYY HH:mm:ss");
         // var date = moment().format("DD-MM-YYYY HH:mm:ss");
 
-        generalSerie.push({id: currentEvc.id, label: currentEvc.label, date: date, value: currentEvc.toFixed(2)});
+        generalSerie.push({id: 0, label: "Geral", date: date, value: currentEvc});
 
     }
 
