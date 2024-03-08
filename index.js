@@ -12,6 +12,8 @@ const dashboardRoute = require('./routes/dashboard-route');
 const projectRoute = require('./routes/project-route');
 const usersRoute = require('./routes/users-route');
 
+const port = process.env.PORT || 7777;
+
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -45,7 +47,7 @@ app.use('/users', usersRoute);
 //     });
 // });
 
-var flagResetAll = false;
+var flagResetAll = true;
 
 global.resetDatabase = flagResetAll;
 
@@ -100,4 +102,4 @@ function serverInitializedCallback() {
     console.log(messages.serverInitializedMessage);
 }
 
-app.listen('7777', serverInitializedCallback);
+app.listen(port, serverInitializedCallback);
