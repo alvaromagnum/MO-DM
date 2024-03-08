@@ -190,7 +190,9 @@ function generateLineCharts(evcRankings, full) {
             snapshots = snapshotsToJson(snapshots);
 
             generateLineChartStudents("allStudentsMotivationDiv", snapshots, evcRankings, pageAllUsersEvc);
-            generateLineChartGeneral("generalMotivationDiv", snapshots, evcRankings, true);
+            generateLineChartGeneral("generalMotivationDiv", snapshots, evcRankings, full);
+
+            generateEvcChartsFromEvcRankings(evcRankings);
 
         }
 
@@ -284,6 +286,7 @@ async function loadAllProjectData(allJsons) {
     for(var evcRanking of evcRankings) {
 
         if(Number(evcRanking.generalEvc.evc) !== 0) allGeneral.push(evcRanking.generalEvc);
+
         allUsers.push(evcRanking.allUsersEvc);
         allCourses.push(evcRanking.allCoursesEvc);
 
@@ -323,8 +326,8 @@ async function loadAllProjectData(allJsons) {
 
     var allData = {generalEvc: generalEvc, allUsersEvc: allUsersEvc, allCoursesEvc: allCoursesEvc};
 
-    generateEvcChartsFromEvcRankings(allData);
     generateLineCharts(allData, true);
+    // generateEvcChartsFromEvcRankings(allData);
 
     $.LoadingOverlay("hide");
 
@@ -342,6 +345,8 @@ function generateEvcChartsFromEvcRankings(allData) {
     var lessMotivatedCourse = countCourses > 0 ? allData.allCoursesEvc[countCourses - 1] : {label: "", id: 0, evc: 0, e: 0, v: 0, c: 0};
 
     var generalEvc = allData.generalEvc ? allData.generalEvc : {label: "Geral", id: 0, evc: 0, e: 0, v: 0, c: 0};
+
+    if(allData.currentGeneral) generalEvc.evc = Number(allData.currentGeneral)/100;
 
     pageAllUsersEvc = allData.allUsersEvc;
     pageAllCoursesEvc = allData.allCoursesEvc;
