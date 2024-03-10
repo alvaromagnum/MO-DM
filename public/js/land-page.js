@@ -22,6 +22,8 @@ var myId = null;
 
 $('#loginButton').click(function () {
 
+    $.LoadingOverlay("show");
+
     var login = $('#inputLogin').val();
     var password = $('#inputPassword').val();
     var key = $('#inputKey').val();
@@ -34,8 +36,10 @@ $('#loginButton').click(function () {
 
     }).done(function (msg) {
         window.location.href = '/dashboard';
+        $.LoadingOverlay("hide");
     }).fail(function(jqXHR, textStatus, errorThrown) {
         Swal.fire('Erro!', jqXHR.responseText, 'error');
+        $.LoadingOverlay("hide");
     });
 
 });

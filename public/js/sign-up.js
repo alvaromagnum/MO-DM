@@ -65,6 +65,7 @@ function getCourses() {
         url: "/users/get/courses",
     }).fail(function(jqXHR, textStatus, errorThrown) {
         Swal.fire('Erro!', jqXHR.responseText, 'error');
+        $.LoadingOverlay("hide");
     }).done(function (courses) {
         for(var courses of courses) {
             addCourse(courses.name, courses.id);
@@ -85,10 +86,12 @@ function checkSelectedCourse() {
     switch (courseId) {
 
         case 0:
+
             $('#selectCourse').removeClass("select-course-selected");
             break;
 
         default:
+
             $('#selectCourse').addClass("select-course-selected");
             break;
 
