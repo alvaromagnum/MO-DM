@@ -53,7 +53,7 @@ export default class Drawflow {
 
     }
 
-    start() {
+    async start() {
         // console.info("Start Drawflow!!");
         this.container.classList.add("parent-drawflow");
         this.container.tabIndex = 0;
@@ -89,7 +89,8 @@ export default class Drawflow {
         this.container.onpointerout = this.pointerup_handler.bind(this);
         this.container.onpointerleave = this.pointerup_handler.bind(this);
 
-        this.load();
+        await this.load();
+        return true;
     }
 
     /* Mobile zoomzoom */
@@ -142,7 +143,7 @@ export default class Drawflow {
     }
 
     /* End Mobile Zoom */
-    load() {
+    async load() {
         for (var key in this.drawflow.drawflow[this.module].data) {
             this.addNodeImport(this.drawflow.drawflow[this.module].data[key], this.precanvas);
         }
@@ -167,6 +168,7 @@ export default class Drawflow {
             });
         });
         this.nodeId = number;
+        return true;
     }
 
     removeReouteConnectionSelected() {

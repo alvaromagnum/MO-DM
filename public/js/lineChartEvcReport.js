@@ -418,7 +418,9 @@ async function processSnapshotsGeneral(snapshots, evcRankings, full) {
         generalSerie.push({id: 0, label: "GERAL", date: date, value: 0});
     }
 
-    var currentEvc = Number(full? avgEVC : generalEvc.evc)*100;
+    var gEVC = generalEvc ? (isNaN(generalEvc.evc) ? 0 : generalEvc.evc)  : 0;
+
+    var currentEvc = Number(full? avgEVC : gEVC)*100;
     var showCurrent = true;
 
     evcRankings.currentGeneral = currentEvc;

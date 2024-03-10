@@ -11,7 +11,9 @@ var currentProjectJson;
 var configCanvas = document.getElementById("projectConfigCanvas");
 var configEditor = new Drawflow(configCanvas);
 
-configEditor.start();
+$.LoadingOverlay("show");
+await configEditor.start();
+$.LoadingOverlay("hide");
 
 $('#btSave').click(async function () {
 

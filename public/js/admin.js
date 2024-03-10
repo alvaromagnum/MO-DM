@@ -1,6 +1,7 @@
 import Drawflow from '../js/drawflow.js';
 
 await darkMode(true);
+
 activateTooltips();
 
 var projectZoom;
@@ -9,10 +10,7 @@ var projectPositionY;
 var currentProjectJson;
 
 var configCanvas = document.getElementById("projectConfigCanvas");
-var configEditor = new Drawflow(configCanvas);
-
-configEditor.start();
-configEditor.editor_mode = 'admin';
+var configEditor;
 
 async function processProjectConfig() {
 
@@ -106,7 +104,7 @@ function clearLabels() {
 
 async function load(dataToImport) {
 
-    configEditor.clear();
+    if(configEditor) configEditor.clear();
 
     $("#tablePendencies").html("<tr class='pendency-row text-2xl'><td colspan='2'><center>-- SEM PENDÊNCIAS --</center></td></tr>");
 
@@ -124,6 +122,13 @@ async function load(dataToImport) {
         $("#selectProjectNames").val(dataToImport.projectId);
 
         if(projectName !== "[TODOS ➤ ADMIN]") {
+
+            configEditor = new Drawflow(configCanvas);
+
+            await configEditor.start();
+
+            configEditor.editor_mode = 'admin';
+            configEditor.zoom_out_by_value(0.3);
 
             $('#buttonResults').show();
             $('#divCardSankeyChart').show();
@@ -448,8 +453,6 @@ $('#selectProjectNames').change(function() {
     });
 
 });
-
-configEditor.zoom_out_by_value(0.3);
 
 $('#buttonResults').hide();
 $('#divCardSankeyChart').hide();
