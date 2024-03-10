@@ -1,7 +1,7 @@
 var allProjectData;
-var pageAllCoursesEvc;
 var pageGeneralEvc;
-var pageAllUsersEvc;
+var pageAllCoursesEvc = [];
+var pageAllUsersEvc = [];
 
 var evaluationData;
 var jsonConfig;
@@ -419,11 +419,11 @@ function generateEvcCharts(editorJson) {
         var countStudents = allData.allUsersEvc.length;
         var countCourses = allData.allCoursesEvc.length;
 
-        var moreMotivatedStudent = countStudents > 0 ? allData.allUsersEvc[0] : {label: "", id: 0, evc: 0, e: 0, v: 0, c: 0};
-        var lessMotivatedStudent = countStudents > 0 ? allData.allUsersEvc[countStudents - 1] : {label: "", id: 0, evc: 0, e: 0, v: 0, c: 0};
+        var moreMotivatedStudent = countStudents > 0 ? allData.allUsersEvc[0] : {label: "---", id: 0, evc: 0, e: 0, v: 0, c: 0};
+        var lessMotivatedStudent = countStudents > 0 ? allData.allUsersEvc[countStudents - 1] : {label: "---", id: 0, evc: 0, e: 0, v: 0, c: 0};
 
-        var moreMotivatedCourse = countCourses > 0 ? allData.allCoursesEvc[0] : {label: "" , evc: 0, e: 0, v: 0, c: 0};
-        var lessMotivatedCourse = countCourses > 0 ? allData.allCoursesEvc[countCourses - 1] : {label: "", id: 0, evc: 0, e: 0, v: 0, c: 0};
+        var moreMotivatedCourse = countCourses > 0 ? allData.allCoursesEvc[0] : {label: "---" , evc: 0, e: 0, v: 0, c: 0};
+        var lessMotivatedCourse = countCourses > 0 ? allData.allCoursesEvc[countCourses - 1] : {label: "---", id: 0, evc: 0, e: 0, v: 0, c: 0};
 
         var generalEvc = allData.generalEvc ? allData.generalEvc : {label: "Geral", id: 0, evc: 0, e: 0, v: 0, c: 0};
 
@@ -1019,7 +1019,7 @@ function setDrawFlowTooltipImport(el, tooltipId) {
     $('#'+tooltipId).attr("data-bs-original-title", $(el).val());
 }
 
-function clearAllCharts() {
+async function clearAllCharts() {
 
     am5.array.each(am5.registry.rootElements,
         function(root) {
@@ -1030,8 +1030,11 @@ function clearAllCharts() {
         }
     );
 
+    return true;
+
 }
 
-function clearCharts(numberOfCharts) {
-    for(var i = 1; i <= numberOfCharts; i++) clearAllCharts();
+async function clearCharts(numberOfCharts) {
+    for(var i = 1; i <= numberOfCharts; i++) await clearAllCharts();
+    return true;
 }

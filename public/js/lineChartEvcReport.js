@@ -398,13 +398,17 @@ async function processSnapshotsGeneral(snapshots, evcRankings, full) {
 
     var generalSerie = [];
 
+    var avgEVC = 0;
+
     for(var snapshot of snapshots) {
 
         var date = date = moment(snapshot.createdAt).format("DD-MM-YYYY HH:mm:ss");
 
         var generalEvc = snapshot.jsonSnapshot.generalEvc;
 
-        generalSerie.push({id: generalEvc.id, label: generalEvc.label, date: date, value: Number(full? snapshot.avgEVC : generalEvc.evc)*100});
+        avgEVC = snapshot.avgEVC;
+
+        generalSerie.push({id: generalEvc.id, label: generalEvc.label, date: date, value: Number(full? avgEVC : generalEvc.evc)*100});
 
     }
 
@@ -414,7 +418,7 @@ async function processSnapshotsGeneral(snapshots, evcRankings, full) {
         generalSerie.push({id: 0, label: "GERAL", date: date, value: 0});
     }
 
-    var currentEvc = Number(full? snapshot.avgEVC : generalEvc.evc)*100;
+    var currentEvc = Number(full? avgEVC : generalEvc.evc)*100;
     var showCurrent = true;
 
     evcRankings.currentGeneral = currentEvc;

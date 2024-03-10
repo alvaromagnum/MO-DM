@@ -110,7 +110,8 @@ async function load(dataToImport) {
 
     $("#tablePendencies").html("<tr class='pendency-row text-2xl'><td colspan='2'><center>-- SEM PENDÊNCIAS --</center></td></tr>");
 
-    clearCharts(11);
+    await clearCharts(11);
+
     clearLabels();
     clearAllUsersTable();
 
@@ -138,6 +139,9 @@ async function load(dataToImport) {
             $('#divAllUsers').hide();
 
             loadAllProjects();
+
+            $.LoadingOverlay("hide");
+            return;
 
         }
 
@@ -297,7 +301,7 @@ async function loadAllProjectData(allJsons) {
     var v = (_.reduce(_.map(allGeneral, (o) => Number(o.v)), function(x, y){ return (x + y); }, 0)/allGeneral.length).toFixed(2);
     var c = (_.reduce(_.map(allGeneral, (o) => Number(o.c)), function(x, y){ return (x + y); }, 0)/allGeneral.length).toFixed(2);
 
-    var generalEvc = {id: 0, label: "Geral", evc: evc, e: e, v: v, c: c};
+    var generalEvc = {id: 0, label: "Geral", evc: isNaN(evc) ? 0 : evc, e: isNaN(e) ? 0 : e, v: isNaN(v) ? 0 : v, c: isNaN(c) ? 0 : c};
 
     for(var users of allUsers) allUsersEvc = allUsersEvc.concat(users);
     for(var courses of allCourses) allCoursesEvcWithDuplicates = allCoursesEvcWithDuplicates.concat(courses);
@@ -338,11 +342,11 @@ function generateEvcChartsFromEvcRankings(allData) {
     var countStudents = allData.allUsersEvc.length;
     var countCourses = allData.allCoursesEvc.length;
 
-    var moreMotivatedStudent = countStudents > 0 ? allData.allUsersEvc[0] : {label: "", id: 0, evc: 0, e: 0, v: 0, c: 0};
-    var lessMotivatedStudent = countStudents > 0 ? allData.allUsersEvc[countStudents - 1] : {label: "", id: 0, evc: 0, e: 0, v: 0, c: 0};
+    var moreMotivatedStudent = countStudents > 0 ? allData.allUsersEvc[0] : {label: "---", id: 0, evc: 0, e: 0, v: 0, c: 0};
+    var lessMotivatedStudent = countStudents > 0 ? allData.allUsersEvc[countStudents - 1] : {label: "---", id: 0, evc: 0, e: 0, v: 0, c: 0};
 
-    var moreMotivatedCourse = countCourses > 0 ? allData.allCoursesEvc[0] : {label: "" , evc: 0, e: 0, v: 0, c: 0};
-    var lessMotivatedCourse = countCourses > 0 ? allData.allCoursesEvc[countCourses - 1] : {label: "", id: 0, evc: 0, e: 0, v: 0, c: 0};
+    var moreMotivatedCourse = countCourses > 0 ? allData.allCoursesEvc[0] : {label: "---" , evc: 0, e: 0, v: 0, c: 0};
+    var lessMotivatedCourse = countCourses > 0 ? allData.allCoursesEvc[countCourses - 1] : {label: "---", id: 0, evc: 0, e: 0, v: 0, c: 0};
 
     var generalEvc = allData.generalEvc ? allData.generalEvc : {label: "Geral", id: 0, evc: 0, e: 0, v: 0, c: 0};
 

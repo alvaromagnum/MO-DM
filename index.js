@@ -47,7 +47,7 @@ app.use('/users', usersRoute);
 //     });
 // });
 
-var flagResetAll = true;
+var flagResetAll = false;
 
 global.resetDatabase = flagResetAll;
 

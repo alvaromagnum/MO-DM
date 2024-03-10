@@ -132,7 +132,7 @@ function importDefaultDataDashboard() {
 
 async function load(dataToImport) {
 
-    clearCharts(11);
+    await clearCharts(11);
 
     if(dataToImport) {
 
@@ -157,7 +157,6 @@ async function load(dataToImport) {
         projectPositionY = configEditor.y;
 
         await processProjectConfig();
-
         await generateEvcCharts(jsonConfig);
 
         var evcRankings = await getEvcRankings(jsonConfig);
