@@ -52,7 +52,7 @@ $("#formProject").keypress(function(e){
     }
 });
 
-function copyKey() {
+export function copyKey() {
     const textToCopy = $('#keyToCopy').text();
     navigator.clipboard.writeText(textToCopy).then(()=>{
         $.notify('Chave copiada com sucesso!', "success")
