@@ -1,6 +1,6 @@
 import Drawflow from '../js/drawflow.js';
 
-await darkMode(true);
+darkMode(true);
 
 activateTooltips();
 

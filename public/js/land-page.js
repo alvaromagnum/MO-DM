@@ -1,7 +1,6 @@
-await darkMode(true);
+darkMode(true);
 
 var sankeyChartRoot = null;
-
 var pageAllUsersEvc = null;
 var pageAllCoursesEvc = null;
 var pageGeneralEvc = null;

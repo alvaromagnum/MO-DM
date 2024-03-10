@@ -17,3 +17,5 @@
 . Quando remover um nó, fechar tooltips.
 
 . Parece que as tooltips pararam de funcionar.
+
+. Melhorar o contraste das cores do texto da página que mostra o impacto de cada decisão nos alunos.

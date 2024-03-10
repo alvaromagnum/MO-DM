@@ -1,4 +1,4 @@
-await darkMode(true);
+darkMode(true);
 
 $('#createProjectButton').click(function () {
 

@@ -669,14 +669,13 @@ function sidenavTypeOnResize() {
 
 
 // Light Mode / Dark Mode
-async function darkMode(flag) {
+function darkMode(flag) {
   $.LoadingOverlay("show");
-  await customDarkMode(flag);
+  customDarkMode(flag);
   $.LoadingOverlay("hide");
-  return true;
 };
 
-async function customDarkMode(flag) {
+function customDarkMode(flag) {
   const body = document.getElementsByTagName('body')[0];
   const hr = document.querySelectorAll('div:not(.sidenav) > hr');
   const hr_card = document.querySelectorAll('div:not(.bg-gradient-dark) hr');

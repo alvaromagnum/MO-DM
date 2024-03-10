@@ -7,6 +7,8 @@ var evaluationData;
 var jsonConfig;
 var myId;
 
+var sankeyChartRoot;
+
 function clearAllUsersTable() {
 
     $("#tableAllUsers").html("");
@@ -352,7 +354,7 @@ function generateProjectSankeyChart(nodes, links) {
         }
     );
 
-    var sankeyChartRoot = am5.Root.new("sankeyChartDiv");
+    sankeyChartRoot = am5.Root.new("sankeyChartDiv");
 
     sankeyChartRoot.setThemes([
         am5themes_Animated.new(sankeyChartRoot)

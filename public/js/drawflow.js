@@ -307,8 +307,10 @@ export default class Drawflow {
                 this.ele_selected.classList.add("selected");
                 break;
             case 'drawflow-delete':
+
                 if (this.node_selected) {
                     this.removeNodeId(this.node_selected.id);
+                    $('.tooltip').remove();
                 }
 
                 if (this.connection_selected) {
@@ -327,6 +329,7 @@ export default class Drawflow {
                 }
 
                 break;
+
             default:
         }
         if (e.type === "touchstart") {

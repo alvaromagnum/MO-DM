@@ -1,1 +1,1 @@
-await darkMode(true);
+darkMode(true);
