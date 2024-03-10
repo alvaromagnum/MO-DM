@@ -1,4 +1,4 @@
-darkMode(true);
+await darkMode(true);
 
 var projectId;
 var userId;

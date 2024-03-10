@@ -1,4 +1,4 @@
-darkMode(true);
+await darkMode(true);
 
 $('#signUpButton').click(function () {
 

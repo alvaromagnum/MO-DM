@@ -1,6 +1,6 @@
 import Drawflow from '../js/drawflow.js';
 
-darkMode(true);
+await darkMode(true);
 activateTooltips();
 
 var projectZoom;

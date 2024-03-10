@@ -669,7 +669,14 @@ function sidenavTypeOnResize() {
 
 
 // Light Mode / Dark Mode
-function darkMode(flag) {
+async function darkMode(flag) {
+  $.LoadingOverlay("show");
+  await customDarkMode(flag);
+  $.LoadingOverlay("hide");
+  return true;
+};
+
+async function customDarkMode(flag) {
   const body = document.getElementsByTagName('body')[0];
   const hr = document.querySelectorAll('div:not(.sidenav) > hr');
   const hr_card = document.querySelectorAll('div:not(.bg-gradient-dark) hr');
@@ -820,7 +827,8 @@ function darkMode(flag) {
       card_border_dark[i].classList.remove('border-dark');
     }
   }
-};
+  return true;
+}
 
 
 // side bullets
