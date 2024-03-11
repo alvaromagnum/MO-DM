@@ -14,7 +14,7 @@
 
 . Avaliação 5 5 3 está gerando inconsistência entre o evc gerado na tabela de avaliação e o avgEVC do snapshot.
 
-. Quando remover um nó, fechar tooltips.
+. Quando remover um nó pelo botão deletar do teclado, fechar tooltips.
 
 . Parece que as tooltips pararam de funcionar.
 
