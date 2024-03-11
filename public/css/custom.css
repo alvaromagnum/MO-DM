@@ -115,15 +115,15 @@ tr.pendency-row:nth-child(even) {
 }
 
 .bg-gradient-warning-text {
-    color: orange;
+    color: yellow;
 }
 
 .bg-gradient-danger-text {
-    color: orangered;
+    color: #F08080;
 }
 
 .bg-gradient-success-text {
-    color: green;
+    color: #90EE90;
 }
 
 .ol-ranking { /*https://codepen.io/michellebarker/pen/poLoeRq*/
@@ -709,6 +709,18 @@ tr.pendency-row:nth-child(even) {
 /* Other browsers */
 *::-webkit-scrollbar{
     width: 16px;
+}
+
+.text-red-ranking {
+    color: #F08080;
+}
+
+.text-yellow-ranking {
+    color: yellow;
+}
+
+.text-green-ranking {
+    color: #90EE90;
 }
 
 *::-webkit-scrollbar-track{

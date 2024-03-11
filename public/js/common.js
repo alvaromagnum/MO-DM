@@ -128,6 +128,10 @@ function generateAndShowImpactsPopup(allData, option) {
 
     var meanV = math.mean(allData.map((o) => o.v)).toFixed(1);
 
+    var succesColorClass = "text-green-ranking";
+    var warningColorClass = "text-yellow-ranking";
+    var failColorClass = "text-red-ranking";
+
     var classMean = "bg-gradient-success";
 
     if (meanV < 70) classMean = "bg-gradient-warning";
@@ -160,7 +164,7 @@ function generateAndShowImpactsPopup(allData, option) {
             <div class="d-flex px-2 py-1">
               <div>
                 <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-toggle="tooltip" title="${data.user}">
-                  <img src="/img/student-avatar.jpg" alt="user5">
+                  <img src="/avatars/${data.userId}.jpg" alt="user5">
                 </a>
               </div>
               <div class="d-flex flex-column justify-content-center">

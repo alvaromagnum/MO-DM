@@ -614,6 +614,7 @@ export default class Drawflow {
             if (this.node_selected != null) {
                 if (this.first_click.tagName !== 'INPUT' && this.first_click.tagName !== 'TEXTAREA' && this.first_click.hasAttribute('contenteditable') !== true) {
                     this.removeNodeId(this.node_selected.id);
+                    $('.tooltip').remove();
                 }
             }
             if (this.connection_selected != null) {
