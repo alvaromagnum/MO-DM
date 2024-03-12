@@ -121,7 +121,7 @@ async function load(dataToImport) {
         $("#labelProjectName").text(projectName);
         $("#selectProjectNames").val(dataToImport.projectId);
 
-        if(projectName !== "[TODOS ➤ ADMIN]") {
+        if($('#selectProjectNames').val() !== "0") {
 
             configEditor = new Drawflow(configCanvas);
 
