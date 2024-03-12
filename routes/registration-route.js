@@ -151,13 +151,13 @@ async function updateUser(req, res) {
         include: [{model: databaseConfig.Course}]
     });
 
+    req.session.user = user;
+
+    var project = await databaseConfig.Project.findOne({where: {id: req.session.project.id}});
+
+    var jsonConfig = project.jsonConfig;
+
     if(jsonConfig) {
-
-        req.session.user = user;
-
-        var project = await databaseConfig.Project.findOne({where: {id: req.session.project.id}});
-
-        var jsonConfig = project.jsonConfig;
 
         var userId = user.id;
         var userName = user.name;

@@ -60,7 +60,7 @@ function generateBubbleChart(divId, allEvc) {
     });
 
     series.circles.template.adapters.add("radius", function(radius, target) {
-        return Math.max(target.dataItem.dataContext.value, 30);
+        return Math.max(target.dataItem.dataContext.value, 10);
     });
 
     series.labels.template.setAll({
@@ -68,7 +68,7 @@ function generateBubbleChart(divId, allEvc) {
         minScale: 0.5,
         textAlign: "center",
         isMeasured: true,
-        oversizedBehavior: "fit"
+        oversizedBehavior: "none"
     });
 
     series.data.setAll([data]);
