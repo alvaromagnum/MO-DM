@@ -59,12 +59,16 @@ function generateBubbleChart(divId, allEvc) {
         tooltipText: `{userName}: [bold]{value}[/]`
     });
 
+    series.circles.template.adapters.add("radius", function(radius, target) {
+        return Math.max(target.dataItem.dataContext.value, 30);
+    });
+
     series.labels.template.setAll({
         fill: am5.color(0x000000),
         minScale: 0.5,
         textAlign: "center",
         isMeasured: true,
-        oversizedBehavior: "wrap-no-break"
+        oversizedBehavior: "fit"
     });
 
     series.data.setAll([data]);

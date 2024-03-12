@@ -14,8 +14,6 @@
 
 . Avaliação 5 5 3 está gerando inconsistência entre o evc gerado na tabela de avaliação e o avgEVC do snapshot.
 
-. Quando remover um nó pelo botão deletar do teclado, fechar tooltips.
+. As vezes tem que carregar duas vezes a página do admin para carregar as informações de forma correta.
 
-. Parece que as tooltips pararam de funcionar.
-
-. Melhorar o contraste das cores do texto da página que mostra o impacto de cada decisão nos alunos.
+. Quando dá update no nome do usuário, não atualiza o drawflow e ainda duplica o usuário nas listas de EVC.
