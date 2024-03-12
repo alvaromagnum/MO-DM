@@ -162,7 +162,7 @@ function generateAndShowImpactsPopup(allData, option) {
         var row = $("<tr></tr>").html(`
           <td>
             <div class="d-flex px-2 py-1">
-              <div>
+              <div class="avatar-container">
                 <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-toggle="tooltip" title="${data.user}">
                   <img src="/avatars/${data.userId}.jpg" alt="user5">
                 </a>
@@ -244,6 +244,8 @@ function generateAndShowImpactsPopup(allData, option) {
     $('#resultsPerUserModal').modalJ({
         fadeDuration: 100
     });
+
+    checkAvatarImages();
 
 }
 
