@@ -3,6 +3,10 @@
     height: 300px!important;
 }
 
+.align-top {
+    vertical-align: top!important;
+}
+
 .background-row-pendencies {
     background-color: #1a2035;
 }
