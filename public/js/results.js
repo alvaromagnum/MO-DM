@@ -91,6 +91,8 @@ function generateRankingItem(id, label, value, draggable) {
 
         if (percentual >= 65) {
             colorClass = "li-ranking-green";
+        } else {
+            colorClass = "li-ranking-red";
         }
 
     }
