@@ -67,27 +67,26 @@ function importDefaultDataDashboard() {
 
     }).done(function (user) {
 
+        // console.log("ENTROU 2");
+
         if(user) $("#labelUserName").text(user.userName);
-        $.LoadingOverlay("hide");
 
-    });
+        $.ajax({
 
-    $.LoadingOverlay("show");
+            method: "GET",
+            url: "/project/loadConfig",
 
-    $.ajax({
+        }).fail(function(jqXHR, textStatus, errorThrown) {
 
-        method: "GET",
-        url: "/project/loadConfig",
+            $.LoadingOverlay("hide");
+            Swal.fire('Erro!', jqXHR.responseText, 'error');
 
-    }).fail(function(jqXHR, textStatus, errorThrown) {
+        }).done(async function (dataToImport) {
+            // console.log("ENTROU 3");
+            await load(dataToImport);
+            $.LoadingOverlay("hide");
 
-        $.LoadingOverlay("hide");
-        Swal.fire('Erro!', jqXHR.responseText, 'error');
-
-    }).done(async function (dataToImport) {
-
-        await load(dataToImport);
-        $.LoadingOverlay("hide");
+        });
 
     });
 
@@ -113,7 +112,11 @@ async function load(dataToImport) {
     clearLabels();
     clearAllUsersTable();
 
+    // console.log("ENTROU 4");
+
     if (dataToImport) {
+
+        // console.log("ENTROU 5");
 
         var projectName = dataToImport.projectName;
         var jsonConfig = dataToImport.jsonConfig;
@@ -122,6 +125,8 @@ async function load(dataToImport) {
         $("#selectProjectNames").val(dataToImport.projectId);
 
         if($('#selectProjectNames').val() !== "0") {
+
+            // console.log("ENTROU 6");
 
             configEditor = new Drawflow(configCanvas);
 
@@ -137,6 +142,8 @@ async function load(dataToImport) {
 
         }
         else {
+
+            // console.log("ENTROU 7");
 
             $('#buttonResults').hide();
             $('#divCardSankeyChart').hide();
@@ -253,6 +260,7 @@ function loadAllProjects() {
         Swal.fire('Erro!', jqXHR.responseText, 'error');
         $.LoadingOverlay("hide");
     }).done(async function (result) {
+        // console.log("ENTROU 8");
         await loadAllProjectData(result.jsons);
         $.LoadingOverlay("hide");
     });
@@ -334,6 +342,8 @@ async function loadAllProjectData(allJsons) {
     allCoursesEvc = newAllCoursesEvc;
 
     var allData = {generalEvc: generalEvc, allUsersEvc: allUsersEvc, allCoursesEvc: allCoursesEvc};
+
+    // console.log("ENTROU 9");
 
     generateLineCharts(allData, true);
     // generateEvcChartsFromEvcRankings(allData);
@@ -460,4 +470,5 @@ $('#divCardProjectConfig').hide();
 $('#divAllUsers').hide();
 
 importProjectNames();
+// console.log("ENTROU 1");
 importDefaultDataDashboard();

@@ -14,6 +14,28 @@
 
 . Avaliação 5 5 3 está gerando inconsistência entre o evc gerado na tabela de avaliação e o avgEVC do snapshot.
 
-. As vezes tem que carregar duas vezes a página do admin para carregar as informações de forma correta.
+. As vezes tem que carregar duas vezes a página do admin para carregar as informações de forma correta. QUANDO DÁ ERRO, OBEDECER O SEGUINTE:
+
+admin.js:476 ENTROU 1
+admin.js:90 ENTROU 3
+admin.js:118 ENTROU 4
+admin.js:122 ENTROU 5
+admin.js:149 ENTROU 7
+admin.js:70 ENTROU 2
+admin.js:266 ENTROU 8
+admin.js:349 ENTROU 9
+
+CORRETO
+
+admin.js:476 ENTROU 1
+admin.js:70 ENTROU 2
+admin.js:90 ENTROU 3
+admin.js:118 ENTROU 4
+admin.js:122 ENTROU 5
+admin.js:149 ENTROU 7
+admin.js:266 ENTROU 8
+admin.js:349 ENTROU 9
 
 . Quando dá update no nome do usuário, não atualiza o drawflow e ainda duplica o usuário nas listas de EVC.
+
+. NO DB ATUAL, QUANDO SALVA UMA NOVA DECISÃO, APAGA AS RESPOSTAS ANTERIORES.
